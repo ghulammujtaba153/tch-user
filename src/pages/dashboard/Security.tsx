@@ -1,11 +1,54 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AuthContext } from '../../context/userContext';
+import axios from 'axios';
+import { BASE_URL } from '../../config/url';
+import { toast } from 'react-toastify';
 
 const Security = () => {
     // State to manage password visibility for each field
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+    // State to manage password values
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+    const [loading, setLoading] = useState(false);
+    const { user } = useContext(AuthContext)!;
+
+    const handleSubmit = async () => {
+        // Validate that new password and confirm new password match
+        if (newPassword !== confirmNewPassword) {
+            toast.error('New password and confirm new password do not match.');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await axios.post(`${BASE_URL}/auth/reset-password`, {
+                id: user?.userId,
+                oldPassword, // Include old password for verification
+                newPassword,
+                confirmPassword: confirmNewPassword,
+            });
+
+            if (res.data) {
+                toast.success('Password changed successfully!');
+                // Clear the form fields
+                setOldPassword('');
+                setNewPassword('');
+                setConfirmNewPassword('');
+            }
+        } catch (error: any) {
+            console.error(error);
+            toast.error(error.response?.data?.message || 'Failed to change password.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className='flex flex-col md:flex-row justify-between gap-8 md:gap-4 p-4'>
@@ -19,8 +62,10 @@ const Security = () => {
                     <div className='relative'>
                         <input
                             type={showOldPassword ? 'text' : 'password'}
-                            placeholder='Enter Password'
+                            placeholder='Enter Old Password'
                             className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            value={oldPassword}
+                            onChange={(e) => setOldPassword(e.target.value)}
                         />
                         <button
                             onClick={() => setShowOldPassword(!showOldPassword)}
@@ -41,8 +86,10 @@ const Security = () => {
                     <div className='relative'>
                         <input
                             type={showNewPassword ? 'text' : 'password'}
-                            placeholder='Enter Password'
+                            placeholder='Enter New Password'
                             className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
                         />
                         <button
                             onClick={() => setShowNewPassword(!showNewPassword)}
@@ -63,8 +110,10 @@ const Security = () => {
                     <div className='relative'>
                         <input
                             type={showConfirmNewPassword ? 'text' : 'password'}
-                            placeholder='Enter Password'
+                            placeholder='Confirm New Password'
                             className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            value={confirmNewPassword}
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
                         />
                         <button
                             onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
@@ -79,8 +128,12 @@ const Security = () => {
                     </div>
                 </div>
 
-                <button className='bg-[#BEE36E] max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full'>
-                    Change Password
+                <button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                    className='bg-[#BEE36E] max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
+                >
+                    {loading ? 'Changing Password...' : 'Change Password'}
                 </button>
             </div>
 
