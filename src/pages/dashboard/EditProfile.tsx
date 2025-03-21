@@ -3,10 +3,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { BASE_URL } from "../../config/url";
 import axios from "axios";
 import { AuthContext } from "../../context/userContext";
+import upload from "../../utils/upload";
 
 const EditProfile = () => {
   const { user } = useContext(AuthContext)!;
   const [imagePreview, setImagePreview] = useState<any>(null);
+  const [file, setFile] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<any>({
     profilePicture: "",
     name: "",
@@ -62,6 +65,7 @@ const EditProfile = () => {
   // Handle file upload
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
+    setFile(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -92,6 +96,10 @@ const EditProfile = () => {
   // Handle form submission
   const handleUpdateProfile = async () => {
     try {
+      setLoading(true);
+      const url =await upload(file);
+      formData.profilePicture = url;
+
       const res = await axios.post(
         `${BASE_URL}/auth/update-profile/${user?.userId}`,
         formData, {
@@ -106,6 +114,8 @@ const EditProfile = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile. Please try again.");
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -337,7 +347,9 @@ const EditProfile = () => {
         {/* Save and Discard Buttons */}
         <div className="flex items-center w-full gap-4">
           <button
-            className="bg-[#BEE36E] hover:bg-[#BEE36E]/80 transition-colors text-black px-4 py-2 rounded-full"
+          disabled={loading}
+          type="submit"
+            className="bg-[#BEE36E] hover:bg-[#BEE36E]/80 transition-colors text-black px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleUpdateProfile}
           >
             Save Changes
