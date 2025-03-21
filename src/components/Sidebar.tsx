@@ -129,7 +129,7 @@ const Sidebar: React.FC = () => {
             <li key={item.name} className="mb-1">
               <Link
                 to={item.path}
-                onClick={(e) => {
+                onClick={() => {
                   // e.preventDefault();
                   toggleExpand(item.name);
                 }}

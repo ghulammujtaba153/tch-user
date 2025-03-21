@@ -44,7 +44,7 @@ const scheduledReportsData = [
 const ReportsAnalytics: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('campaign');
   const [dateRange, setDateRange] = useState('last30');
-  const [selectedReport, setSelectedReport] = useState<string | null>(null);
+  
   const location = useLocation();
   const pathname = location.pathname;
   const roles = ["campaign", "donor", "custom"];

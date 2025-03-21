@@ -20,7 +20,7 @@ const AddUsers = () => {
     password: '',
     confirmPassword: '',
   });
-  const navigate = useNavigate();
+  
   const [isPending, startTransition] = useTransition();
   const [updateSuccess, setUpdateSuccess] = useState('');
   const [updateError, setUpdateError] = useState('');

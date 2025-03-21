@@ -54,6 +54,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
         id,
         otp: otpString,
       });
+      console.log(res.data);
 
       
         toast.success("OTP verified successfully! Redirecting...");

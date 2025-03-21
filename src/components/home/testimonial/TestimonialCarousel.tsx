@@ -29,10 +29,10 @@ const testimonials = [
 
 const TestimonialCarousel = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const isAutoPlaying=true;
 
     useEffect(() => {
-        let interval: number | NodeJS.Timeout;
+        let interval: number;
         if (isAutoPlaying) {
             interval = setInterval(() => {
                 setCurrentIndex((prevIndex) =>
