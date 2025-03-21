@@ -1,33 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { LineChart, Line, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { CalendarIcon, DocumentArrowDownIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { DocumentArrowDownIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { useLocation } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 // Mock data for the charts
-const fundraisingTrendsData = [
-  { month: 'Jan', amount: 25000, donors: 150 },
-  { month: 'Feb', amount: 45000, donors: 280 },
-  { month: 'Mar', amount: 38000, donors: 220 },
-  { month: 'Apr', amount: 52000, donors: 310 },
-  { month: 'May', amount: 48000, donors: 290 },
-  { month: 'Jun', amount: 65000, donors: 380 },
-];
+
 
 const donorDistributionData = [
   { name: 'Recurring Donors', value: 65, color: '#0ea5e9' },
   { name: 'One-time Donors', value: 35, color: '#6366f1' },
 ];
 
-const topCampaignsData = [
-  { name: 'Save the Forests', amount: 85000 },
-  { name: 'Clean Water Initiative', amount: 72000 },
-  { name: 'Education for All', amount: 65000 },
-  { name: 'Healthcare Access', amount: 58000 },
-  { name: 'Food Security Program', amount: 45000 },
-];
+
 
 // Mock data for scheduled reports
 const scheduledReportsData = [

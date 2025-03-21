@@ -7,49 +7,7 @@ import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
 // Mock data for the charts
-const userDistributionData = [
-  { name: 'Admins', value: 5, color: '#0ea5e9' },
-  { name: 'Campaign Creators', value: 25, color: '#22c55e' },
-  { name: 'Donors', value: 70, color: '#f59e0b' },
-];
 
-const newUsersData = [
-  { month: 'Jan', users: 45 },
-  { month: 'Feb', users: 52 },
-  { month: 'Mar', users: 48 },
-  { month: 'Apr', users: 70 },
-  { month: 'May', users: 65 },
-  { month: 'Jun', users: 85 },
-];
-
-// Mock data for the users table
-const usersData = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'Admin',
-    status: 'Active',
-    lastActive: '2024-02-27 14:30',
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'Campaign Creator',
-    status: 'Active',
-    lastActive: '2024-02-27 12:15',
-  },
-  {
-    id: 3,
-    name: 'Mike Johnson',
-    email: 'mike@example.com',
-    role: 'Donor',
-    status: 'Suspended',
-    lastActive: '2024-02-25 09:45',
-  },
-  // Add more mock data as needed
-];
 const colors = ["#FF6384", "#36A2EB", "#FFCE56"];
 
 const UsersManagement: React.FC = () => {

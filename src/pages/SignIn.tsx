@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useContext, useState, useTransition } from 'react';
+import { useContext, useState, useTransition } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import { toast } from 'react-toastify';

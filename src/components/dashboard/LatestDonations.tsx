@@ -2,40 +2,6 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const donation = [
-    {
-        id: 1,
-        name: 'John Doe',
-        image: 'https://via.placeholder.com/150',
-        date: '2021-01-01',
-        amount: 100,
-        title: 'Donation for a good cause'
-    },
-    {
-        id: 2,
-        name: 'John Doe',
-        image: 'https://via.placeholder.com/150',
-        date: '2021-01-01',
-        amount: 100,
-        title: 'Donation for a good cause'
-    },
-    {
-        id: 3,
-        name: 'John Doe',
-        image: 'https://via.placeholder.com/150',
-        date: '2021-01-01',
-        amount: 100,
-        title: 'Donation for a good cause'
-    },
-    {
-        id: 4,
-        name: 'John Doe',
-        image: 'https://via.placeholder.com/150',
-        date: '2021-01-01',
-        amount: 100,
-        title: 'Donation for a good cause'
-    }
-]
 
 const LatestDonations: React.FC<{ latestDonations: any }> = ({ latestDonations }) => {
 

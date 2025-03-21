@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // For redirect handling
 import { SOCKET_URL } from '../../config/url';
 

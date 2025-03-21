@@ -7,66 +7,7 @@ import { BASE_URL } from '../config/url';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
-// Mock data for the charts
-const campaignStatusData = [
-  { status: 'Active', count: 24, color: '#22c55e' },
-  { status: 'Pending', count: 12, color: '#f59e0b' },
-  { status: 'Completed', count: 36, color: '#3b82f6' },
-];
 
-const fundsOverTimeData = [
-  { date: '2024-01', amount: 25000 },
-  { date: '2024-02', amount: 45000 },
-  { date: '2024-03', amount: 38000 },
-  { date: '2024-04', amount: 52000 },
-  { date: '2024-05', amount: 48000 },
-  { date: '2024-06', amount: 65000 },
-];
-
-const topCampaignsData = [
-  { name: 'Save the Forests', amount: 85000 },
-  { name: 'Clean Water Initiative', amount: 72000 },
-  { name: 'Education for All', amount: 65000 },
-  { name: 'Healthcare Access', amount: 58000 },
-  { name: 'Food Security Program', amount: 45000 },
-];
-
-// Mock data for campaigns
-const campaignsData = [
-  {
-    id: 1,
-    title: 'Save the Forests',
-    creator: 'John Smith',
-    status: 'active',
-    fundsRaised: 85000,
-    goal: 100000,
-    startDate: '2024-01-15',
-    endDate: '2024-04-15',
-    description: 'Campaign to protect and restore forest ecosystems.',
-  },
-  {
-    id: 2,
-    title: 'Clean Water Initiative',
-    creator: 'Sarah Johnson',
-    status: 'pending',
-    fundsRaised: 0,
-    goal: 50000,
-    startDate: '2024-03-01',
-    endDate: '2024-06-01',
-    description: 'Providing clean water access to rural communities.',
-  },
-  {
-    id: 3,
-    title: 'Education for All',
-    creator: 'Michael Brown',
-    status: 'active',
-    fundsRaised: 65000,
-    goal: 80000,
-    startDate: '2024-02-01',
-    endDate: '2024-05-01',
-    description: 'Supporting education in underprivileged areas.',
-  },
-];
 
 const CampaignsManagement: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('all');

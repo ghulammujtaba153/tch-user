@@ -1,4 +1,3 @@
-import React from "react";
 import { SOCKET_URL } from "../../config/url";
 
 const GoogleLoginButton = () => {

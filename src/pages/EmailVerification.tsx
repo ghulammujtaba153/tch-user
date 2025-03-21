@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { BASE_URL } from "../config/url";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import {  useLocation } from "react-router-dom"; // Import useLocation
 import { toast } from "react-toastify";
 import Notification from "../components/notification/Notification";
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
   const [isPending, setIsPending] = useState(false);
-  const navigate = useNavigate();
+  
   const location = useLocation(); // Use useLocation to access state
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

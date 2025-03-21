@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  HomeIcon, ChartBarIcon, UsersIcon, FolderIcon, 
+  HomeIcon, UsersIcon, FolderIcon, 
   CreditCardIcon, ChartPieIcon, BellIcon, CogIcon 
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../context/userContext';

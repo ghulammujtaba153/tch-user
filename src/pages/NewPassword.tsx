@@ -1,5 +1,5 @@
 import React, { useState, useTransition } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -14,7 +14,7 @@ const NewPassword = () => {
     newPassword: '',
     confirmPassword: '',
   });
-  const navigate = useNavigate();
+  
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 

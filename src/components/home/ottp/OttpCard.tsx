@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BASE_URL } from "../../../config/url";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Notification from "../../notification/Notification";
 
@@ -12,7 +11,7 @@ interface OtpCardProps {
 const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
   const [isPending, setIsPending] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 

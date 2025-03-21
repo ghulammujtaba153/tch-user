@@ -5,7 +5,7 @@ import {
   PuzzlePieceIcon,
   ArrowPathIcon,
   CloudArrowUpIcon,
-  KeyIcon,
+  
   BanknotesIcon,
   EnvelopeIcon,
 } from '@heroicons/react/24/outline';

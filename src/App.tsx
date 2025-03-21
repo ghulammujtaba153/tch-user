@@ -1,15 +1,7 @@
-import React from 'react';
+
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import "react-toastify/dist/ReactToastify.css";
 
-import DashboardLayout from './components/DashboardLayout';
-import Dashboard from './components/Dashboard';
-import UsersManagement from './components/UsersManagement';
-import CampaignsManagement from './components/CampaignsManagement';
-import DonationsManagement from './components/DonationsManagement';
-import ReportsAnalytics from './components/ReportsAnalytics';
-import NotificationsEmails from './components/NotificationsEmails';
-import Settings from './components/Settings';
 import Home from './pages/Home';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
@@ -22,10 +14,9 @@ import CampaignDetails from './pages/CampaignDetails';
 import CreateCampaignForm from './pages/CampaignCreate';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './context/userContext';
-import AdminCampaigns from './components/AdminCampaigns';
+
 import EditCampaign from './components/EditCampaign';
-import AddUsers from './components/AddUsers';
-import DonationDetail from './components/DonationDetail';
+
 import MainDashboard from './pages/dashboard/main';
 import CampaignerDashboardLayout from './layouts/DashboardLayout';
 import MyCampaigns from './pages/dashboard/MyCampaigns';
@@ -37,7 +28,7 @@ import ProtectedRoute from './protectedRoutes/ProtectedRoutes';
 import Unauthorized from './pages/Unauthorized';
 // import EditCampaignPage from './pages/dashboard/EditCampaignPage';
 import EmailVerification from './pages/EmailVerification';
-import AdminSignIn from './pages/AdminLogin';
+
 
 function App() {
 

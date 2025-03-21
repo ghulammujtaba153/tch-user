@@ -3,45 +3,8 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { BASE_URL } from '../config/url';
 import axios from 'axios';
 
-interface QuickStats {
-  totalCampaigns: number;
-  campaignGrowth: number;
-  campaignStats: {
-    completionRate: number;
-    statusDistribution: Record<string, { count: number; percentage: number }>;
-    successRate: number;
-  };
-  totalUsers: number;
-  userGrowth: number;
-  totalDonations: number;
-  donationGrowth: number;
-}
 
-interface DonationTrend {
-  month: string;
-  amount: number;
-  count: number;
-}
 
-interface CampaignTrend {
-  month: string;
-  total: number;
-  amount: number;
-  byStatus: {
-    pending: number;
-    active: number;
-    completed: number;
-    cancelled: number;
-    inactive: number;
-  };
-}
-
-interface Activity {
-  type: string;
-  title: string;
-  details?: string;
-  timestamp: string;
-}
 
 const Dashboard: React.FC = () => {
   const [quickStats, setQuickStats] = useState<any | null>(null);

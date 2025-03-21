@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const testimonials = [
     {
@@ -46,17 +46,7 @@ const TestimonialCarousel = () => {
     
     
 
-    const nextSlide = () => {
-        setCurrentIndex((prevIndex) => 
-            prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1
-        );
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prevIndex) => 
-            prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-        );
-    };
+    
 
     const goToSlide = (index: number) => {
         setCurrentIndex(index);

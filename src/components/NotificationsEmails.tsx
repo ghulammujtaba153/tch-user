@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { BellIcon, EnvelopeIcon, DocumentDuplicateIcon, MagnifyingGlassIcon, ClockIcon, PencilIcon } from '@heroicons/react/24/outline';
+import {  PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {  EnvelopeIcon, DocumentDuplicateIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { useLocation } from 'react-router-dom';
 
 // Mock data for the charts
@@ -92,7 +92,7 @@ const scheduledEmailsData = [
 
 const NotificationsEmails: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('center');
-  const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
+  // const [selectedTemplate, setSelectedTemplate] = useState<number | null>(null);
 
   const location = useLocation();
   const pathname = location.pathname;

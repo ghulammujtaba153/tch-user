@@ -7,9 +7,9 @@ import CampaignsSection from '../components/home/CampaignsSection';
 import OurFeatureSection from '../components/home/OurFeatureSection';
 import ChooseUsSection from '../components/home/ChooseUsSection';
 import Testimonials from '../components/home/Testimonials';
-import Footer from '../components/home/Footer';
+
 import FAQsSection from '../components/home/FAQsSection';
-import { ToastContainer } from 'react-toastify';
+
 import { AuthContext } from '../context/userContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';

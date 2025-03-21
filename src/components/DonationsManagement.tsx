@@ -7,76 +7,13 @@ import { BASE_URL } from '../config/url';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
-// Mock data for the charts
-const donationTrendsData = [
-  { date: '2024-01', amount: 25000 },
-  { date: '2024-02', amount: 45000 },
-  { date: '2024-03', amount: 38000 },
-  { date: '2024-04', amount: 52000 },
-  { date: '2024-05', amount: 48000 },
-  { date: '2024-06', amount: 65000 },
-];
 
-const paymentMethodsData = [
-  { name: 'Credit Card', value: 60, color: '#0ea5e9' },
-  { name: 'PayPal', value: 25, color: '#22c55e' },
-  { name: 'Bank Transfer', value: 10, color: '#f59e0b' },
-  { name: 'Other', value: 5, color: '#6366f1' },
-];
-
-const topCampaignsData = [
-  { name: 'Save the Forests', amount: 85000 },
-  { name: 'Clean Water Initiative', amount: 72000 },
-  { name: 'Education for All', amount: 65000 },
-  { name: 'Healthcare Access', amount: 58000 },
-  { name: 'Food Security Program', amount: 45000 },
-];
-
-// Mock data for transactions
-const transactionsData = [
-  {
-    id: 1,
-    donor: 'John Smith',
-    amount: 1000,
-    campaign: 'Save the Forests',
-    paymentMethod: 'Credit Card',
-    status: 'Successful',
-    date: '2024-02-27 14:30',
-  },
-  {
-    id: 2,
-    donor: 'Sarah Johnson',
-    amount: 500,
-    campaign: 'Clean Water Initiative',
-    paymentMethod: 'PayPal',
-    status: 'Successful',
-    date: '2024-02-27 12:15',
-  },
-  {
-    id: 3,
-    donor: 'Mike Brown',
-    amount: 250,
-    campaign: 'Education for All',
-    paymentMethod: 'Bank Transfer',
-    status: 'Pending',
-    date: '2024-02-27 10:45',
-  },
-  {
-    id: 4,
-    donor: 'Emily Davis',
-    amount: 750,
-    campaign: 'Healthcare Access',
-    paymentMethod: 'Credit Card',
-    status: 'Failed',
-    date: '2024-02-27 09:30',
-  },
-];
 
 const COLORS = ["#4CAF50", "#2196F3", "#FF5722", "#FFC107", "#9C27B0"];
 
 const DonationsManagement: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('transactions');
-  const [selectedTransaction, setSelectedTransaction] = useState<number | null>(null);
+  // const [selectedTransaction, setSelectedTransaction] = useState<number | null>(null);
   const [donationStats, setDonationStats] = useState<any>(null);
   const [donationTrends, setDonationTrends] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);

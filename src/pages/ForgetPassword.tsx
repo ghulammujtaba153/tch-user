@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState, useTransition } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import  { useState, useTransition } from "react";
+
 import { toast } from "react-toastify";
 import { BASE_URL } from "../config/url";
 import Notification from "../components/notification/Notification";
@@ -10,7 +10,7 @@ const ForgetPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const navigate=useNavigate();
+  
 
   const handleChange = (e:any) => {
     setEmail(e.target.value);

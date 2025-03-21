@@ -1,16 +1,15 @@
 import axios from 'axios';
-import React, { useContext, useState, useTransition } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useContext, useState, useTransition } from 'react';
+import { Link } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../context/userContext';
 import Notification from '../components/notification/Notification';
-import GoogleLoginButton from '../components/home/GoogleButton';
-import MicrosoftLoginButton from '../components/home/MicrosoftButton';
+
 
 const AdminSignIn = () => {
     const [hide, setHide] = useState(true);
-    const navigate = useNavigate();
+   
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
