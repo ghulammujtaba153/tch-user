@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 import CampaignCard from '../../components/Campaigns/CampaignCard';
@@ -7,7 +7,43 @@ import { BASE_URL } from '../../config/url';
 import axios from 'axios';
 
 
+const campaign=[
+  {
+    _id:"1",
+    image:"/campaign-card.png",
+    title:"Campaign 1",
+    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    amount:1000,
+    totalDonations:500,
+    lastDonationDate:"2021-01-01",
+    city:"New York",
+    createdAt:"2021-01-01"  
 
+  },
+  {
+    _id:"2",
+    image:"/campaign-card.png",
+    title:"Campaign 2",
+    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    amount:1000,
+    totalDonations:500,
+    lastDonationDate:"2021-01-01",
+    city:"New York",
+    createdAt:"2021-01-01"  
+  },
+  {
+    _id:"2",
+    image:"/campaign-card.png",
+    title:"Campaign 2",
+    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
+    amount:1000,
+    totalDonations:500,
+    lastDonationDate:"2021-01-01",
+    city:"New York",
+    createdAt:"2021-01-01"  
+  },
+  
+]
 
 const MyCampaigns = () => {
     const {user} =useContext(AuthContext) || {};

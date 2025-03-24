@@ -7,6 +7,8 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { LinkIcon } from "@heroicons/react/24/outline";
+
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -132,17 +134,18 @@ const CampaignDetails = () => {
           </div>
 
           {/* basic details section */}
-          <div className="flex md:flex-row flex-col items-center justify-between gap-2">
+          <div className="flex md:flex-row flex-col md:items-center justify-between gap-2">
             {/* avatar and location section */}
 
             <div className="flex items-center gap-2 h-[50px]">
               <img
                 src={
                   campaign?.userDetails[0].profilePicture
-                    ? "/campaign.userId.profilePicture"
+                    ? 
+                        campaign?.userDetails[0].profilePicture
                     : "/user.png"
                 }
-                alt="location"
+                alt="A"
                 className="w-[50px] h-full rounded-md"
               />
 
@@ -165,7 +168,7 @@ const CampaignDetails = () => {
             </div>
 
             {/* funds required section */}
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col md:items-center gap-2">
               <p className=" font-bold text-black font-onest">Required Funds</p>
               <p className="text-[#BEE36E] font-bold text-2xl font-onest">
                 R{campaign?.amount}
@@ -182,6 +185,29 @@ const CampaignDetails = () => {
                 className="w-4 h-4 ml-2"
               />
             </button>
+          </div>
+
+          {/* links section */}
+          <div className="flex items-center gap-2 mt-2">
+            <p className="text-sm text-gray-600 font-onest">links: </p>
+            <Link
+              href={campaign?.media}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
+            >
+              <LinkIcon className="w-4 h-4"/>
+            </Link>
+            
+            <Link
+              href={campaign?.video}
+              target="_blank"
+              rel="noreferrer"
+              className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
+            >
+              <LinkIcon className="w-4 h-4"/>
+            </Link>
+            
           </div>
 
           {/* campaign details section */}

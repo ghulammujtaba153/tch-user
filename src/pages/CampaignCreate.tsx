@@ -87,6 +87,21 @@ const CreateCampaignForm: React.FC = () => {
         return;
       }
 
+      if (formData.startDate > formData.endDate) {
+        toast.error('Start date must be before end date');
+        return;
+      }
+
+      if (formData.startDate === formData.endDate) {
+        toast.error('Start date and end date cannot be the same');
+        return;
+      }
+
+      if (formData.startDate < new Date().toISOString().split('T')[0]) {
+        toast.error('Start date must be in the future');
+        return;
+      }
+
         startTransition(async () => {
           try {
             const imageUrl=await upload(formData.image);
@@ -131,7 +146,7 @@ const CreateCampaignForm: React.FC = () => {
   return (
     <div className="max-w-3xl mx-auto p-6 pt-[100px] ">
 
-            {isSuccess && <Notification isOpen={isSuccess} onClose={() => setIsSuccess(false)} title="Campaign created successfully" message="Campaign created successfully" link={`/home/campaigns`}/>}
+            {isSuccess && <Notification isOpen={isSuccess} onClose={() => setIsSuccess(false)} title="Campaign created successfully" message="Campaign created successfully" link={`/user/dashboard/campaigns`}/>}
         {error && <Notification isOpen={true} onClose={() => setError("")} title="Error" message={error} />}
 
         <div className='flex flex-col items-center border-2 border-gray-300 rounded-[40px] p-4 font-onest shadow-md'>

@@ -121,6 +121,38 @@ const EditCampaign = () => {
         setIsSubmitting(true);
 
         try {
+
+            if (formData.startDate && formData.endDate) {
+                const startDate = new Date(formData.startDate);
+                const endDate = new Date(formData.endDate);
+
+                if (startDate > endDate) {
+                    toast.error('Start date cannot be after end date');
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                if (startDate.toISOString().split('T')[0] < new Date().toISOString().split('T')[0]) {
+                    toast.error('Start date cannot be in the past');
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                if (endDate < new Date()) {
+                    toast.error('End date cannot be in the past');
+                    setIsSubmitting(false);
+                    return;
+                }
+
+                if (startDate === endDate) {
+                    toast.error('Start date and end date cannot be the same');
+                    setIsSubmitting(false);
+                    return;
+                }
+
+            }
+
+
             const imgUrl = await upload(pic);
             formData.image = imgUrl;
             await axios.put(`${BASE_URL}/campaigns/update/${id}`, formData, {
