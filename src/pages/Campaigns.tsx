@@ -19,29 +19,28 @@ interface Campaign {
 const Campaigns = () => {
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('Select Category');
+  const [selectedCategory, setSelectedCategory] = useState('All'); // Default to 'All'
   const [searchQuery, setSearchQuery] = useState('');
   const [minAmount, setMinAmount] = useState('');
   const [maxAmount, setMaxAmount] = useState('');
   const [sortBy, setSortBy] = useState('newest');
 
-  const categories = ['Education', 'Health', 'Sports', 'Arts', 'Environment', 'Other'];
+  const categories = ["All", 'Education', 'Health', 'Sports', 'Arts', 'Environment', 'Other'];
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [filteredCampaigns, setFilteredCampaigns] = useState<Campaign[]>([]);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetch= async () => {
+    const fetch = async () => {
       try {
-      
         const res = await axios.get(`${BASE_URL}/campaigns/getAllWithDonations`);
         setCampaigns(res.data);
         setFilteredCampaigns(res.data);
       } catch (error) {
         console.error('Error fetching campaigns:', error);
         setError("Error fetching campaigns");
-      }finally{
+      } finally {
         setIsPending(false);
       }
     };
@@ -55,28 +54,28 @@ const Campaigns = () => {
 
     // Apply search filter
     if (searchQuery) {
-      filtered = filtered.filter(campaign => 
+      filtered = filtered.filter(campaign =>
         campaign.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         campaign.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         campaign.city.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
-    // Apply category filter
-    if (selectedCategory !== 'Select Category') {
-      filtered = filtered.filter(campaign => 
+    // Apply category filter only if a specific category is selected
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter(campaign =>
         campaign?.category === selectedCategory
       );
     }
 
     // Apply amount range filter
     if (minAmount) {
-      filtered = filtered.filter(campaign => 
+      filtered = filtered.filter(campaign =>
         campaign.amount >= Number(minAmount)
       );
     }
     if (maxAmount) {
-      filtered = filtered.filter(campaign => 
+      filtered = filtered.filter(campaign =>
         campaign.amount <= Number(maxAmount)
       );
     }
@@ -102,8 +101,6 @@ const Campaigns = () => {
     setFilteredCampaigns(filtered);
   }, [searchQuery, selectedCategory, minAmount, maxAmount, sortBy, campaigns]);
 
-
-
   return (
     <div className='max-w-[1200px] mx-auto p-4 flex flex-col gap-5 min-h-screen items-center pt-[100px] overflow-x-hidden font-sans'>
       {/* Header Section */}
@@ -121,9 +118,9 @@ const Campaigns = () => {
       <div className='flex flex-col md:flex-row items-center justify-center gap-4 relative'>
         {/* Search Bar */}
         <div className='flex items-center gap-2 border border-gray-300 rounded-full p-2 w-[320px]'>
-          <input 
-            type="text" 
-            placeholder='Search Campaigns' 
+          <input
+            type="text"
+            placeholder='Search Campaigns'
             className='w-full h-[20px] rounded-full outline-none px-2'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -133,7 +130,7 @@ const Campaigns = () => {
 
         {/* Category Dropdown */}
         <div className='relative'>
-          <div 
+          <div
             className='flex items-center gap-2 border border-gray-300 rounded-full p-2 px-4 cursor-pointer'
             onClick={() => setCategoryOpen(!categoryOpen)}
           >
@@ -144,12 +141,15 @@ const Campaigns = () => {
           {categoryOpen && (
             <ul className="absolute left-0 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-md z-10">
               {categories.map((category, index) => (
-                <li 
-                  key={index} 
+                <li
+                  key={index}
                   className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
                   onClick={() => {
                     setSelectedCategory(category);
                     setCategoryOpen(false);
+                    if (category === 'All') {
+                      setSortBy('newest'); // Reset sorting when "All" is selected
+                    }
                   }}
                 >
                   {category}
@@ -161,7 +161,7 @@ const Campaigns = () => {
 
         {/* Filters */}
         <div className='relative'>
-          <div 
+          <div
             className='flex items-center gap-2 border border-gray-300 rounded-full p-2 px-4 cursor-pointer'
             onClick={() => setFilterOpen(!filterOpen)}
           >

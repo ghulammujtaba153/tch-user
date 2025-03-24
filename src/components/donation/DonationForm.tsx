@@ -19,16 +19,17 @@ interface FormData {
   houseNumber: string;
 }
 
-const DonationForm: React.FC<{ id: string, campaigner: string }> = ({ id, campaigner }) => {
+const DonationForm: React.FC<{ id: string, campaigner: string, communication: string }> = ({ id, campaigner, communication }) => {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('Test Donation');
   const [customAmount, setCustomAmount] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<string>('150');
   const [isDonate, setIsDonate] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [errors, setErrors] = useState("")
-  const { user } = useContext(AuthContext) || { user: null };
+  const { user } = useContext(AuthContext)!;
   const [isPending, startTransition] = useTransition();
   const socketRef = useRef<Socket | null>(null);
+  console.log("donation form user", user)
 
   const [formData, setFormData] = useState<FormData>({
     donorId: user?.userId,
@@ -132,8 +133,13 @@ const DonationForm: React.FC<{ id: string, campaigner: string }> = ({ id, campai
     if (!validateForm()) {
       return;
     }
+    if (!user) {
+      setErrors("Please log in to donate");
+      return;
+    }
     console.log(formData)
     console.log(user)
+    formData.donorId = user.userId
     startTransition(async () => {
       try {
         const response = await axios.post(`${BASE_URL}/donations`, formData, {
@@ -193,7 +199,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string }> = ({ id, campai
           isOpen={isDonate}
           onClose={() => setIsDonate(false)}
           title="Donation successful"
-          message="Thank you for your donation!"
+          message={communication}
           link="/home/campaigns"
         />
       )}

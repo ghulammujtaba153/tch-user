@@ -52,10 +52,13 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
             <img src={campaign.image} alt="campaign-card" className='w-full h-[200px] object-cover rounded-lg' />
 
             {/* Campaign Title */}
-            <div className='flex flex-col gap-2'>
-                <p className='text-lg font-bold font-onest'>{campaign.title}</p>
-                <p className='text-sm text-gray-500'>{campaign.description}</p>
-            </div>
+            <div className="flex flex-col gap-2">
+        <p className="text-lg font-bold font-onest">{campaign.title}</p>
+        <p className="text-sm text-gray-500">
+          {campaign.description.split(" ").slice(0, 15).join(" ")}
+          {campaign.description.split(" ").length > 15 && "..."}
+        </p>
+      </div>
 
             {/* Campaign Details */}
             <div className='flex items-center gap-6 text-sm'>

@@ -381,7 +381,7 @@ const CampaignDetails = () => {
 
           
 
-          {!admin && !campaigner && <DonationForm id={id as string} campaigner={campaign?.userDetails[0]?._id} />}
+          {!admin && !campaigner && <DonationForm id={id as string} campaigner={campaign?.userDetails[0]?._id} communication={campaign?.donorCommunication	} />}
 
           {campaigner && (
             <div className="flex justify-end w-full">

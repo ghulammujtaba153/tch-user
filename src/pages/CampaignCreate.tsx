@@ -232,12 +232,12 @@ const CreateCampaignForm: React.FC = () => {
             className="w-full px-4 py-2 border border-gray-300 cursor-pointer rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#BEE36E] focus:border-transparent"
             >
             <option value="">Select category</option>
-            <option value="animals">Education</option>
-            <option value="animals">Health</option>
-            <option value="animals">Environment</option>
-            <option value="animals">Sports</option>
-            <option value="animals">Arts</option>
-            <option value="animals">Other</option>
+            <option value="Education">Education</option>
+            <option value="Health">Health</option>
+            <option value="Environment">Environment</option>
+            <option value="Sports">Sports</option>
+            <option value="Arts">Arts</option>
+            <option value="other">Other</option>
             {/* Add more categories as needed */}
             </select>
 
