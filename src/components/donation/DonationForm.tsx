@@ -142,11 +142,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
     formData.donorId = user.userId
     startTransition(async () => {
       try {
-        const response = await axios.post(`${BASE_URL}/donations`, formData, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
+        const response = await axios.post(`${BASE_URL}/donations`, formData);
         
 
         const res =await axios.post(`${BASE_URL}/notifications/create`, {
