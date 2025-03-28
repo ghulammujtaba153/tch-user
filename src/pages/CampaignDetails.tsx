@@ -190,23 +190,23 @@ const CampaignDetails = () => {
           {/* links section */}
           <div className="flex items-center gap-2 mt-2">
             <p className="text-sm text-gray-600 font-onest">links: </p>
-            <Link
+            <a
               href={campaign?.media}
               target="_blank"
               rel="noreferrer"
               className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
             >
               <LinkIcon className="w-4 h-4"/>
-            </Link>
+            </a>
             
-            <Link
+            <a
               href={campaign?.video}
               target="_blank"
               rel="noreferrer"
               className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
             >
               <LinkIcon className="w-4 h-4"/>
-            </Link>
+            </a>
             
           </div>
 
