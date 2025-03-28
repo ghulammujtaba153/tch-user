@@ -29,7 +29,7 @@ const MainDashboard = () => {
         },
         {
             title: "Pending Withdrawals",
-            value: basicInfo?.totalCampaigns
+            value: basicInfo?.withdrawn
         },
         {
             title: "Success Rate",
