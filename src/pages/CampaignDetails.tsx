@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { LinkIcon } from "@heroicons/react/24/outline";
+import Comments from "../components/donationComments/Comments";
 
 
 const CampaignDetails = () => {
@@ -393,6 +394,10 @@ const CampaignDetails = () => {
               </Link>
             </div>
           )}
+
+
+          {/* comments section */}
+          <Comments campaignId={id}/>
         </div>
       </div>
 
@@ -429,7 +434,7 @@ const CampaignDetails = () => {
         </div>
       </div>
 
-      {/* details section */}
+      
     </div>
   );
 };
