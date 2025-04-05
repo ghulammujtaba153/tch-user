@@ -119,6 +119,9 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
           <Comment 
             key={comment._id} 
             comment={comment}
+            onReplyAdded={(newReply) => {
+              setComments(prev => Array.isArray(prev) ? [newReply, ...prev] : [newReply]);
+            }}
           />
         ))}
       </div>

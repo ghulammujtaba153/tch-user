@@ -15,33 +15,16 @@ import { AuthContext } from '../../context/userContext';
 
 dayjs.extend(relativeTime);
 
-interface User {
-  _id: string;
-  name: string;
-  profile?: string;
-}
 
-interface CommentType {
-  _id: string;
-  senderId: User;
-  text: string;
-  likeCount: number;
-  dislikeCount: number;
-  replies: CommentType[];
-  createdAt: string;
-}
 
-interface CommentProps {
-  comment: CommentType;
-  onReplyAdded?: (newReply: CommentType) => void;
-}
 
-const Comment: React.FC<CommentProps> = ({ comment, onReplyAdded }) => {
+
+const Comment = ({ comment, onReplyAdded }) => {
   const { user } = useContext(AuthContext);
   const [showReplies, setShowReplies] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [isReplying, setIsReplying] = useState(false);
-  const [replies, setReplies] = useState<CommentType[]>(comment.replies || []);
+  const [replies, setReplies] = useState(comment.replies || []);
   const [loadingReplies, setLoadingReplies] = useState(false);
 
   const handleLike = async () => {
@@ -71,7 +54,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onReplyAdded }) => {
     if (!replyText.trim()) return;
 
     try {
-      const { data } = await axios.post<CommentType>(`${BASE_URL}/comments/${comment._id}/replies`, {
+      const { data } = await axios.post(`${BASE_URL}/comments/${comment._id}/replies`, {
         text: replyText,
         userId: user?.userId
       });
@@ -92,7 +75,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onReplyAdded }) => {
     if (!showReplies && replies.length === 0) {
       setLoadingReplies(true);
       try {
-        const { data } = await axios.get<CommentType[]>(`${BASE_URL}/comments/${comment._id}/replies`);
+        const { data } = await axios.get(`${BASE_URL}/comments/${comment._id}/replies`);
         setReplies(data);
       } catch (error) {
         console.error('Error fetching replies:', error);
