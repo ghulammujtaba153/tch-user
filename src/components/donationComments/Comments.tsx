@@ -11,7 +11,7 @@ interface CommentType {
   senderId: {
     _id: string;
     username: string;
-    avatar?: string;
+    profilePicture?: string;
   };
   text: string;
   likes: string[];
