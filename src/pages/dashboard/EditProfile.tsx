@@ -135,7 +135,7 @@ const EditProfile = () => {
             <div className="w-full md:w-1/3 h-full">
               <label
                 htmlFor="profilePicture"
-                className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-[#BEE36E] transition-colors h-full"
+                className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-secondary transition-colors h-full"
               >
                 {/* Image Preview or Upload Icon */}
                 {formData.profilePicture || imagePreview ? (
@@ -148,7 +148,7 @@ const EditProfile = () => {
                   <>
                     <CloudArrowUpIcon className="w-8 h-8 text-gray-400" />
                     <span className="text-sm text-gray-500 text-center">
-                      <span className="text-[#BEE36E] font-medium">
+                      <span className="text-secondary font-medium">
                         Upload image
                       </span>{" "}
                       or drag and drop
@@ -179,7 +179,7 @@ const EditProfile = () => {
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                  className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>
 
@@ -194,7 +194,7 @@ const EditProfile = () => {
                     id="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="w-full p-2 bg-white rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                    className="w-full p-2 bg-white rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   >
                     <option value="">Select</option>
                     <option value="male">Male</option>
@@ -215,7 +215,7 @@ const EditProfile = () => {
                     id="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
 
@@ -232,7 +232,7 @@ const EditProfile = () => {
                     id="nationality"
                     value={formData.nationality}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
               </div>
@@ -256,7 +256,7 @@ const EditProfile = () => {
                 id="organization.name"
                 value={formData.organization.name}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
@@ -272,7 +272,7 @@ const EditProfile = () => {
                 id="organization.phone"
                 value={formData.organization.phone}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
           </div>
@@ -289,7 +289,7 @@ const EditProfile = () => {
               id="organization.email"
               value={formData.organization.email}
               onChange={handleChange}
-              className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+              className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
             />
           </div>
 
@@ -306,7 +306,7 @@ const EditProfile = () => {
                 id="organization.address"
                 value={formData.organization.address}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
@@ -322,7 +322,7 @@ const EditProfile = () => {
                 id="organization.city"
                 value={formData.organization.city}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
@@ -338,7 +338,7 @@ const EditProfile = () => {
                 id="organization.country"
                 value={formData.organization.country}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
           </div>
@@ -349,13 +349,13 @@ const EditProfile = () => {
           <button
           disabled={loading}
           type="submit"
-            className="bg-[#BEE36E] hover:bg-[#BEE36E]/80 transition-colors text-black px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-secondary hover:bg-secondary/80 transition-colors text-black px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleUpdateProfile}
           >
             Save Changes
           </button>
           <button
-            className="text-[#BEE36E] border border-[#BEE36E] hover:bg-[#BEE36E] hover:text-black transition-colors px-4 py-2 rounded-full"
+            className="text-secondary border border-secondary hover:bg-secondary hover:text-black transition-colors px-4 py-2 rounded-full"
             onClick={() => window.history.back()}
           >
             Discard

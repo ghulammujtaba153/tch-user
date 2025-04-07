@@ -6,7 +6,7 @@ import { BASE_URL } from '../../config/url';
 import axios from 'axios';
 import Notification from '../notification/Notification';
 
-dayjs.extend(relativeTime);  // ✅ This is required to enable `fromNow()`
+dayjs.extend(relativeTime);  //  This is required to enable `fromNow()`
 
 interface Campaign {
     _id: string;
@@ -45,7 +45,7 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
 
 
     return (
-        <div className='font-sans flex flex-col border border-[#020D1914] p-4 gap-4 rounded-lg overflow-hidden max-w-[400px] hover:shadow-lg hover:border-[#BEE36E] transition-all duration-300'>
+        <div className='font-sans flex flex-col border border-[#020D1914] p-4 gap-4 rounded-lg overflow-hidden max-w-[400px] hover:shadow-lg hover:border-secondary transition-all duration-300'>
             {isDeleted && <Notification isOpen={isDeleted} onClose={()=>setIsDeleted(false)} title="Success" message="Campaign deleted successfully" />}
 
             {/* Campaign Image */}
@@ -78,7 +78,7 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
             {/* Progress Bar */}
             <div className='flex flex-col gap-2'>
                 <div className='flex items-center justify-end'>
-                    <p className='text-sm font-bold text-[#BEE36E]'>{Number(progress).toFixed(2)}% Funded</p>
+                    <p className='text-sm font-bold text-secondary'>{Number(progress).toFixed(2)}% Funded</p>
                 </div>
 
                 <progress 
@@ -86,23 +86,23 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
                     max={goal}
                     className="w-full h-2 rounded-full 
                         [&::-webkit-progress-bar]:bg-gray-300 
-                        [&::-webkit-progress-value]:bg-[#BEE36E] 
-                        [&::-moz-progress-bar]:bg-[#BEE36E]"
+                        [&::-webkit-progress-value]:bg-secondary 
+                        [&::-moz-progress-bar]:bg-secondary"
                 />
             </div>
 
             {!admin && !campaigner && <div className='flex items-center justify-center'>
-                <Link to={`/home/campaigns/${campaign._id}`} className='bg-[#BEE36E] text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Donate Now</Link>
+                <Link to={`/home/campaigns/${campaign._id}`} className='bg-secondary text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Donate Now</Link>
             </div>}
 
             {admin && <div className='flex items-center justify-center gap-2'>
                 <button onClick={handleDelete} disabled={isPending} className='text-center text-[#a8cc5c] disabled:opacity-50 border border-[#a8cc5c] transition-colors duration-200 hover:text-black font-semibold px-4 py-2 rounded-full w-full'>{isPending ? "Deleting..." : "Delete"}</button>
-                <Link to={`/admin/campaigns/${campaign._id}`} className='bg-[#BEE36E] text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Preview</Link>
+                <Link to={`/admin/campaigns/${campaign._id}`} className='bg-secondary text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Preview</Link>
             </div>}
 
             {campaigner && <div className='flex items-center justify-center gap-2'>
                 <button onClick={handleDelete} disabled={isPending} className='text-center text-[#a8cc5c] disabled:opacity-50 border border-[#a8cc5c] transition-colors duration-200 hover:text-black font-semibold px-4 py-2 rounded-full w-full'>{isPending ? "Deleting..." : "Delete"}</button>
-                <Link to={`/user/dashboard/campaigns/${campaign._id}`} className='bg-[#BEE36E] text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Preview</Link>
+                <Link to={`/user/dashboard/campaigns/${campaign._id}`} className='bg-secondary text-center hover:bg-[#a8cc5c] transition-colors duration-200 text-black font-semibold px-4 py-2 rounded-full w-full'>Preview</Link>
             </div>}
 
         </div>

@@ -24,7 +24,7 @@ const HeroSection: React.FC = () => {
               </div>
               <div className="flex flex-col md:flex-row justify-between text-white mb-4 w-full">
                 <div className="flex items-center">
-                  <p className="text-5xl md:text-7xl font-bold text-[#BEE36E] tracking-wide leading-tight">
+                  <p className="text-5xl md:text-7xl font-bold text-secondary tracking-wide leading-tight">
                     Change
                   </p>
                   <div className="flex flex-col text-white text-xl md:text-2xl font-bold ml-2">
@@ -33,7 +33,7 @@ const HeroSection: React.FC = () => {
                   </div>
                 </div>
                 <div className="mt-4 md:mt-auto">
-                  <Link to={"/home/campaigns"} className="bg-[#BEE36E] flex items-center justify-center text-black px-4 py-2 md:px-6 md:py-3 rounded-full text-lg font-bold w-full sm:w-[210px] h-[50px] shadow-md hover:bg-[#BEE36E]/80 transition-all duration-300">
+                  <Link to={"/home/campaigns"} className="bg-secondary flex items-center justify-center text-black px-4 py-2 md:px-6 md:py-3 rounded-full text-lg font-bold w-full sm:w-[210px] h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300">
                     Donate Now <img src="/arrow-black.png" alt="arrow-right" className="w-4 h-4 ml-2" />
                   </Link>
                 </div>

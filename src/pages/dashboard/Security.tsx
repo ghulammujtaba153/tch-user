@@ -54,7 +54,7 @@ const Security = () => {
         <div className='flex flex-col md:flex-row justify-between gap-8 md:gap-4 p-4'>
             {/* Left Section - Change Password */}
             <div className='flex flex-col gap-4 flex-1'>
-                <h1 className='text-2xl font-bold text-[#BEE36E]'>Change Password</h1>
+                <h1 className='text-2xl font-bold text-secondary'>Change Password</h1>
 
                 {/* Old Password Field */}
                 <div>
@@ -63,7 +63,7 @@ const Security = () => {
                         <input
                             type={showOldPassword ? 'text' : 'password'}
                             placeholder='Enter Old Password'
-                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary pr-10'
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                         />
@@ -87,7 +87,7 @@ const Security = () => {
                         <input
                             type={showNewPassword ? 'text' : 'password'}
                             placeholder='Enter New Password'
-                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary pr-10'
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                         />
@@ -111,7 +111,7 @@ const Security = () => {
                         <input
                             type={showConfirmNewPassword ? 'text' : 'password'}
                             placeholder='Confirm New Password'
-                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] pr-10'
+                            className='w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary pr-10'
                             value={confirmNewPassword}
                             onChange={(e) => setConfirmNewPassword(e.target.value)}
                         />
@@ -131,7 +131,7 @@ const Security = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className='bg-[#BEE36E] max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='bg-secondary max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
                 >
                     {loading ? 'Changing Password...' : 'Change Password'}
                 </button>
@@ -150,7 +150,7 @@ const Security = () => {
                             id="twoFactorAuth"
                             className='sr-only peer' // Hidden checkbox
                         />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-[#BEE36E] peer-focus:ring-[#BEE36E] peer-focus:ring-2'></div>
+                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-secondary peer-focus:ring-secondary peer-focus:ring-2'></div>
                         <div className='absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                     </div>
                 </label>

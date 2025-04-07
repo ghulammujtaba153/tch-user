@@ -104,7 +104,7 @@ return (
                             role="button"
                             aria-label={`Go to testimonial ${index + 1}`}
                             className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                                index === currentIndex ? 'bg-[#BEE36E]' : 'bg-gray-300'
+                                index === currentIndex ? 'bg-secondary' : 'bg-gray-300'
                             }`}
                         />
                     ))}

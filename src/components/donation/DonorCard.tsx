@@ -32,7 +32,7 @@ const DonorCard = ({ donor }: { donor: any }) => {
                             </div>
                         </div>
                     </div>
-                    <p className='text-sm font-bold text-[#BEE36E]'>
+                    <p className='text-sm font-bold text-secondary'>
                         {donor?.amount ? `R${donor.amount}` : "Amount not available"}
                     </p>
                 </div>

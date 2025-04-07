@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import { AuthContext } from '../../context/userContext';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
+import Notification from '../notification/Notification';
 
 interface CommentType {
   _id: string;
@@ -57,6 +58,11 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
     e.preventDefault();
     if (!newComment.trim()) return;
 
+    if(!user){
+      setError('Please login to add a comment')
+      return
+    }
+
     try {
       setLoading(true);
       const res = await axios.post(`${BASE_URL}/comments`, { 
@@ -82,13 +88,13 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
     return <div className="text-center py-4">Loading comments...</div>;
   }
 
-  if (error) {
-    return <div className="text-center text-red-500 py-4">{error}</div>;
-  }
+  
 
   return (
     <div className="w-full mx-auto p-4">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Comments</h1>
+
+      {error && <Notification isOpen={true} onClose={() => { setError("") }} title="Error" message={error} type="error" />}
       
       <form onSubmit={handleAddComment} className="mb-8">
         <div className="flex items-start space-x-3">
@@ -108,12 +114,12 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Write your comment..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
               disabled={loading}
             />
             <button 
               type="submit"
-              className="px-4 py-2 bg-[#BEE36E] text-white rounded-lg hover:bg-[#BEE36E] transition disabled:opacity-50"
+              className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary transition disabled:opacity-50"
               disabled={loading || !newComment.trim()}
             >
               {loading ? 'Posting...' : 'Post'}

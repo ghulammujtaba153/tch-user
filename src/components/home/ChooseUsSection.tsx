@@ -48,7 +48,7 @@ const ChooseUsSection: React.FC = () => {
           </p>
         
           {/* Button */}
-          <button className='w-[150px] h-[45px] bg-[#BEE36E] text-black flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-[#a8cc5c] transition-colors duration-300 mt-4'>
+          <button className='w-[150px] h-[45px] bg-secondary text-black flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-[#a8cc5c] transition-colors duration-300 mt-4'>
             About Us
             <img 
               src="/arrow-black.png" 

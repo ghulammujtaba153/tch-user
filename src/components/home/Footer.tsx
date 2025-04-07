@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-8 mb-4 font-sans">
 
-<div className="flex flex-col md:flex-row items-center justify-between bg-[#BEE36E] max-h-[300px] rounded-xl overflow-hidden">
+<div className="flex flex-col md:flex-row items-center justify-between bg-secondary max-h-[300px] rounded-xl overflow-hidden">
     {/* Left Section */}
     <div className="w-full md:w-1/2 h-full flex justify-center md:justify-start">
         <img 
@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
                         href="https://www.pinterest.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-[40px] h-[40px] bg-[#BEE36E] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
+                        className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
                         aria-label="Pinterest"
                     >
                         <img src="/pinterest.png" alt="Pinterest" className="w-[20px] h-[20px]" />
@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
                         href="https://www.facebook.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-[40px] h-[40px] bg-[#BEE36E] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
+                        className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
                         aria-label="Facebook"
                     >
                         <img src="/facebook.png" alt="Facebook" className="w-[20px] h-[20px]" />
@@ -87,7 +87,7 @@ const Footer: React.FC = () => {
                         href="https://www.instagram.com"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-[40px] h-[40px] bg-[#BEE36E] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
+                        className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300"
                         aria-label="Instagram"
                     >
                         <img src="/instagram.png" alt="Instagram" className="w-[20px] h-[20px]" />
@@ -106,9 +106,9 @@ const Footer: React.FC = () => {
                 <input 
                     type="text" 
                     placeholder='Enter your email' 
-                    className='w-full h-[40px] border border-[#BEE36E] rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#BEE36E]' 
+                    className='w-full h-[40px] border border-secondary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary' 
                 />
-                <button className='w-[40px] h-[40px] bg-[#BEE36E] rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300'>
+                <button className='w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:bg-[#a8cc5c] transition-all duration-300'>
                     <img src="/send.png" alt="send" className='w-[20px] h-[20px]' />
                 </button>
             </div>
@@ -116,26 +116,26 @@ const Footer: React.FC = () => {
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-8'>
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-sm font-bold mb-2 font-onest'>Quick Links</h2>
-                    <a href="/" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Home</a>
-                    <a href="/about" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>About Us</a>
-                    <a href="/services" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Services</a>
-                    <a href="/blog" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Blog</a>
+                    <a href="/" className='text-sm hover:text-secondary transition-colors duration-300'>Home</a>
+                    <a href="/about" className='text-sm hover:text-secondary transition-colors duration-300'>About Us</a>
+                    <a href="/services" className='text-sm hover:text-secondary transition-colors duration-300'>Services</a>
+                    <a href="/blog" className='text-sm hover:text-secondary transition-colors duration-300'>Blog</a>
                 </div>
 
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-sm font-bold mb-2 font-onest'>Services</h2>
-                    <a href="/food-security" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Food Security Initiative</a>
-                    <a href="/healthcare" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Healthcare Access</a>
-                    <a href="/education" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Education</a>
-                    <a href="/women-empowerment" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Women Empowerment</a>
+                    <a href="/food-security" className='text-sm hover:text-secondary transition-colors duration-300'>Food Security Initiative</a>
+                    <a href="/healthcare" className='text-sm hover:text-secondary transition-colors duration-300'>Healthcare Access</a>
+                    <a href="/education" className='text-sm hover:text-secondary transition-colors duration-300'>Education</a>
+                    <a href="/women-empowerment" className='text-sm hover:text-secondary transition-colors duration-300'>Women Empowerment</a>
                 </div>
 
                 <div className='flex flex-col gap-2'>
                     <h2 className='text-sm font-bold mb-2 font-onest'>Support</h2>
-                    <a href="/faq" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>FAQ</a>
-                    <a href="/support" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Support</a>
-                    <a href="/terms" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Terms & Conditions</a>
-                    <a href="/privacy" className='text-sm hover:text-[#BEE36E] transition-colors duration-300'>Privacy Policy</a>
+                    <a href="/faq" className='text-sm hover:text-secondary transition-colors duration-300'>FAQ</a>
+                    <a href="/support" className='text-sm hover:text-secondary transition-colors duration-300'>Support</a>
+                    <a href="/terms" className='text-sm hover:text-secondary transition-colors duration-300'>Terms & Conditions</a>
+                    <a href="/privacy" className='text-sm hover:text-secondary transition-colors duration-300'>Privacy Policy</a>
                 </div>
             </div>
         </div>

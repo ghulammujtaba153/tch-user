@@ -75,7 +75,7 @@ const DonationsTabs = () => {
                     <h1 className='text-2xl font-bold'>Donations</h1>
                     <p className='text-xs text-gray-500'>{dayjs().format('DD MMM YYYY')}</p>
                 </div>
-                <button className='bg-[#BEE36E] text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'>
+                <button className='bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'>
                     Download Reports
                     <ArrowDownIcon className='w-4 h-4' />
                 </button>
@@ -88,8 +88,8 @@ const DonationsTabs = () => {
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${
                             activeTab === tab.key
-                                ? 'bg-[#BEE36E] text-black'
-                                : 'outline outline-[#BEE36E] outline-1 text-[#BEE36E]'
+                                ? 'bg-secondary text-black'
+                                : 'outline outline-secondary outline-1 text-secondary'
                         }`}
                     >
                         {tab.name}

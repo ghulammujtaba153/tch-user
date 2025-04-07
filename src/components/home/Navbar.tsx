@@ -22,12 +22,12 @@ const Navbar: React.FC = () => {
             <img src={"/line.png"} alt="logo" className='w-[1px] h-[30px] hidden md:block'/>
             
             {/* <div className="hidden md:flex items-center gap-4">
-              <Link to="/" className="hover:text-[#BEE36E] transition-colors duration-300">Home</Link>
-              <Link to="/campaigns" className="hover:text-[#BEE36E] transition-colors duration-300">About Us</Link>
-              <Link to="/donate" className="hover:text-[#BEE36E] transition-colors duration-300">Services</Link>
-              <Link to="/about" className="hover:text-[#BEE36E] transition-colors duration-300">Blog</Link>
-              <Link to="/contact" className="hover:text-[#BEE36E] transition-colors duration-300">Donate</Link>
-              <Link to="/contact" className="hover:text-[#BEE36E] transition-colors duration-300">Contact Us</Link>
+              <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link>
+              <Link to="/campaigns" className="hover:text-secondary transition-colors duration-300">About Us</Link>
+              <Link to="/donate" className="hover:text-secondary transition-colors duration-300">Services</Link>
+              <Link to="/about" className="hover:text-secondary transition-colors duration-300">Blog</Link>
+              <Link to="/contact" className="hover:text-secondary transition-colors duration-300">Donate</Link>
+              <Link to="/contact" className="hover:text-secondary transition-colors duration-300">Contact Us</Link>
             </div> */}
           </div>
 
@@ -50,7 +50,7 @@ const Navbar: React.FC = () => {
             <Link to="/signup" className="bg-black flex items-center justify-center text-white px-4 py-2 rounded-full w-[100px] hover:bg-gray-800 transition-colors duration-300">
               Signup
             </Link>
-            <Link to="/signin" className="bg-[#BEE36E] flex items-center justify-center text-black px-4 py-2 rounded-full w-[100px] hover:bg-[#a8cc5c] transition-colors duration-300">
+            <Link to="/signin" className="bg-secondary flex items-center justify-center text-black px-4 py-2 rounded-full w-[100px] hover:bg-[#a8cc5c] transition-colors duration-300">
               Login
             </Link>
             </>
@@ -76,12 +76,12 @@ const Navbar: React.FC = () => {
           ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2 pointer-events-none'}
         `}>
           <div className="flex flex-col p-4 gap-4">
-              {/* <Link to="/" className="hover:text-[#BEE36E] transition-colors duration-300">Home</Link>
-              <Link to="/campaigns" className="hover:text-[#BEE36E] transition-colors duration-300">About Us</Link>
-              <Link to="/donate" className="hover:text-[#BEE36E] transition-colors duration-300">Services</Link>
-              <Link to="/about" className="hover:text-[#BEE36E] transition-colors duration-300">Blog</Link>
-              <Link to="/contact" className="hover:text-[#BEE36E] transition-colors duration-300">Donate</Link>
-              <Link to="/contact" className="hover:text-[#BEE36E] transition-colors duration-300">Contact Us</Link>
+              {/* <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link>
+              <Link to="/campaigns" className="hover:text-secondary transition-colors duration-300">About Us</Link>
+              <Link to="/donate" className="hover:text-secondary transition-colors duration-300">Services</Link>
+              <Link to="/about" className="hover:text-secondary transition-colors duration-300">Blog</Link>
+              <Link to="/contact" className="hover:text-secondary transition-colors duration-300">Donate</Link>
+              <Link to="/contact" className="hover:text-secondary transition-colors duration-300">Contact Us</Link>
              */}
             <div className='flex flex-col gap-3 pt-2'>
 
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
               <Link to="/signup" className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-800 transition-colors duration-300">
                 Signup
               </Link>
-              <Link to="/signin" className="bg-[#BEE36E] text-black px-4 py-2 rounded-full hover:bg-[#a8cc5c] transition-colors duration-300">
+              <Link to="/signin" className="bg-secondary text-black px-4 py-2 rounded-full hover:bg-[#a8cc5c] transition-colors duration-300">
                 Login
               </Link>
               </>

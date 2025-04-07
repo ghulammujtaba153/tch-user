@@ -56,7 +56,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({ userId, onClose }) =>
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
             placeholder="Enter your email"
             required
           />
@@ -67,7 +67,7 @@ const AddPaymentModal: React.FC<AddPaymentModalProps> = ({ userId, onClose }) =>
           <button
             onClick={handleStripeOnboarding}
             disabled={loading}
-            className="bg-[#BEE36E] text-black px-4 py-2 rounded-md hover:bg-[#a8cc5c] disabled:opacity-50"
+            className="bg-secondary text-black px-4 py-2 rounded-md hover:bg-[#a8cc5c] disabled:opacity-50"
           >
             {loading ? "Redirecting to Stripe..." : "Connect with Stripe"}
           </button>

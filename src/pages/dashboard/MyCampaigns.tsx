@@ -108,7 +108,7 @@ const MyCampaigns = () => {
                     <h1 className='text-2xl font-bold'>My Campaigns</h1>
                     <p className='text-gray-500'>{dayjs(new Date()).format('DD MMM YYYY')}</p>
                 </div>
-                <Link to="/user/dashboard/campaigns/create" className='bg-[#BEE36E] text-black px-4 py-2 rounded-full hover:opacity-80 transition-all duration-300'>Create Campaign</Link>
+                <Link to="/user/dashboard/campaigns/create" className='bg-secondary text-black px-4 py-2 rounded-full hover:opacity-80 transition-all duration-300'>Create Campaign</Link>
             </div>
 
             {

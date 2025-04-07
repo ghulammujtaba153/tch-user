@@ -82,13 +82,13 @@ const Withdrawal = () => {
           <h1 className='text-2xl font-bold text-black'>{amount}</h1>
         </div>
 
-        <h1 className='text-2xl font-semibold text-[#BEE36E]'>Withdrawal</h1>
+        <h1 className='text-2xl font-semibold text-secondary'>Withdrawal</h1>
 
 
 
         <button
           onClick={() => setWithDrawModal(true)}
-          className='bg-[#BEE36E] max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full'
+          className='bg-secondary max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full'
         >
           Withdraw
         </button>
@@ -110,7 +110,7 @@ const Withdrawal = () => {
             >
               ✕
             </button>
-            <h1 className='text-2xl font-semibold text-[#BEE36E]'>Withdrawal</h1>
+            <h1 className='text-2xl font-semibold text-secondary'>Withdrawal</h1>
             <p className='text-sm text-gray-500'>Enter the amount you want to withdraw</p>
             <input
               type="number"
@@ -124,7 +124,7 @@ const Withdrawal = () => {
             <button
               onClick={handleWithdraw}
               disabled={apiLoading}
-              className='bg-[#BEE36E] max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full mt-4'
+              className='bg-secondary max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full mt-4'
             >
               {
                 apiLoading ? "Processing..." : "Withdraw"
@@ -141,7 +141,7 @@ const Withdrawal = () => {
       {/* Right Section - Payment Methods */}
       <div className='flex flex-col gap-4 flex-1'>
 
-        <button onClick={() => setIsModalOpen(true)} className='text-[#BEE36E] hover:bg-[#BEE36E] hover:text-black cursor-pointer border border-[#BEE36E] max-w-fit mx-auto text-sm px-4 py-2 rounded-full flex items-center gap-2'>
+        <button onClick={() => setIsModalOpen(true)} className='text-secondary hover:bg-secondary hover:text-black cursor-pointer border border-secondary max-w-fit mx-auto text-sm px-4 py-2 rounded-full flex items-center gap-2'>
           Add Card
           <ArrowRightIcon className='w-4 h-4' />
         </button>

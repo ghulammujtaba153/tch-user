@@ -12,6 +12,7 @@ import {
 import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import { AuthContext } from '../../context/userContext';
+import Notification from '../notification/Notification';
 
 dayjs.extend(relativeTime);
 
@@ -30,12 +31,17 @@ const Comment = ({ comment }) => {
   const [loadingReplies, setLoadingReplies] = useState(false);
   const [isLiked, setIsLiked] = useState(comment.likes.includes(user?.userId));
   const [isDisliked, setIsDisliked] = useState(comment.dislikes.includes(user?.userId));
+  const [error, setError] = useState(null);
 
 
   console.log("comment", comment)
   console.log("comment likes count", comment.likes.includes(user?.userId))
 
   const handleLike = async () => {
+    if(!user){
+      setError("Please login to like the comment");
+      return;
+    }
     try {
       const res = await axios.put(`${BASE_URL}/comments/${comment._id}/like`, {
         userId: user?.userId
@@ -55,7 +61,12 @@ const Comment = ({ comment }) => {
   
 
   const handleDislike = async () => {
+    if(!user){
+      setError("Please login");
+      return;
+    }
     try {
+      
       const res = await axios.put(`${BASE_URL}/comments/${comment._id}/dislike`, {
         userId: user?.userId
       });
@@ -75,6 +86,10 @@ const Comment = ({ comment }) => {
   const handleReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!replyText.trim()) return;
+    if(!user){
+      setError("Please login");
+      return;
+    }
 
     try {
       const res = await axios.post(`${BASE_URL}/comments/${comment._id}/replies`, {
@@ -129,6 +144,9 @@ const Comment = ({ comment }) => {
 
   return (
     <div className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
+      
+      {error && <Notification isOpen={true} onClose={() => { setError("") }} title="Error" message={error} type="error" />}
+
       <div className="flex space-x-3">
         {comment.senderId?.profilePicture ? (
           <img 
@@ -184,11 +202,11 @@ const Comment = ({ comment }) => {
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write your reply..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
               />
               <button 
                 type="submit"
-                className="p-2 bg-[#BEE36E] text-white rounded-lg hover:bg-[#BEE36E] transition"
+                className="p-2 bg-secondary text-white rounded-lg hover:bg-secondary transition"
               >
                 <PaperAirplaneIcon className="h-5 w-5" />
               </button>
@@ -199,7 +217,7 @@ const Comment = ({ comment }) => {
           {!isReplying && (
             <button 
               onClick={() => setIsReplying(true)}
-              className="mt-2 text-sm text-[#BEE36E] hover:text-[#BEE36E]"
+              className="mt-2 text-sm text-secondary hover:text-secondary"
             >
               + Add Reply
             </button>

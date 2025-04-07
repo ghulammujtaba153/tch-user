@@ -55,8 +55,8 @@ const Profile = () => {
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${activeTab === tab.key
-                            ? 'bg-[#BEE36E] text-black'
-                            : 'outline outline-[#BEE36E] outline-1 text-[#BEE36E]'
+                            ? 'bg-secondary text-black'
+                            : 'outline outline-secondary outline-1 text-secondary'
                             }`}
                     >
                         {tab.name} <tab.icon className='w-4 h-4' />
@@ -72,8 +72,8 @@ const Profile = () => {
                 {activeTab === 'profile' && (
                     <div className='p-4 flex flex-col gap-4'>
                         <div className='flex items-center justify-between'>
-                            <h1 className='text-2xl font-bold text-[#BEE36E]'>Personal Details</h1>
-                            <Link to="/user/dashboard/profile/edit" className='bg-[#BEE36E] flex items-center gap-2 text-black text-sm px-4 py-2 rounded-full'>Edit Profile <PencilIcon className='w-4 h-4' /></Link>
+                            <h1 className='text-2xl font-bold text-secondary'>Personal Details</h1>
+                            <Link to="/user/dashboard/profile/edit" className='bg-secondary flex items-center gap-2 text-black text-sm px-4 py-2 rounded-full'>Edit Profile <PencilIcon className='w-4 h-4' /></Link>
                         </div>
 
                         {/* Personal Details */}
@@ -82,7 +82,7 @@ const Profile = () => {
                             <div className='flex flex-col md:flex-row md:items-center gap-4'>
                                 <div className='max-w-[400px] h-full md:max-h-[250px]'>
                                     <img src={data?.profilePicture || 'https://i.ibb.co/5k0z6Zv/Profile-Picture.png'} alt="Profile" className='w-full h-full rounded-lg object-cover' />
-                                    <p className='text-sm text-[#BEE36E] cursor-pointer mt-2'>Upload Profile Picture</p>
+                                    <p className='text-sm text-secondary cursor-pointer mt-2'>Upload Profile Picture</p>
                                 </div>
 
                                 <div className='flex flex-col gap-4'>
@@ -110,14 +110,14 @@ const Profile = () => {
 
                             {/* Organization Details */}
                             <div className='flex flex-col gap-4'>
-                                <h1 className='text-sm font-bold text-[#BEE36E]'>Organization Details</h1>
+                                <h1 className='text-sm font-bold text-secondary'>Organization Details</h1>
 
                                 <div className='flex flex-col gap-1'>
                                     <h1 className='text-sm font-bold'>Name</h1>
                                     <p className='text-sm text-gray-500'>{data?.organization?.name || 'N/A'}</p>
                                 </div>
 
-                                <h1 className='text-sm font-bold text-[#BEE36E]'>Contact Details</h1>
+                                <h1 className='text-sm font-bold text-secondary'>Contact Details</h1>
 
                                 <div className='flex flex-col gap-1'>
                                     <h1 className='text-sm font-bold'>Phone</h1>
@@ -132,7 +132,7 @@ const Profile = () => {
 
                             {/* Address Details */}
                             <div className='flex flex-col gap-4'>
-                                <h1 className='text-sm font-bold text-[#BEE36E]'>Address</h1>
+                                <h1 className='text-sm font-bold text-secondary'>Address</h1>
 
                                 <div className='flex flex-col gap-1'>
                                     <h1 className='text-sm font-bold'>Address</h1>

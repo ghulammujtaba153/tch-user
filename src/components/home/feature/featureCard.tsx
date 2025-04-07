@@ -21,7 +21,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ image, stats, title, descript
             <div className="flex flex-wrap items-center gap-4 p-4">
                 {/* Text Section */}
                 <div className="flex-1 flex flex-col space-y-1">
-                    <h1 className="text-3xl font-bold text-[#BEE36E] mb-4">{stats}</h1>
+                    <h1 className="text-3xl font-bold text-secondary mb-4">{stats}</h1>
                     <p className="font-onest text-sm font-bold">{title}</p>
                     <p className="text-xs text-gray-500 leading-relaxed">
                         {description}

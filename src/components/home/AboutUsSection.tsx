@@ -66,20 +66,20 @@ const AboutUsSection: React.FC = () => {
 
         <div className='flex flex-col md:flex-row items-center justify-between p-4 gap-2'>
                 <div className="flex flex-col items-center gap-2">
-                    <h1 className="text-4xl font-bold text-[#BEE36E]">25+</h1>
+                    <h1 className="text-4xl font-bold text-secondary">25+</h1>
                     <p className="text-sm">Years of experience</p>
                 </div>
 
                 <div className="h-full w-[1px] bg-gray-300"></div>
 
                 <div className="flex flex-col items-center gap-2">
-                    <h1 className="text-4xl font-bold text-[#BEE36E]">25+</h1>
+                    <h1 className="text-4xl font-bold text-secondary">25+</h1>
                     <p className="text-sm">Years of experience</p>
                 </div>
                 <div className="h-full w-[1px] bg-gray-300"></div>
 
                 <div className="flex flex-col items-center gap-2 ">
-                    <h1 className="text-4xl font-bold text-[#BEE36E]">25+</h1>
+                    <h1 className="text-4xl font-bold text-secondary">25+</h1>
                     <p className="text-sm">Years of experience</p>
                 </div>
                 
