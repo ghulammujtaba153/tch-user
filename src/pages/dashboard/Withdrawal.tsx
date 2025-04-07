@@ -47,12 +47,18 @@ const Withdrawal = () => {
         toast.error("Amount must be greater than 0");
         return;
       }
-      const res =await axios.post(`${BASE_URL}/account/withdraw/${user.userId}`, {
+
+      const res = await axios.post(`${BASE_URL}/requests`, {
+        userId: user.userId,
         amount: withdrawalAmount,
-      })
-      console.log(res.data)
-      setAmount(parseInt(amount.toString()) - parseInt(withdrawalAmount.toString()));
-      setWithdrawalAmount(0);
+      });
+      console.log(res.data);
+      // const res =await axios.post(`${BASE_URL}/account/withdraw/${user.userId}`, {
+      //   amount: withdrawalAmount,
+      // })
+      // console.log(res.data)
+      // setAmount(parseInt(amount.toString()) - parseInt(withdrawalAmount.toString()));
+      // setWithdrawalAmount(0);
       setWithDrawModal(false);
 
     } catch (error: any) {

@@ -1,9 +1,9 @@
 import { ArrowUpIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../context/userContext';
-import axios from 'axios';
-import { BASE_URL } from '../../config/url';
+// import React, { useContext, useEffect, useState } from 'react';
+// import { AuthContext } from '../../context/userContext';
+// import axios from 'axios';
+// import { BASE_URL } from '../../config/url';
 
 interface DonationSentProps {
     loading: boolean;

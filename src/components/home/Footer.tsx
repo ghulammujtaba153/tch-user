@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
         <div className='flex flex-col justify-between gap-4 w-full md:w-1/3 h-full'>
             <div>
                 <div className='flex mb-8'>
-                    <img src="/footer-logo.png" alt="logo" className='w-[100px] h-[20px]'/>
+                    <img src="/nav-logo.png" alt="logo" className='w-[100px] h-[40px]'/>
                 </div>
 
                 <div className='flex flex-col md:justify-between md:flex-row gap-4 md:gap-8 mb-8'>
