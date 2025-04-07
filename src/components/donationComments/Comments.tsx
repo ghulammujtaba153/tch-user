@@ -3,6 +3,7 @@ import Comment from './Comment';
 import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import { AuthContext } from '../../context/userContext';
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 interface CommentType {
   _id: string;
@@ -75,6 +76,8 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
     }
   };
 
+ 
+
   if (loading && comments.length === 0) {
     return <div className="text-center py-4">Loading comments...</div>;
   }
@@ -85,27 +88,32 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
 
   return (
     <div className="w-full mx-auto p-4">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Comments ({comments.length})</h1>
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">Comments</h1>
       
       <form onSubmit={handleAddComment} className="mb-8">
         <div className="flex items-start space-x-3">
+        {user?.profilePicture ? (
           <img 
-            src="https://via.placeholder.com/40" 
+            src={user.profilePicture} 
             alt="User" 
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full" 
           />
+        ) : (
+          <UserCircleIcon className="w-10 h-10 text-gray-400" />
+        )}
+
           <div className="flex-1 flex items-center gap-2">
             <input
               type="text"
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Write your comment..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
               disabled={loading}
             />
             <button 
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+              className="px-4 py-2 bg-[#BEE36E] text-white rounded-lg hover:bg-[#BEE36E] transition disabled:opacity-50"
               disabled={loading || !newComment.trim()}
             >
               {loading ? 'Posting...' : 'Post'}
@@ -119,9 +127,6 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
           <Comment 
             key={comment._id} 
             comment={comment}
-            onReplyAdded={(newReply) => {
-              setComments(prev => Array.isArray(prev) ? [newReply, ...prev] : [newReply]);
-            }}
           />
         ))}
       </div>

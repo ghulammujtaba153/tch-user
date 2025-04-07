@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { 
@@ -19,57 +19,98 @@ dayjs.extend(relativeTime);
 
 
 
-const Comment = ({ comment, onReplyAdded }) => {
+const Comment = ({ comment }) => {
   const { user } = useContext(AuthContext);
   const [showReplies, setShowReplies] = useState(false);
   const [replyText, setReplyText] = useState('');
+  const [likeCount, setLikeCount] = useState(comment.likeCount);
+  const [dislikeCount, setDisLikeCount] = useState(comment.dislikeCount);
   const [isReplying, setIsReplying] = useState(false);
   const [replies, setReplies] = useState(comment.replies || []);
   const [loadingReplies, setLoadingReplies] = useState(false);
+  const [isLiked, setIsLiked] = useState(comment.likes.includes(user?.userId));
+  const [isDisliked, setIsDisliked] = useState(comment.dislikes.includes(user?.userId));
+
+
+  console.log("comment", comment)
+  console.log("comment likes count", comment.likes.includes(user?.userId))
 
   const handleLike = async () => {
     try {
-      await axios.put(`${BASE_URL}/comments/${comment._id}/like`, {
+      const res = await axios.put(`${BASE_URL}/comments/${comment._id}/like`, {
         userId: user?.userId
       });
-      comment.likeCount++;
+  
+      const data = res.data.data;
+  
+      setLikeCount(data.likeCount);
+      setDisLikeCount(data.dislikeCount);
+      setIsLiked(data.isLiked);
+      setIsDisliked(data.isDisliked);
+      
     } catch (error) {
       console.error('Error liking comment:', error);
     }
   };
+  
 
   const handleDislike = async () => {
     try {
-      await axios.put(`${BASE_URL}/comments/${comment._id}/dislike`, {
+      const res = await axios.put(`${BASE_URL}/comments/${comment._id}/dislike`, {
         userId: user?.userId
       });
-      comment.dislikeCount++;
+  
+      const data = res.data.data;
+  
+      setLikeCount(data.likeCount);
+      setDisLikeCount(data.dislikeCount);
+      setIsLiked(data.isLiked);
+      setIsDisliked(data.isDisliked);
     } catch (error) {
       console.error('Error disliking comment:', error);
     }
   };
+  
 
   const handleReplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!replyText.trim()) return;
 
     try {
-      const { data } = await axios.post(`${BASE_URL}/comments/${comment._id}/replies`, {
+      const res = await axios.post(`${BASE_URL}/comments/${comment._id}/replies`, {
         text: replyText,
         userId: user?.userId
       });
+      const data = res.data.data;
 
+      console.log('Reply posted:', data);
+      console.log('Comment replies:', replies);
       setReplies(prev => [data, ...prev]);
       setReplyText('');
       setIsReplying(false);
+
+      // setReplies(prev => [...prev, data]);
       
-      if (onReplyAdded) {
-        onReplyAdded(data);
-      }
+      
     } catch (error) {
       console.error('Error posting reply:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchReplies = async ()=>{
+      try {
+        const res = await axios.get(`${BASE_URL}/comments/${comment._id}/replies`);
+        const data = res.data.data;
+        console.log("replies", data)
+        setReplies(data);
+      } catch (error) {
+        console.error('Error fetching replies:', error);
+      }
+    }
+
+    fetchReplies()
+  }, [comment._id])
 
   const toggleReplies = async () => {
     if (!showReplies && replies.length === 0) {
@@ -89,9 +130,9 @@ const Comment = ({ comment, onReplyAdded }) => {
   return (
     <div className="border-b border-gray-200 pb-4 last:border-0 last:pb-0">
       <div className="flex space-x-3">
-        {comment.senderId.profile ? (
+        {comment.senderId?.profilePicture ? (
           <img 
-            src={comment.senderId.profile} 
+            src={comment.senderId.profilePicture? comment.senderId.profilePicture : <UserCircleIcon className="w-10 h-10 text-gray-400" />} 
             alt={comment.senderId.name} 
             className="w-10 h-10 rounded-full"
           />
@@ -110,14 +151,15 @@ const Comment = ({ comment, onReplyAdded }) => {
           <p className="mt-1 text-gray-700">{comment.text}</p>
           
           <div className="mt-2 flex items-center space-x-4 text-gray-500">
-            <button onClick={handleLike} className="flex items-center space-x-1 hover:text-blue-600">
+            <button onClick={handleLike} className={`flex items-center space-x-1 ${isLiked ? 'text-blue-600' : 'hover:text-blue-600'} hover:text-blue-600`}>
               <HeartIcon className="h-5 w-5" />
-              <span>{comment.likeCount}</span>
+              <span>{likeCount}</span>
+              
             </button>
             
-            <button onClick={handleDislike} className="flex items-center space-x-1 hover:text-red-600">
+            <button onClick={handleDislike} className={`flex items-center space-x-1 ${isDisliked ? 'text-red-600' : 'hover:text-red-600'} hover:text-red-600`}>
               <HandThumbDownIcon className="h-5 w-5" />
-              <span>{comment.dislikeCount}</span>
+              <span>{dislikeCount}</span>
             </button>
             
             <button 
@@ -128,10 +170,10 @@ const Comment = ({ comment, onReplyAdded }) => {
               <span>Reply ({replies.length})</span>
             </button>
             
-            <button className="flex items-center space-x-1 hover:text-gray-600">
+            {/* <button className="flex items-center space-x-1 hover:text-gray-600">
               <ShareIcon className="h-5 w-5" />
               <span>Share</span>
-            </button>
+            </button> */}
           </div>
 
           {/* Reply Form */}
@@ -142,11 +184,11 @@ const Comment = ({ comment, onReplyAdded }) => {
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Write your reply..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
               />
               <button 
                 type="submit"
-                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="p-2 bg-[#BEE36E] text-white rounded-lg hover:bg-[#BEE36E] transition"
               >
                 <PaperAirplaneIcon className="h-5 w-5" />
               </button>
@@ -157,7 +199,7 @@ const Comment = ({ comment, onReplyAdded }) => {
           {!isReplying && (
             <button 
               onClick={() => setIsReplying(true)}
-              className="mt-2 text-sm text-blue-600 hover:text-blue-800"
+              className="mt-2 text-sm text-[#BEE36E] hover:text-[#BEE36E]"
             >
               + Add Reply
             </button>
@@ -173,7 +215,7 @@ const Comment = ({ comment, onReplyAdded }) => {
                   <Comment 
                     key={reply._id} 
                     comment={reply} 
-                    onReplyAdded={(newReply) => setReplies(prev => [newReply, ...prev])}
+                    
                   />
                 ))
               ) : (
