@@ -57,11 +57,11 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   };
 
   return (
-    <div className={`relative h-screen  bg-gray-900 text-white flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
+    <div className={`relative h-screen  bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">
-          <img src={"/logo.png"} alt="logo" className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} />
+          <img src={"/nav-logo.png"} alt="logo" className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} />
         </Link>
 
         {/* Menu Items */}
@@ -72,7 +72,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
                 <Link
                   to={item.path}
                   onClick={(e) => toggleExpand(item.name)}
-                  className={`w-full ${isOpen ? "px-6 py-4" : "px-5 py-5"} flex items-center hover:bg-gray-800 transition-colors duration-200 ${isActive(item.path) ? 'bg-gray-800 border-l-4 border-[#BEE36E]' : ''}`}
+                  className={`w-full ${isOpen ? "px-6 py-4" : "px-5 py-5"} flex items-center hover:bg-secondary/20 transition-colors duration-200 ${isActive(item.path) ? 'bg-secondary/20 border-l-4 text-secondary border-secondary' : ''}`}
                 >
                   <item.icon className={`${isOpen ? 'h-6 w-6' : 'h-8 w-8'}`} />
                   {isOpen && (
@@ -118,7 +118,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
       {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="absolute top-4 -right-2 p-2 bg-gray-800 rounded-full"
+        className="absolute top-4 -right-2 p-2 bg-secondary/80 text-white rounded-full"
       >
         {isOpen ? '<' : '>'}
       </button>

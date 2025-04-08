@@ -3,7 +3,7 @@ import TestimonialCarousel from "./testimonial/TestimonialCarousel";
 
 const Testimonials: React.FC = () => {
     return (
-        <div className="font-sans bg-[#F8F8F8] w-full py-8 md:py-16">
+        <div className="font-sans bg-primary w-full py-8 md:py-16">
             <div className="max-w-[1200px] mx-auto p-4 flex flex-col lg:flex-row gap-8 lg:gap-12">
                 {/* image section */}
                 <div className="w-full lg:w-1/2 flex items-center justify-center">

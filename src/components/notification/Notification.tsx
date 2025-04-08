@@ -30,7 +30,7 @@ const Notification: React.FC<NotificationModalProps> = ({
         <div className="flex flex-col items-center text-center">
           {/* Success Icon */}
           {type === 'success' && (
-            <div className="w-20 h-20 rounded-full bg-[#BEE36E] flex items-center justify-center mb-6">
+            <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-6">
               <svg 
                 className="w-10 h-10 text-white" 
                 fill="none" 
@@ -47,7 +47,7 @@ const Notification: React.FC<NotificationModalProps> = ({
             </div>
           )}
           {type === 'error' && (
-            <div className="w-20 h-20 rounded-full bg-[#BEE36E] flex items-center justify-center mb-6">
+            <div className="w-20 h-20 rounded-full bg-secondary flex items-center justify-center mb-6">
               <svg 
                 className="w-10 h-10 text-white" 
                 fill="none" 
@@ -75,14 +75,14 @@ const Notification: React.FC<NotificationModalProps> = ({
           </p>
 
           {link && (
-            <Link to={link} className="w-full bg-[#BEE36E] text-black py-3 rounded-lg font-medium hover:bg-[#a8cc5c] transition-colors duration-200">Continue</Link>
+            <Link to={link} className="w-full bg-secondary text-white py-3 rounded-lg font-medium  hover:scale-105 transition-transform duration-300">Continue</Link>
           )}
 
           {/* Continue Button */}
           {!link && (
             <button
               onClick={onClose}
-              className="w-full bg-[#BEE36E] text-black py-3 rounded-lg font-medium hover:bg-[#a8cc5c] transition-colors duration-200"
+              className="w-full bg-secondary text-white py-3 rounded-lg font-medium hover:scale-105 transition-transform duration-300"
             >
               ok
             </button>

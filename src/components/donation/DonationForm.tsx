@@ -202,7 +202,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
       {errors && <Notification isOpen={true} onClose={() => { setErrors("") }} title="Error" message={errors} type="error" />}
 
       {/* Payment Method Selection */}
-      <div className="font-onest bg-white w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
+      <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
         <div className='flex flex-col items-center gap-2'>
           <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
           <div className="md:col-span-1">
@@ -212,7 +212,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               placeholder="Enter Your Amount"
               value={customAmount}
               onChange={handleCustomAmountChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              className="w-full px-4 bg-transparent py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
             />
           </div>
         </div>
@@ -227,7 +227,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
                   value={method}
                   checked={selectedMethod === method}
                   onChange={(e) => setSelectedMethod(e.target.value as PaymentMethod)}
-                  className="form-radio h-4 w-4 accent-secondary border-gray-300"
+                  className="form-radio bg-transparent h-4 w-4 accent-secondary border-gray-300"
                 />
                 <span className="ml-2 text-gray-700">{method}</span>
               </label>
@@ -241,7 +241,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
                 onClick={() => handleAmountSelect(amount.value)}
                 className={`px-4 py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
                     ? 'bg-secondary text-black'
-                    : 'bg-white border border-secondary text-black hover:bg-secondary/10'
+                    : 'bg-transparent border border-secondary text-black hover:bg-secondary/10'
                   }`}
               >
                 {amount.label}
@@ -254,7 +254,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
       {/* Details Form */}
       <h2 className="text-xl font-semibold mb-4">Details</h2>
 
-      <div className="bg-white rounded-lg p-4 border border-gray-300 shadow-sm">
+      <div className=" rounded-lg p-4 border border-gray-300 shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <input
@@ -263,7 +263,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               placeholder="Alex Jordan*"
               value={formData.donorName}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border border-gray-300} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+              className={`w-full bg-transparent px-4 py-2 border border-gray-300} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
             />
 
           </div>
@@ -274,7 +274,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               placeholder="Name@Example.Com*"
               value={formData.donorEmail}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+              className={`w-full bg-transparent px-4 py-2 border 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
             />
 
           </div>
@@ -286,7 +286,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
             placeholder="Company Name*"
             value={formData.companyName}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
           />
 
         </div>
@@ -304,7 +304,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               placeholder="Postcode*"
               value={formData.postalCode}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+              className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
             />
 
           </div>
@@ -315,7 +315,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               placeholder="City*"
               value={formData.city}
               onChange={handleChange}
-              className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+              className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
             />
 
           </div>
@@ -327,7 +327,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
             placeholder="House No*"
             value={formData.houseNumber}
             onChange={handleChange}
-            className={`w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            className={`w-full px-4 bg-transparent py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
           />
 
         </div>
@@ -350,7 +350,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
         <button
           disabled={isPending}
           onClick={handleDonate}
-          className="bg-secondary text-black py-3 px-6 mt-4 rounded-full font-xs hover:bg-[#a8cc5c] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="bg-secondary text-white py-3 px-6 mt-4 rounded-full font-xs hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? 'Donating...' : 'DONATE NOW'}
         </button>

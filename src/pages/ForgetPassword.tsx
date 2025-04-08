@@ -50,7 +50,7 @@ const ForgetPassword = () => {
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src="/nav-logo.png" alt="logo" className="w-[150px] h-[40px]" />
+          <img src="/nav-logo.png" alt="logo" className="w-[150px] h-[50px]" />
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -71,7 +71,7 @@ const ForgetPassword = () => {
                 value={email}
                 onChange={handleChange}
                 required
-                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#BEE36E] focus:border-transparent"
+                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                 placeholder="Enter your email"
               />
             </div>
@@ -81,7 +81,7 @@ const ForgetPassword = () => {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-[#BEE36E] hover:bg-[#a8cc5c] disabled:opacity-50"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-secondary hover:scale-105 transition-transform duration-300 disabled:opacity-50"
             >
               {isPending ? "Sending..." : "Send Code"}
             </button>

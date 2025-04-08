@@ -7,7 +7,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { LinkIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, ClockIcon, LinkIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Comments from "../components/donationComments/Comments";
 
 
@@ -103,16 +103,12 @@ const CampaignDetails = () => {
             />
 
             {/* gradient overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-white to-transparent flex items-end p-4">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-bg to-transparent flex items-end p-4">
               {/* Progress Bar */}
               <div className="w-full pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <img
-                      src="/location.png"
-                      alt="location"
-                      className="w-[20px] h-[20px]"
-                    />
+                    <MapPinIcon className="w-[25px] h-[25px] text-secondary" />
                     <p className="text-xs font-bold text-black">
                       {campaign?.city}
                     </p>
@@ -127,8 +123,8 @@ const CampaignDetails = () => {
                   max={goal}
                   className="w-full h-2 rounded-full 
                                     [&::-webkit-progress-bar]:bg-gray-300 
-                                    [&::-webkit-progress-value]:bg-[#BEE36E] 
-                                    [&::-moz-progress-bar]:bg-[#BEE36E]"
+                                    [&::-webkit-progress-value]:bg-secondary 
+                                    [&::-moz-progress-bar]:bg-secondary"
                 />
               </div>
             </div>
@@ -156,11 +152,7 @@ const CampaignDetails = () => {
                 </p>
 
                 <div className="flex items-center gap-2">
-                  <img
-                    src="/clock.png"
-                    alt="location"
-                    className="w-[20px] h-[20px] rounded-lg"
-                  />
+                  <ClockIcon  className="w-[15px] h-[15px] text-gray-600" />
                   <p className="text-xs font-bold text-gray-600 font-onest">
                     {dayjs(campaign?.createdAt).fromNow()}
                   </p>
@@ -171,20 +163,16 @@ const CampaignDetails = () => {
             {/* funds required section */}
             <div className="flex flex-col md:items-center gap-2">
               <p className=" font-bold text-black font-onest">Required Funds</p>
-              <p className="text-[#BEE36E] font-bold text-2xl font-onest">
+              <p className="text-secondary font-bold text-2xl font-onest">
                 R{campaign?.amount}
               </p>
             </div>
 
             {/* donate btn */}
 
-            <button className="bg-[#BEE36E] flex items-center justify-center text-black px-4 py-1 md:py-2 rounded-full text-sm font-bold h-[50px] shadow-md hover:bg-[#BEE36E]/80 transition-all duration-300">
+            <button className="bg-secondary flex items-center justify-center text-white px-4 py-1 md:py-2 rounded-full text-sm font-bold h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300">
               Donate Now
-              <img
-                src="/arrow-black.png"
-                alt="arrow-right"
-                className="w-4 h-4 ml-2"
-              />
+              <ArrowRightIcon className="w-[20px] h-[20px] ml-2" />
             </button>
           </div>
 
@@ -195,7 +183,7 @@ const CampaignDetails = () => {
               href={campaign?.media}
               target="_blank"
               rel="noreferrer"
-              className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
+              className="text-sm text-secondary hover:bg-secondary hover:text-white p-2 rounded-lg font-bold"
             >
               <LinkIcon className="w-4 h-4"/>
             </a>
@@ -204,7 +192,7 @@ const CampaignDetails = () => {
               href={campaign?.video}
               target="_blank"
               rel="noreferrer"
-              className="text-sm text-[#BEE36E] hover:bg-[#BEE36E] hover:text-white p-2 rounded-lg font-bold"
+              className="text-sm text-secondary hover:bg-secondary hover:text-white p-2 rounded-lg font-bold"
             >
               <LinkIcon className="w-4 h-4"/>
             </a>
@@ -273,7 +261,7 @@ const CampaignDetails = () => {
                 <p
                   className={`text-sm font-bold py-2 font-onest rounded-lg p-2 ${
                     status === "active"
-                      ? "bg-[#BEE36E] text-black"
+                      ? "bg-secondary text-black"
                       : status === "cancelled"
                       ? "bg-red-500 text-white"
                       : status === "pending"
@@ -326,7 +314,7 @@ const CampaignDetails = () => {
                 <p
                   className={`text-sm font-bold py-2 font-onest rounded-lg p-2 ${
                     status === "active"
-                      ? "bg-[#BEE36E] text-black"
+                      ? "bg-secondary text-black"
                       : status === "cancelled"
                       ? "bg-red-500 text-white"
                       : status === "pending"
@@ -360,7 +348,7 @@ const CampaignDetails = () => {
                     id="action"
                     name="action"
                     onChange={(e) => handleAction(e.target.value)}
-                    className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#BEE36E] transition"
+                    className="w-full p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-secondary transition"
                   >
                     <option value="">Select Action</option>
                     <option value="active">Approve</option>
@@ -372,7 +360,7 @@ const CampaignDetails = () => {
                 {/* Edit Button */}
                 <Link
                   to={`/admin/campaigns/${id}/edit`}
-                  className="bg-[#BEE36E] text-black px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-[#BEE36E]/80 transition-all duration-300"
+                  className="bg-secondary text-black px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-secondary/80 transition-all duration-300"
                 >
                   Edit
                 </Link>
@@ -388,7 +376,7 @@ const CampaignDetails = () => {
             <div className="flex justify-end w-full">
               <Link
                 to={`/user/dashboard/campaigns/${id}/edit`}
-                className="bg-[#BEE36E] text-black px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-[#BEE36E]/80 transition-all duration-300"
+                className="bg-secondary text-black px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-secondary/80 transition-all duration-300"
               >
                 Edit
               </Link>
@@ -416,7 +404,7 @@ const CampaignDetails = () => {
                 className={`text-sm font-bold cursor-pointer px-4 py-1 rounded-full transition-all duration-300 
                                 ${
                                   activeTab === tab
-                                    ? "bg-[#BEE36E] text-black"
+                                    ? "bg-secondary text-white"
                                     : "bg-white border border-gray-300 text-gray-600"
                                 }`}
                 onClick={() => setActiveTab(tab as "Hot" | "All")}

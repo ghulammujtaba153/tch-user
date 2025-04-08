@@ -114,7 +114,7 @@ const Comments: React.FC<CommentsProps> = ({ campaignId }) => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
               placeholder="Write your comment..."
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full px-4 py-2 bg-transparent border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
               disabled={loading}
             />
             <button 

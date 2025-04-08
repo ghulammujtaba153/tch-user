@@ -98,14 +98,14 @@ const EmailVerification = () => {
       <div className="w-full max-w-md bg-white p-6 rounded-xxxl shadow-lg">
         {/* Logo */}
         <div className="flex items-center justify-center mb-4">
-          <img src="/nav-logo.png" alt="logo" className="w-[180px] h-[40px]" />
+          <img src="/nav-logo.png" alt="logo" className="w-[180px] h-[50px]" />
         </div>
 
         {/* Heading */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Email Verification</h1>
           <p className="text-gray-500 mt-2">Enter the verification code sent to your email:</p>
-          <p className="text-[#BEE36E] font-semibold">{userData?.email || "example@gmail.com"}</p>
+          <p className="text-secondary font-semibold">{userData?.email || "example@gmail.com"}</p>
         </div>
 
         {/* OTP Inputs */}
@@ -121,8 +121,8 @@ const EmailVerification = () => {
               onKeyDown={(e) => handleKeyDown(index, e)}
               className={`w-full h-12 text-center text-lg font-semibold border rounded-lg shadow-sm focus:outline-none focus:ring-2 ${
                 value
-                  ? "border-[#BEE36E] focus:ring-[#BEE36E]"
-                  : "border-gray-300 focus:ring-[#BEE36E]"
+                  ? "border-secondary focus:ring-secondary"
+                  : "border-gray-300 focus:ring-secondary"
               }`}
             />
           ))}
@@ -131,7 +131,7 @@ const EmailVerification = () => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full col-span-4 mt-6 py-3 rounded-lg shadow-md text-sm font-medium text-black outline-none bg-[#BEE36E] hover:bg-[#a8cc5c] transition-all duration-300 disabled:opacity-50"
+            className="w-full col-span-4 mt-6 py-3 rounded-lg shadow-md text-sm font-medium text-white outline-none bg-secondary hover:scale-105 transition-transform duration-300 disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             {isPending ? "Verifying..." : "Verify"}
           </button>

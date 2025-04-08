@@ -40,8 +40,8 @@ const CollaborationSection: React.FC = () => {
 
         <div className="relative flex flex-wrap justify-between items-center gap-6 w-[90%] max-w-6xl">
           {/* Gradient Overlays */}
-          <div className="absolute left-0 top-0 h-full w-16 sm:w-24 bg-gradient-to-r from-white to-transparent"></div>
-          <div className="absolute right-0 top-0 h-full w-16 sm:w-24 bg-gradient-to-l from-white to-transparent"></div>
+          <div className="absolute left-0 top-0 h-full w-16 sm:w-24 bg-gradient-to-r from-bg to-transparent"></div>
+          <div className="absolute right-0 top-0 h-full w-16 sm:w-24 bg-gradient-to-l from-bg to-transparent"></div>
 
           {/* Company Logos */}
           <img src="/collaborate-1.png" alt="logo" className="w-24 sm:w-32 md:w-40 lg:w-48" />

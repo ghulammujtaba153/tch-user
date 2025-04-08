@@ -1,5 +1,3 @@
-import { ArrowDownIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/userContext';
 import axios from 'axios';
@@ -7,13 +5,10 @@ import { BASE_URL } from '../../config/url';
 import DonationsTabs from '../../components/donation/DonationTabs';
 
 
-const tabs = [
-    { name: 'Received', key: 'Received' },
-    { name: 'Sent', key: 'Sent' }
-];
+
 
 const Donations = () => {
-    const [activeTab, setActiveTab] = useState<string>('profile');
+    // const [activeTab, setActiveTab] = useState<string>('profile');
     const {user} =useContext(AuthContext) || {};
     const [donations, setDonations]=useState([]);
     const [loading, setLoading] =useState(true);
@@ -47,9 +42,6 @@ const Donations = () => {
 
 
     return <div className='flex flex-col gap-4'>
-
-
-
         <DonationsTabs/>
 
     </div>;

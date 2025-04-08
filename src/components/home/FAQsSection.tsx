@@ -1,30 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Question from './faqs/Question';
+import axios from 'axios';
+import { BASE_URL } from '../../config/url';
+
+
+const questions = [
+    {
+        question: "What is the purpose of this website?",
+        answer: "The purpose of this website is to provide a platform for people to donate to charities."
+    },
+    {
+        question: "What is the purpose of this website?",
+        answer: "The purpose of this website is to provide a platform for people to donate to charities."
+    },
+    {
+        question: "What is the purpose of this website?",
+        answer: "The purpose of this website is to provide a platform for people to donate to charities."
+    },
+    {
+        question: "What is the purpose of this website?",
+        answer: "The purpose of this website is to provide a platform for people to donate to charities."
+    },
+    {
+        question: "What is the purpose of this website?",
+        answer: "The purpose of this website is to provide a platform for people to donate to charities."
+    }
+]
+
 
 const FAQsSection: React.FC = () => {
-    const questions = [
-        {
-            question: "What is the purpose of this website?",
-            answer: "The purpose of this website is to provide a platform for people to donate to charities."
-        },
-        {
-            question: "What is the purpose of this website?",
-            answer: "The purpose of this website is to provide a platform for people to donate to charities."
-        },
-        {
-            question: "What is the purpose of this website?",
-            answer: "The purpose of this website is to provide a platform for people to donate to charities."
-        },
-        {
-            question: "What is the purpose of this website?",
-            answer: "The purpose of this website is to provide a platform for people to donate to charities."
-        },
-        {
-            question: "What is the purpose of this website?",
-            answer: "The purpose of this website is to provide a platform for people to donate to charities."
-        }
+    const [data, setData]= useState({});
+    const [loading, setLoading] = useState(true);
 
-    ]
+    useEffect(()=>{
+        const fetch = async()=>{
+            
+            try {
+                const res = await axios.get(`${BASE_URL}/faqs`);
+                console.log(res.data);
+                setData(res.data)
+                
+            } catch (error) {
+                console.log(error)
+            }finally{
+                setLoading(false)
+            }
+        }
+        fetch()
+    },[])
+
+    if (loading) {
+        return (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          </div>
+        )
+      }
+
+    
   return (
     <div className="max-w-[1200px] mx-auto py-16 flex flex-col gap-2">
         <div className="flex items-center justify-center gap-2 ">
@@ -33,9 +66,9 @@ const FAQsSection: React.FC = () => {
                 alt="home-header" 
                 className="w-[15px] h-[10px]" 
             />
-            <p className="text-xs font-bold tracking-[3.5px] font-onest">FAQ's</p>   
+            <p className="text-xs font-bold tracking-[3.5px] font-onest">{data?.heading}</p>   
         </div>
-        <h1 className='text-4xl font-bold text-center mb-4 font-onest'>Have Any Questions For Us?</h1>
+        <h1 className='text-4xl font-bold text-center mb-4 font-onest'>{data?.subHeading}</h1>
 
         <div className='flex justify-center flex-col md:flex-row gap-4'>
             {/* image section  */}
@@ -57,7 +90,7 @@ const FAQsSection: React.FC = () => {
 
             {/* Question section */}
             <div className='flex flex-col gap-4 w-full lg:w-1/2 px-2' >
-                {questions.map((question, index) => (
+                {data?.questions.map((question, index) => (
                     <Question key={index} question={question.question} answer={question.answer} />
                 ))}
                 

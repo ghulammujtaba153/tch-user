@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import CampaignCard from '../components/Campaigns/CampaignCard';
 import axios from 'axios';
 import { BASE_URL } from '../config/url';
+import { FiFilter } from 'react-icons/fi';
 
 interface Campaign {
   _id: string;
@@ -121,7 +122,7 @@ const Campaigns = () => {
           <input
             type="text"
             placeholder='Search Campaigns'
-            className='w-full h-[20px] rounded-full outline-none px-2'
+            className='w-full h-[20px] rounded-full bg-transparent outline-none px-2'
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -166,7 +167,7 @@ const Campaigns = () => {
             onClick={() => setFilterOpen(!filterOpen)}
           >
             <p className='text-sm font-normal text-gray-600'>Filters</p>
-            <img src="/filter.png" alt="filter" className='w-[20px] h-[20px]' />
+            <FiFilter className='text-gray-600' />
           </div>
 
           {filterOpen && (

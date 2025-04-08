@@ -1,3 +1,4 @@
+import { StarIcon } from '@heroicons/react/16/solid';
 import { useState, useEffect } from 'react';
 
 const testimonials = [
@@ -74,14 +75,14 @@ return (
                                 </div>
                                 <div>
                                     <p className="font-bold text-lg text-gray-800">{testimonials[currentIndex].name}</p>
-                                    <p className="text-sm text-gray-600">{testimonials[currentIndex].role}</p>
+                                    <p className="text-sm text-gray-400">{testimonials[currentIndex].role}</p>
                                 </div>
                             </div>
 
                             {/* Stars */}
                             <div className="flex items-center">
                                 {[...Array(testimonials[currentIndex].rating)].map((_, i) => (
-                                    <img src="/star.png" alt="star" className="w-[15px] h-[15px]" />
+                                    <StarIcon key={i} className="w-4 h-4 text-secondary" />
                                 ))}
                             </div>
                         </div>
@@ -89,7 +90,7 @@ return (
                         <div className='w-full h-[1px] bg-gray-200'></div>
 
                         {/* Quote */}
-                        <blockquote className="text-xl italic text-gray-800">
+                        <blockquote className="text-sm text-gray-400">
                             "{testimonials[currentIndex].quote}"
                         </blockquote>
                     </div>

@@ -74,7 +74,7 @@ const NewPassword = () => {
       )}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src="/nav-logo.png" alt="logo" className="w-[200px] h-[40px]" />
+          <img src="/nav-logo.png" alt="logo" className="w-[200px] h-[50px]" />
         </div>
 
         <div className="flex flex-col items-center justify-center">
@@ -98,7 +98,7 @@ const NewPassword = () => {
                 required
                 value={data.newPassword}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#BEE36E] focus:border-transparent"
+                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                 placeholder="••••••••"
               />
               <img
@@ -123,7 +123,7 @@ const NewPassword = () => {
                 required
                 value={data.confirmPassword}
                 onChange={handleChange}
-                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#BEE36E] focus:border-transparent"
+                className="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                 placeholder="••••••••"
               />
               <img
@@ -139,7 +139,7 @@ const NewPassword = () => {
             <button
               disabled={isPending}
               onClick={handleSubmit}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-black bg-[#BEE36E] hover:bg-[#a8cc5c]"
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-secondary hover:scale-105 transition-transform duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isPending ? 'Creating Password...' : 'Create Password'}
             </button>

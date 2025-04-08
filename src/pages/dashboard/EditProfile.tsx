@@ -142,7 +142,7 @@ const EditProfile = () => {
                   <img
                     src={imagePreview || formData.profilePicture} // Use imagePreview if available, otherwise use formData.profilePicture
                     alt="Profile Preview"
-                    className="w-full h-full object-cover rounded-md"
+                    className="bg-transparent w-full h-full object-cover rounded-md"
                   />
                 ) : (
                   <>
@@ -179,7 +179,7 @@ const EditProfile = () => {
                   id="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                  className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>
 
@@ -194,7 +194,7 @@ const EditProfile = () => {
                     id="gender"
                     value={formData.gender}
                     onChange={handleChange}
-                    className="w-full p-2 bg-white rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                    className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   >
                     <option value="">Select</option>
                     <option value="male">Male</option>
@@ -215,7 +215,7 @@ const EditProfile = () => {
                     id="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                    className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
 
@@ -232,7 +232,7 @@ const EditProfile = () => {
                     id="nationality"
                     value={formData.nationality}
                     onChange={handleChange}
-                    className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                    className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
               </div>
@@ -256,7 +256,7 @@ const EditProfile = () => {
                 id="organization.name"
                 value={formData.organization.name}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
@@ -272,7 +272,7 @@ const EditProfile = () => {
                 id="organization.phone"
                 value={formData.organization.phone}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
           </div>
@@ -289,7 +289,7 @@ const EditProfile = () => {
               id="organization.email"
               value={formData.organization.email}
               onChange={handleChange}
-              className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+              className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
             />
           </div>
 
@@ -297,7 +297,7 @@ const EditProfile = () => {
             <div className="w-full md:w-1/3">
               <label
                 htmlFor="organization.address"
-                className="text-sm text-gray-500"
+                className="bg-transparent text-sm text-gray-500"
               >
                 Organization Address
               </label>
@@ -306,14 +306,14 @@ const EditProfile = () => {
                 id="organization.address"
                 value={formData.organization.address}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
             <div className="w-full md:w-1/3">
               <label
                 htmlFor="organization.city"
-                className="text-sm text-gray-500"
+                className="bg-transparent text-sm text-gray-500"
               >
                 City
               </label>
@@ -322,7 +322,7 @@ const EditProfile = () => {
                 id="organization.city"
                 value={formData.organization.city}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
 
@@ -338,7 +338,7 @@ const EditProfile = () => {
                 id="organization.country"
                 value={formData.organization.country}
                 onChange={handleChange}
-                className="w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
               />
             </div>
           </div>
@@ -349,13 +349,13 @@ const EditProfile = () => {
           <button
           disabled={loading}
           type="submit"
-            className="bg-secondary hover:bg-secondary/80 transition-colors text-black px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-secondary hover:bg-secondary/80 transition-colors text-white px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleUpdateProfile}
           >
             Save Changes
           </button>
           <button
-            className="text-secondary border border-secondary hover:bg-secondary hover:text-black transition-colors px-4 py-2 rounded-full"
+            className="text-secondary border border-secondary hover:bg-secondary hover:text-white transition-colors px-4 py-2 rounded-full"
             onClick={() => window.history.back()}
           >
             Discard

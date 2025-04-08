@@ -55,7 +55,7 @@ const Profile = () => {
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${activeTab === tab.key
-                            ? 'bg-secondary text-black'
+                            ? 'bg-secondary text-white'
                             : 'outline outline-secondary outline-1 text-secondary'
                             }`}
                     >
@@ -73,7 +73,7 @@ const Profile = () => {
                     <div className='p-4 flex flex-col gap-4'>
                         <div className='flex items-center justify-between'>
                             <h1 className='text-2xl font-bold text-secondary'>Personal Details</h1>
-                            <Link to="/user/dashboard/profile/edit" className='bg-secondary flex items-center gap-2 text-black text-sm px-4 py-2 rounded-full'>Edit Profile <PencilIcon className='w-4 h-4' /></Link>
+                            <Link to="/user/dashboard/profile/edit" className='bg-secondary flex items-center gap-2 text-white text-sm px-4 py-2 rounded-full'>Edit Profile <PencilIcon className='w-4 h-4' /></Link>
                         </div>
 
                         {/* Personal Details */}

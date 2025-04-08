@@ -88,7 +88,7 @@ const DonationsTabs = () => {
                         onClick={() => setActiveTab(tab.key)}
                         className={`flex items-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${
                             activeTab === tab.key
-                                ? 'bg-secondary text-black'
+                                ? 'bg-secondary text-white'
                                 : 'outline outline-secondary outline-1 text-secondary'
                         }`}
                     >

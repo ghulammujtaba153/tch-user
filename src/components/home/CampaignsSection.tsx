@@ -3,6 +3,7 @@ import CampaignCard from '../Campaigns/CampaignCard';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { BASE_URL } from '../../config/url';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const CampaignsSection: React.FC = () => {
   const [campaigns, setCampaigns] = React.useState([]);
@@ -46,9 +47,9 @@ const CampaignsSection: React.FC = () => {
         </div>
 
         {/* Button */}
-        <Link to="/home/campaigns" className='w-[150px] h-[55px] flex items-center justify-center gap-2 border border-secondary text-secondary px-4 py-2 rounded-full'>View All
+        <Link to="/home/campaigns" className='w-[150px] h-[55px] flex items-center justify-center gap-2 border border-secondary text-secondary px-4 py-2 rounded-full hover:shadow-lg hover:bg-secondary hover:text-white transition-all duration-300'>View All
 
-          <img src="/arrow.png" alt="arrow-right" className='w-[20px] h-[20px]' />
+          <ArrowRightIcon className='w-5 h-5'/>
         </Link>
     </section>
   );

@@ -1,8 +1,9 @@
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
 
 const ChooseUsSection: React.FC = () => {
   return (
-    <div className="bg-[#F5F5F5] py-8 md:py-16 px-4 md:p-10">
+    <div className="bg-primary py-8 md:py-16 px-4 md:p-10">
       <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-14">
         {/* Image Section */}
         <div className="flex flex-col gap-4 w-full lg:w-1/2">
@@ -48,13 +49,9 @@ const ChooseUsSection: React.FC = () => {
           </p>
         
           {/* Button */}
-          <button className='w-[150px] h-[45px] bg-secondary text-black flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:bg-[#a8cc5c] transition-colors duration-300 mt-4'>
+          <button className='w-[150px] h-[45px] bg-secondary text-white flex items-center justify-center gap-2 px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300 mt-4'>
             About Us
-            <img 
-              src="/arrow-black.png" 
-              alt="arrow-right" 
-              className='w-[20px] h-[20px]' 
-            />
+            <ArrowRightIcon className="w-4 h-4" />
           </button>
         </div>
       </div>

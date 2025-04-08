@@ -28,6 +28,12 @@ import ProtectedRoute from './protectedRoutes/ProtectedRoutes';
 import Unauthorized from './pages/Unauthorized';
 // import EditCampaignPage from './pages/dashboard/EditCampaignPage';
 import EmailVerification from './pages/EmailVerification';
+import "./App.css";
+import HowWorks from './pages/HowWorks';
+import About from './pages/About';
+import FAQs from './pages/FAQs';
+import FeesPayouts from './pages/Fees&Payouts';
+import Support from './pages/Support';
 
 
 
@@ -64,6 +70,12 @@ function App() {
           <Route path="/home/campaigns" element={<Campaigns />} />
           <Route path="/home/campaigns/:id" element={<CampaignDetails />} />
           <Route path="/home/campaigns/create" element={<CreateCampaignForm />} />
+
+          <Route path="/works" element={<HowWorks/>} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/faqs" element={<FAQs/>} />
+          <Route path="/fees" element={<FeesPayouts/>} />
+          <Route path="/support" element={<Support/>}/>
 
         </Route>
         
