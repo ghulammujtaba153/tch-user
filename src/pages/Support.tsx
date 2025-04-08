@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { GrCloudUpload } from 'react-icons/gr';
+// import { GrCloudUpload } from 'react-icons/gr';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
 
 const Support = () => {
@@ -231,7 +231,7 @@ const Support = () => {
                     {/* Message */}
                     <div className='flex flex-col gap-2'>
                         <label htmlFor="message" className='font-medium'>Query Description*</label>
-                        <textarea
+                        {/* <textarea
                             name="message"
                             id="message"
                             rows="4"
@@ -239,7 +239,7 @@ const Support = () => {
                             onChange={handleChange}
                             className='border border-gray-300 rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500'
                             required
-                        />
+                        /> */}
                     </div>
 
                     {/* File upload - Improved design */}
