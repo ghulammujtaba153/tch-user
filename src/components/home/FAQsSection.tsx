@@ -4,32 +4,11 @@ import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 
 
-const questions = [
-    {
-        question: "What is the purpose of this website?",
-        answer: "The purpose of this website is to provide a platform for people to donate to charities."
-    },
-    {
-        question: "What is the purpose of this website?",
-        answer: "The purpose of this website is to provide a platform for people to donate to charities."
-    },
-    {
-        question: "What is the purpose of this website?",
-        answer: "The purpose of this website is to provide a platform for people to donate to charities."
-    },
-    {
-        question: "What is the purpose of this website?",
-        answer: "The purpose of this website is to provide a platform for people to donate to charities."
-    },
-    {
-        question: "What is the purpose of this website?",
-        answer: "The purpose of this website is to provide a platform for people to donate to charities."
-    }
-]
+
 
 
 const FAQsSection: React.FC = () => {
-    const [data, setData]= useState({});
+    const [data, setData]= useState<any>({});
     const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
@@ -90,7 +69,7 @@ const FAQsSection: React.FC = () => {
 
             {/* Question section */}
             <div className='flex flex-col gap-4 w-full lg:w-1/2 px-2' >
-                {data?.questions.map((question, index) => (
+                {data?.questions?.map((question, index) => (
                     <Question key={index} question={question.question} answer={question.answer} />
                 ))}
                 
