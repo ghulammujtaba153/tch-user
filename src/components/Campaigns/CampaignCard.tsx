@@ -53,11 +53,10 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
             <img src={campaign.image} alt="campaign-card" className='w-full h-[200px] object-cover rounded-lg' />
 
             {/* Campaign Title */}
-            <div className="flex flex-col gap-2">
-                <p className="text-lg font-bold font-onest">{campaign.title}</p>
-                <p className="text-sm text-gray-500">
-                    {campaign.description.split(" ").slice(0, 15).join(" ")}
-                    {campaign.description.split(" ").length > 15 && "..."}
+            <div className="flex flex-col gap-2 h-[100px] overflow-hidden">  {/* Fixed height added here */}
+                <p className="text-lg font-bold font-onest line-clamp-2">{campaign.title}</p>  {/* line-clamp for single line */}
+                <p className="text-sm text-gray-500 line-clamp-2">  {/* line-clamp for two lines */}
+                    {campaign.description}
                 </p>
             </div>
 

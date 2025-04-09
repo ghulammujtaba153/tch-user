@@ -16,7 +16,7 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
     if (error) return <div>Error: {error.message}</div>;
 
     return (
-        <div className='flex flex-col gap-4 border border-gray-200 rounded-lg p-4'>
+        <div className='flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4'>
             <h1 className='text-lg font-bold'>Received Donations</h1>
             
             {donations.length === 0 ? (

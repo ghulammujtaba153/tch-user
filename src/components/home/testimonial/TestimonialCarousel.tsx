@@ -1,34 +1,34 @@
 import { StarIcon } from '@heroicons/react/16/solid';
 import { useState, useEffect } from 'react';
 
-const testimonials = [
-    {
-        id: 1,
-        name: "Sarah Johnson",
-        role: "Regular Donor",
-        image: "/testimonial.png",
-        quote: "Making a difference through this platform has been incredibly rewarding. The transparency and ease of use make it my go-to for charitable giving.",
-        rating: 4
-    },
-    {
-        id: 2,
-        name: "Michael Chen",
-        role: "Campaign Organizer",
-        image: "/testimonial.png",
-        quote: "As someone who's organized multiple fundraising campaigns, I can't praise this platform enough. The support and tools provided are exceptional.",
-        rating: 5
-    },
-    {
-        id: 3,
-        name: "Emma Williams",
-        role: "Monthly Supporter",
-        image: "/testimonial.png",
-        quote: "I love how easy it is to track the impact of my donations. The regular updates from beneficiaries make the giving experience so much more meaningful.",
-        rating: 4
-    }
-];
+// const testimonials = [
+//     {
+//         id: 1,
+//         name: "Sarah Johnson",
+//         role: "Regular Donor",
+//         image: "/testimonial.png",
+//         quote: "Making a difference through this platform has been incredibly rewarding. The transparency and ease of use make it my go-to for charitable giving.",
+//         rating: 4
+//     },
+//     {
+//         id: 2,
+//         name: "Michael Chen",
+//         role: "Campaign Organizer",
+//         image: "/testimonial.png",
+//         quote: "As someone who's organized multiple fundraising campaigns, I can't praise this platform enough. The support and tools provided are exceptional.",
+//         rating: 5
+//     },
+//     {
+//         id: 3,
+//         name: "Emma Williams",
+//         role: "Monthly Supporter",
+//         image: "/testimonial.png",
+//         quote: "I love how easy it is to track the impact of my donations. The regular updates from beneficiaries make the giving experience so much more meaningful.",
+//         rating: 4
+//     }
+// ];
 
-const TestimonialCarousel = () => {
+const TestimonialCarousel = ({testimonials}) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const isAutoPlaying=true;
 
@@ -67,7 +67,7 @@ return (
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 relative">
                                     <img
-                                        src={testimonials[currentIndex].image}
+                                        src={testimonials[currentIndex].avatar}
                                         alt={testimonials[currentIndex].name}
                                         className="w-full h-full rounded-full object-cover"
                                         loading="lazy"
@@ -91,7 +91,7 @@ return (
 
                         {/* Quote */}
                         <blockquote className="text-sm text-gray-400">
-                            "{testimonials[currentIndex].quote}"
+                            "{testimonials[currentIndex].content}"
                         </blockquote>
                     </div>
                 </div>

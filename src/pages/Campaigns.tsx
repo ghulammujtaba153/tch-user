@@ -163,7 +163,7 @@ const Campaigns = () => {
         {/* Filters */}
         <div className='relative'>
           <div
-            className='flex items-center gap-2 border border-gray-300 rounded-full p-2 px-4 cursor-pointer'
+            className='w-[100px] flex items-center gap-2 border border-gray-300 rounded-full p-2 px-4 cursor-pointer'
             onClick={() => setFilterOpen(!filterOpen)}
           >
             <p className='text-sm font-normal text-gray-600'>Filters</p>

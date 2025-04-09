@@ -131,7 +131,7 @@ const Security = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className='bg-secondary max-w-fit mx-auto text-sm text-black px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
+                    className='bg-secondary max-w-fit mx-auto text-sm text-white px-4 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed'
                 >
                     {loading ? 'Changing Password...' : 'Change Password'}
                 </button>
@@ -142,7 +142,7 @@ const Security = () => {
 
             {/* Right Section - Two-Factor Authentication */}
             <div className='flex flex-col gap-4 flex-1'>
-                <label htmlFor="twoFactorAuth" className='flex justify-between items-center cursor-pointer'>
+                {/* <label htmlFor="twoFactorAuth" className='flex justify-between items-center cursor-pointer'>
                     <span className='text-sm text-gray-700'>Two-Factor Authentication</span>
                     <div className='relative'>
                         <input
@@ -153,7 +153,7 @@ const Security = () => {
                         <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-secondary peer-focus:ring-secondary peer-focus:ring-2'></div>
                         <div className='absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
                     </div>
-                </label>
+                </label> */}
             </div>
         </div>
     );
