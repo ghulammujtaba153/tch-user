@@ -17,10 +17,10 @@ const ForgetPassword = () => {
   };
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault(); // ✅ Fix: Call the function correctly
+    e.preventDefault(); // Fix: Call the function correctly
 
     if (!email) {
-      toast.error("❌ Please enter your email.");
+      toast.error(" Please enter your email.");
       return;
     }
 
@@ -30,16 +30,16 @@ const ForgetPassword = () => {
 
         const result = res.data
         if (res.data.otp) {
-          toast.success("✅ OTP sent to your email!");
+          toast.success(" OTP sent to your email!");
           // navigate(`/verification/${res.data.id}`);
           setSuccess(res.data.id);
         } else {
-          toast.error(`❌ ${result.message || "Something went wrong!"}`);
+          toast.error(` ${result.message || "Something went wrong!"}`);
           setError(result.message || "Something went wrong!");
         }
       } catch (error) {
-        toast.error("❌ Failed to send OTP. Try again later.");
-        setError("❌ Failed to send OTP. Try again later.");
+        toast.error("Failed to send OTP. Try again later.");
+        setError("Failed to send OTP. Try again later.");
       }
     });
   };
