@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
                         <input
                             type="text"
                             placeholder='Enter your email'
-                            className='w-full h-[40px] border border-secondary rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-secondary'
+                            className='w-full h-[40px] border border-gray-300 rounded-full px-4 py-2 outine-none bg-transparent'
                         />
                         <button className='w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300'>
                             <BsSendFill className='text-white text-lg'/>
