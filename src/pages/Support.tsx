@@ -63,23 +63,25 @@ const Support = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    
-    
     setLoading(true);
+    
     try {
-        console.log(formData)
       const formDataToSend = new FormData();
+      
+      // Append all form data
       Object.entries(formData).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           formDataToSend.append(key, value);
         }
       });
-
-      const res = await axios.post(`${BASE_URL}/support`, formData);
+  
+      const res = await axios.post(`${BASE_URL}/support`, formDataToSend, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       
       console.log(res.data);
-      // Show success message or redirect
       alert('Your support request has been submitted successfully!');
       handleDiscard();
     } catch (error) {
