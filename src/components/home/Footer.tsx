@@ -60,6 +60,7 @@ const Footer: React.FC = () => {
                                 <p className='text-sm font-bold font-onest'>info@tch.com</p>
                             </div>
                         </div>
+                        <p>Powered By pfireDigital</p>
                     </div>
 
                     <div className="mt-auto">
