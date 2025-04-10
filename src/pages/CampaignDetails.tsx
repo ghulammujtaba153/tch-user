@@ -119,13 +119,14 @@ const CampaignDetails = () => {
                 </div>
 
                 <progress
-                  value={raised}
-                  max={goal}
-                  className="w-full h-3 rounded-full 
-                                    [&::-webkit-progress-bar]:bg-gray-300 
-                                    [&::-webkit-progress-value]:bg-secondary 
-                                    [&::-moz-progress-bar]:bg-secondary"
-                />
+                    value={raised}
+                    max={goal}
+                    className="w-full h-3 rounded-full overflow-hidden appearance-none
+                        [&::-webkit-progress-bar]:bg-gray-300 
+                        [&::-webkit-progress-value]:bg-secondary 
+                        [&::-webkit-progress-value]:rounded-full 
+                        [&::-moz-progress-bar]:bg-secondary"
+                    />
               </div>
             </div>
           </div>
