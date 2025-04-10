@@ -37,11 +37,11 @@ const Navbar: React.FC = () => {
             {user ? <>
 
               {
-                <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} className="bg-primary text-black px-4 py-2 rounded-full hover:scale-105 transition-trnaform duration-300">
+                <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} className="bg-primary w-[120px] text-black px-4 py-2 rounded-full hover:scale-105 transition-trnaform duration-300">
                   Dashboard
                 </Link>
               }
-              <button onClick={logout} className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-trnasform duration-300">
+              <button onClick={logout} className="bg-secondary w-[120px]  text-white px-4 py-2 rounded-full hover:scale-105 transition-trnasform duration-300">
                 Logout
               </button>
               <div className='flex items-center gap-2'>

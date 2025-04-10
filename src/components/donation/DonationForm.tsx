@@ -43,7 +43,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
     houseNumber: '',
   });
 
-  // Connect to Socket.IO server
+  
   useEffect(() => {
     socketRef.current = io(`${SOCKET_URL}`); // Replace with your server URL
 
