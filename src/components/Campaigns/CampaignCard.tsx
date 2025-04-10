@@ -84,11 +84,13 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
                 <progress
                     value={raised}
                     max={goal}
-                    className="w-full h-3 rounded-full 
+                    className="w-full h-3 rounded-full overflow-hidden appearance-none
                         [&::-webkit-progress-bar]:bg-gray-300 
                         [&::-webkit-progress-value]:bg-secondary 
+                        [&::-webkit-progress-value]:rounded-full 
                         [&::-moz-progress-bar]:bg-secondary"
-                />
+                    />
+
             </div>
 
             {!admin && !campaigner && <div className='flex items-center justify-center'>
