@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const LatestDonations: React.FC<{ latestDonations: any }> = ({ latestDonations }) => {
 
     return (
-        <div className='flex flex-col gap-4 rounded-lg p-2 sm:p-6 bg-white border border-gray-200'>
+        <div className='flex flex-col gap-4 rounded-lg p-2 sm:p-6 bg-white shadow-lg border border-gray-200'>
             <div className='flex items-center justify-between'>
                 <h1 className='text-lg font-semibold'>Latest Donations</h1>
                 <Link to='/user/dashboard/donations' className='text-xs text-gray-500 hover:text-gray-700'>View All</Link>

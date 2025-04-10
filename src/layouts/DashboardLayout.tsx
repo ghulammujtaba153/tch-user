@@ -159,9 +159,9 @@ const CampaignerDashboardLayout: React.FC = () => {
               notificationSection ? 'bg-gray-100' : ''
             } hover:bg-gray-100`}
           >
-            <div className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
+            {newNotificationCount> 0 && <div className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
               {newNotificationCount}
-            </div>
+            </div>}
             <BellIcon className="w-6 h-6" />
           </div>
 

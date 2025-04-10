@@ -179,7 +179,7 @@ const EditCampaign = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl bg-white border border-gray-400 shadow-lg rounded-[20px] mx-auto p-6">
             <h1 className="text-2xl font-bold mb-6">Edit Campaign</h1>
             
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -204,8 +204,8 @@ const EditCampaign = () => {
                                 file:mr-4 file:py-2 file:px-4
                                 file:rounded-full file:border-0
                                 file:text-sm file:font-semibold
-                                file:bg-[#BEE36E] file:text-black
-                                hover:file:bg-[#BEE36E]/80"
+                                file:bg-secondary file:text-white
+                                hover:file:bg-secondary/80"
                         />
                     </div>
                 </div>
@@ -221,7 +221,7 @@ const EditCampaign = () => {
                             name="title"
                             value={formData.title}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -238,7 +238,7 @@ const EditCampaign = () => {
                             value={formData.description}
                             onChange={handleInputChange}
                             rows={2}
-                            className='w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]'
+                            className='w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary'
                         />
                     </div>
 
@@ -256,7 +256,7 @@ const EditCampaign = () => {
                         value={formData.story}
                         onChange={handleInputChange}
                         rows={4}
-                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         required
                     />
                 </div>
@@ -271,7 +271,7 @@ const EditCampaign = () => {
                         value={formData.goal}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         required
                     />
                 </div>
@@ -287,7 +287,7 @@ const EditCampaign = () => {
                             name="amount"
                             value={formData.amount}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -299,7 +299,7 @@ const EditCampaign = () => {
                             name="category"
                             value={formData.category}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         >
                             <option value="">Select Category</option>
@@ -324,7 +324,7 @@ const EditCampaign = () => {
                             name="country"
                             value={formData.country}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -337,7 +337,7 @@ const EditCampaign = () => {
                             name="city"
                             value={formData.city}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -354,7 +354,7 @@ const EditCampaign = () => {
                             name="address"
                             value={formData.address}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -367,7 +367,7 @@ const EditCampaign = () => {
                             name="zipCode"
                             value={formData.zipCode}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
                         />
                     </div>
@@ -384,8 +384,9 @@ const EditCampaign = () => {
                             name="startDate"
                             value={formData.startDate}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
+                            min={new Date(Date.now()).toISOString().split("T")[0]}
                         />
                     </div>
                     <div className="space-y-2">
@@ -397,8 +398,9 @@ const EditCampaign = () => {
                             name="endDate"
                             value={formData.endDate}
                             onChange={handleInputChange}
-                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                             required
+                            min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
                         />
                     </div>
                 </div>
@@ -413,7 +415,7 @@ const EditCampaign = () => {
                         name="video"
                         value={formData.video}
                         onChange={handleInputChange}
-                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         placeholder="https://youtube.com/..."
                     />
                 </div>
@@ -428,7 +430,7 @@ const EditCampaign = () => {
                         name="media"
                         value={formData.media}
                         onChange={handleInputChange}
-                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         placeholder="https://youtube.com/..."
                     />
                 </div>
@@ -443,7 +445,7 @@ const EditCampaign = () => {
                         value={formData.donorCommunication}
                         onChange={handleInputChange}
                         rows={3}
-                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#BEE36E]"
+                        className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-secondary"
                         placeholder="Describe how you'll communicate with donors..."
                     />
                 </div>
@@ -460,7 +462,7 @@ const EditCampaign = () => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="px-4 py-2 bg-[#BEE36E] text-black rounded-md hover:bg-[#BEE36E]/80 disabled:opacity-50"
+                        className="px-4 py-2 bg-secondary text-white rounded-full hover:scale-105 transition-transform duration-300 disabled:opacity-50"
                     >
                         {isSubmitting ? 'Updating...' : 'Update Campaign'}
                     </button>

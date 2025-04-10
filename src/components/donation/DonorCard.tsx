@@ -1,3 +1,4 @@
+import { ClockIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
@@ -25,9 +26,9 @@ const DonorCard = ({ donor }: { donor: any }) => {
                         <div className='flex flex-col justify-between h-full'>
                             <p className='text-sm font-bold text-black font-onest'>{donorDetail.name || "Unknown Donor"}</p>
                             <div className='flex items-center gap-2'>
-                                <img src="/clock.png" alt="clock" className='w-[20px] h-[20px] rounded-lg' />
+                                <ClockIcon className='w-5 h-5 text-gray-600' />
                                 <p className='text-xs text-gray-600'>
-                                    {donor?.date ? dayjs(donor.date).fromNow() : "Date not available"}
+                                    {donor?.date ? dayjs(donor.date).format('MMMM D YYYY') : "Date not available"}
                                 </p>
                             </div>
                         </div>

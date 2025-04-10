@@ -65,7 +65,7 @@ const FundsGraph = () => {
     const processedData = useMemo(() => formatData(data, selectedRange, selectedYear), [data, selectedRange, selectedYear]);
 
     return (
-        <div className='px-4 py-6 border bg-white border-gray-200 rounded-lg'>
+        <div className='px-4 py-6 border bg-white shadow-lg border-gray-200 rounded-lg'>
             <div className='flex md:flex-row flex-col justify-between items-center mb-4'>
                 <h2 className='text-xl font-bold'>Funds Raised Over Time</h2>
 

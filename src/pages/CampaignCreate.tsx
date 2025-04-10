@@ -294,6 +294,7 @@ const CreateCampaignForm: React.FC = () => {
                 value={formData.startDate}
                 onChange={handleInputChange}
                 className="bg-transparent w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                min={new Date(Date.now()).toISOString().split("T")[0]}
               />
             </div>
             <div>
@@ -304,6 +305,7 @@ const CreateCampaignForm: React.FC = () => {
                 value={formData.endDate}
                 onChange={handleInputChange}
                 className="bg-transparent w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+                min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
               />
             </div>
           </div>

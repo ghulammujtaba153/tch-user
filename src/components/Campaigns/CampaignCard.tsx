@@ -84,7 +84,7 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
                 <progress
                     value={raised}
                     max={goal}
-                    className="w-full h-2 rounded-full 
+                    className="w-full h-3 rounded-full 
                         [&::-webkit-progress-bar]:bg-gray-300 
                         [&::-webkit-progress-value]:bg-secondary 
                         [&::-moz-progress-bar]:bg-secondary"

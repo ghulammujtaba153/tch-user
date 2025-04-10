@@ -88,7 +88,7 @@ const Withdrawal = () => {
 
         <button
           onClick={() => setWithDrawModal(true)}
-          className='bg-secondary max-w-fit mx-auto text-sm text-white px-4 py-2 rounded-full'
+          className='bg-secondary w-[100px] hover:scale-105 trnasition-transform duration-300 mx-auto text-sm text-white px-4 py-2 rounded-full'
         >
           Withdraw
         </button>

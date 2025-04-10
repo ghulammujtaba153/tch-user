@@ -239,8 +239,8 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
               <button
                 key={amount.value}
                 onClick={() => handleAmountSelect(amount.value)}
-                className={`px-4 py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
-                    ? 'bg-secondary text-black'
+                className={`px-4 text-sm w-[80px] py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
+                    ? 'bg-secondary text-white'
                     : 'bg-transparent border border-secondary text-black hover:bg-secondary/10'
                   }`}
               >

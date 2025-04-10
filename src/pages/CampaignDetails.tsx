@@ -95,7 +95,7 @@ const CampaignDetails = () => {
       <div className="flex justify-between md:w-[75%] w-full">
         <div className="flex flex-col">
           {/* image section */}
-          <div className="relative flex items-center gap-2 rounded-xl overflow-hidden">
+          <div className="relative flex items-center border border-b-gray-400 mb-4 gap-2 rounded-xl overflow-hidden">
             <img
               src={campaign?.image}
               alt="arrow-left"
@@ -107,9 +107,9 @@ const CampaignDetails = () => {
               {/* Progress Bar */}
               <div className="w-full pb-4">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <MapPinIcon className="w-[25px] h-[25px] text-secondary" />
-                    <p className="text-xs font-bold text-black">
+                    <p className="text-normal font-bold text-black">
                       {campaign?.city}
                     </p>
                   </div>
@@ -121,7 +121,7 @@ const CampaignDetails = () => {
                 <progress
                   value={raised}
                   max={goal}
-                  className="w-full h-2 rounded-full 
+                  className="w-full h-3 rounded-full 
                                     [&::-webkit-progress-bar]:bg-gray-300 
                                     [&::-webkit-progress-value]:bg-secondary 
                                     [&::-moz-progress-bar]:bg-secondary"
@@ -134,7 +134,7 @@ const CampaignDetails = () => {
           <div className="flex md:flex-row flex-col md:items-center justify-between gap-2">
             {/* avatar and location section */}
 
-            <div className="flex items-center gap-2 h-[50px]">
+            <div className="flex items-center gap-2 h-[40px]">
               <img
                 src={
                   campaign?.userDetails[0].profilePicture
@@ -143,7 +143,7 @@ const CampaignDetails = () => {
                     : "/user.png"
                 }
                 alt="A"
-                className="w-[50px] h-full rounded-md"
+                className="w-[40px] h-full rounded-md"
               />
 
               <div className="flex flex-col h-full justify-between">
@@ -161,8 +161,8 @@ const CampaignDetails = () => {
             </div>
 
             {/* funds required section */}
-            <div className="flex flex-col md:items-center gap-2">
-              <p className=" font-bold text-black font-onest">Required Funds</p>
+            <div className="flex flex-col md:items-center ">
+              <p className=" font-bold text-black text-sm font-onest">Required Funds</p>
               <p className="text-secondary font-bold text-2xl font-onest">
                 R{campaign?.amount}
               </p>
@@ -261,7 +261,7 @@ const CampaignDetails = () => {
                 <p
                   className={`text-sm font-bold py-2 font-onest rounded-lg p-2 ${
                     status === "active"
-                      ? "bg-secondary text-black"
+                      ? "bg-secondary text-white"
                       : status === "cancelled"
                       ? "bg-red-500 text-white"
                       : status === "pending"
@@ -312,9 +312,9 @@ const CampaignDetails = () => {
                   Status:
                 </p>
                 <p
-                  className={`text-sm font-bold py-2 font-onest rounded-lg p-2 ${
+                  className={`text-sm w-[100px] flex item-center justify-center font-bold py-2 font-onest rounded-lg p-2 ${
                     status === "active"
-                      ? "bg-secondary text-black"
+                      ? "bg-secondary text-white"
                       : status === "cancelled"
                       ? "bg-red-500 text-white"
                       : status === "pending"
@@ -376,7 +376,7 @@ const CampaignDetails = () => {
             <div className="flex justify-end w-full">
               <Link
                 to={`/user/dashboard/campaigns/${id}/edit`}
-                className="bg-secondary text-black px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-secondary/80 transition-all duration-300"
+                className="bg-secondary w-[100px] text-white w-[100px] flex items-center justify-center px-4 py-2 rounded-full text-sm font-bold h-[40px] shadow-md hover:bg-secondary/80 transition-all duration-300"
               >
                 Edit
               </Link>
@@ -395,13 +395,13 @@ const CampaignDetails = () => {
           Donations
         </p>
 
-        <div className="flex flex-col gap-2 overflow-y-auto max-h-[500px] scrollbar-hide border border-gray-300 rounded-lg p-4">
+        <div className="flex flex-col bg-white  gap-2 overflow-y-auto max-h-[500px] scrollbar-hide border border-gray-300 rounded-lg p-4">
           {/* filter section */}
-          <div className="flex items-center gap-2 p-2">
+          <div className="flex items-center justify-center gap-2 p-2">
             {["Hot", "All"].map((tab) => (
               <p
                 key={tab}
-                className={`text-sm font-bold cursor-pointer px-4 py-1 rounded-full transition-all duration-300 
+                className={`text-sm font-bold w-[100px] flex items-center justify-center cursor-pointer px-4 py-1 rounded-full transition-all duration-300 
                                 ${
                                   activeTab === tab
                                     ? "bg-secondary text-white"

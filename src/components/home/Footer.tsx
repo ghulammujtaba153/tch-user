@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { BsSendFill } from 'react-icons/bs';
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 const Footer: React.FC = () => {
     return (
@@ -27,13 +28,13 @@ const Footer: React.FC = () => {
                         and fostering lasting change for communities in need around the world.
                     </p>
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-start">
-                        <Link to={"/home/campaigns/create"} className="text-white px-4 py-2 rounded-full flex items-center gap-2 border border-white">
+                        <Link to={"/home/campaigns/create"} className="text-white px-4 py-2 rounded-full flex items-center gap-2 ">
                             START CAMPAIGN
                             <img src="/arrow-1.png" alt="arrow" className="w-[20px] h-[20px]" />
                         </Link>
-                        <Link to={"/home/campaigns"} className="bg-white font-bold text-black px-4 py-2 rounded-full flex items-center gap-2">
+                        <Link to={"/home/campaigns"} className="bg-white font-bold text-secondary px-4 py-2 rounded-full flex items-center gap-2">
                             Donate Now
-                            <img src="/arrow-black.png" alt="arrow" className="w-[20px] h-[20px]" />
+                            <ArrowRightIcon className="w-[20px] h-[20px]" />
                         </Link>
                     </div>
                 </div>
