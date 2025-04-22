@@ -71,7 +71,7 @@ const Profile = () => {
 
                 {activeTab === 'profile' && (
                     <div className='p-4 flex flex-col gap-4'>
-                        <div className='flex items-center justify-between'>
+                        <div className='flex sm:flex-row flex-col items-center justify-between'>
                             <h1 className='text-2xl font-bold text-secondary'>Personal Details</h1>
                             <Link to="/user/dashboard/profile/edit" className='bg-secondary flex items-center gap-2 text-white text-sm px-4 py-2 rounded-full'>Edit Profile <PencilIcon className='w-4 h-4' /></Link>
                         </div>

@@ -34,6 +34,7 @@ import About from './pages/About';
 import FAQs from './pages/FAQs';
 import FeesPayouts from './pages/Fees&Payouts';
 import Support from './pages/Support';
+import AuthRoutes from './protectedRoutes/AuthRoutes';
 
 
 
@@ -60,13 +61,15 @@ function App() {
 
         <Route path="/" element={<NavLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/signin" element={<SignIn />} />
-          {/* <Route path="/admin/signin" element={<AdminSignIn />} /> */}
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/forgetpassword" element={<ForgetPassword />} />
-          <Route path="/verification/:id" element={<Verification />} />
-          <Route path="/email/verification" element={<EmailVerification />} />
-          <Route path="/newpassword/:id" element={<NewPassword />} />
+          <Route element={<AuthRoutes />}>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/forgetpassword" element={<ForgetPassword />} />
+            <Route path="/verification/:id" element={<Verification />} />
+            <Route path="/email/verification" element={<EmailVerification />} />
+            <Route path="/newpassword/:id" element={<NewPassword />} />
+          </Route>
+          
           <Route path="/home/campaigns" element={<Campaigns />} />
           <Route path="/home/campaigns/:id" element={<CampaignDetails />} />
           <Route path="/home/campaigns/create" element={<CreateCampaignForm />} />

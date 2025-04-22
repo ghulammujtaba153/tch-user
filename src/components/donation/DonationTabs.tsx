@@ -70,7 +70,7 @@ const DonationsTabs = () => {
 
     return (
         <div className='flex flex-col gap-4'>
-            <div className='flex items-center justify-between'>
+            <div className='flex items-center sm:flex-row flex-col gap-2 justify-between'>
                 <div className='flex flex-col gap-2'>
                     <h1 className='text-2xl font-bold'>Donations</h1>
                     <p className='text-xs text-gray-500'>{dayjs().format('DD MMM YYYY')}</p>

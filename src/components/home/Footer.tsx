@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
                 </div>
 
                 {/* Right Section */}
-                <div className="flex flex-col gap-3 w-full md:w-1/2 text-center md:text-left mt-4 md:mt-0">
+                <div className="flex flex-col gap-3 w-full p-2 md:w-1/2 text-center md:text-left mt-4 md:mt-0">
                     <h1 className="text-xl md:text-4xl font-bold text-white font-onest">
                         Empower Change with every Donation!
                     </h1>

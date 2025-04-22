@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
             </Link>
             <img src={"/line.png"} alt="logo" className='w-[1px] h-[30px] hidden md:block' />
 
-            <div className="hidden lg:flex items-center text-sm gap-6">
+            <div className="hidden lg:flex items-center text-sm gap-4 xl:gap-6">
               <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link>
               <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link>
               <Link to="/home/campaigns/create" className="hover:text-secondary transition-colors duration-300">Start Campaign</Link>
@@ -98,7 +98,7 @@ const Navbar: React.FC = () => {
               {user ? <>
 
                 {
-                  <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} className="bg-primary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
+                  <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} className="bg-secondary flex items-center justify-center text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
                     Dashboard
                   </Link>
                 }
@@ -108,7 +108,7 @@ const Navbar: React.FC = () => {
               </>
 
                 : <>
-                  <Link to="/signup" className="bg-primary text-sm text-black px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
+                  <Link to="/signup" className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
                     Signup
                   </Link>
                   <Link to="/signin" className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">

@@ -35,7 +35,7 @@ const formatData = (data: any, range: any, year: any) => {
 };
 
 const FundsGraph = () => {
-    const [selectedRange, setSelectedRange] = useState('yearly');
+    const [selectedRange, setSelectedRange] = useState('daily');
     const [selectedYear, setSelectedYear] = useState('all');
 
     const [data, setData] = useState([]);

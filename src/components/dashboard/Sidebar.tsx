@@ -2,7 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon, SpeakerWaveIcon, CurrencyDollarIcon, UsersIcon,
-  ArrowRightStartOnRectangleIcon
+  ArrowRightStartOnRectangleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/userContext';
 
@@ -57,7 +59,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   };
 
   return (
-    <div className={`relative h-screen  bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
+    <div className={`relative hidden sm:block h-screen  bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">
@@ -120,7 +122,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
         onClick={toggleSidebar}
         className="absolute top-4 -right-2 p-2 bg-secondary/80 text-white rounded-full"
       >
-        {isOpen ? '<' : '>'}
+        {isOpen ? <ChevronLeftIcon className="h-5 w-5" />  : <ChevronRightIcon className="h-5 w-5" />}
       </button>
     </div>
   );

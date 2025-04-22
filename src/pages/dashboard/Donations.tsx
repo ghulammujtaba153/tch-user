@@ -11,30 +11,30 @@ const Donations = () => {
     // const [activeTab, setActiveTab] = useState<string>('profile');
     const {user} =useContext(AuthContext) || {};
     const [donations, setDonations]=useState([]);
-    const [loading, setLoading] =useState(true);
+    const [loading, setLoading] =useState(false);
     const [error, setError]=useState(null);
 
-    useEffect(()=>{
-        if(user?.userId){
-            const fetchDonations = async ()=>{
-                try {
-                    const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem('token')}`,
-                        },
-                    });
-                    setDonations(res.data);
-                    console.log(res.data);
-                } catch (error:any) {
-                    setError(error);
-                } finally {
-                    setLoading(false);
-                }
+    // useEffect(()=>{
+    //     if(user?.userId){
+    //         const fetchDonations = async ()=>{
+    //             try {
+    //                 const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
+    //                     headers: {
+    //                         Authorization: `Bearer ${localStorage.getItem('token')}`,
+    //                     },
+    //                 });
+    //                 setDonations(res.data);
+    //                 console.log(res.data);
+    //             } catch (error:any) {
+    //                 setError(error);
+    //             } finally {
+    //                 setLoading(false);
+    //             }
 
-            }
-            fetchDonations()
-        }
-    },[user])
+    //         }
+    //         fetchDonations()
+    //     }
+    // },[user])
 
 
     if(loading) return <div>Loading...</div>

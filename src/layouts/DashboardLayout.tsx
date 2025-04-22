@@ -141,14 +141,14 @@ const CampaignerDashboardLayout: React.FC = () => {
       <main className={`flex-1 overflow-x-hidden overflow-y-auto transition-all duration-300`}>
         {/* Search Bar */}
         <div className="flex justify-end gap-4 py-4 px-6 items-center">
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
+          {/* <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
             <input
               type="text"
               placeholder="Search"
               className="w-full px-4 py-2 outline-none text-gray-700 placeholder-gray-400"
             />
             <MagnifyingGlassIcon className="w-6 h-6 text-gray-500 mx-3 cursor-pointer" />
-          </div>
+          </div> */}
 
           <div className="w-[1px] h-10 bg-gray-400"></div>
 

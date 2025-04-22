@@ -144,7 +144,7 @@ const CreateCampaignForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 pt-[100px] ">
+    <div className="max-w-3xl mx-auto p-1 pt-[20px] ">
 
       {isSuccess && <Notification isOpen={isSuccess} onClose={() => setIsSuccess(false)} title="Campaign created successfully" message="Campaign created successfully" link={`/user/dashboard/campaigns`} />}
       {error && <Notification isOpen={true} onClose={() => setError("")} title="Error" message={error} />}
@@ -387,7 +387,7 @@ const CreateCampaignForm: React.FC = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4">
+          <div className="flex sm:flex-row flex-col gap-4">
             <button
               type="submit"
               disabled={isPending}
@@ -398,7 +398,7 @@ const CreateCampaignForm: React.FC = () => {
             <button
               type="button"
               onClick={() => window.history.back()}
-              className="px-6 py-2 text-secondary border border-secondary rounded-full hover:text-gray-800 transition-colors duration-200"
+              className="px-6 py-2 text-secondary border border-secondary rounded-full hover:bg-secondary hover:text-white transition-colors duration-200"
             >
               Discard
             </button>

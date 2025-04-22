@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { use, useContext, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import { AuthContext } from '../context/userContext';
 
 interface ProtectedRouteProps {
   allowedRoles: string[];
@@ -9,30 +10,29 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const navigate = useNavigate();
 
-  // Retrieve the JWT token from localStorage
-  const token = localStorage.getItem('token');
+  const {user} = useContext(AuthContext);
+
+  // const token = localStorage.getItem('token');
 
   useEffect(() => {
-    if (!token) {
-      // If no token, redirect to login
+    if (!user) {
       navigate('/signin');
       return;
     }
 
-    // Decode the token to get user details
-    const decodedToken = jwtDecode(token) as any;
-    console.log(decodedToken);
-    const userRole = decodedToken.role; // Assuming the role is stored in the token
+    // const decodedToken = jwtDecode(token) as any;
+    console.log(user);
+    const userRole = user.role; 
 
-    // Check if the user's role is allowed
+    
     if (!allowedRoles.includes(userRole)) {
       navigate('/unauthorized');
       return;
     }
-  }, [token, allowedRoles, navigate]);
+  }, [user, allowedRoles, navigate]);
 
-  // If the user is authenticated and has the correct role, render the nested routes
-  return token ? <Outlet /> : null;
+  
+  return user ? <Outlet /> : null;
 };
 
 export default ProtectedRoute;

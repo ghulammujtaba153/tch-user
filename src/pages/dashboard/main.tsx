@@ -37,41 +37,45 @@ const MainDashboard = () => {
         }
     ]
 
+    const fetch = async () => {
+        setLoading(true);
+        try {
+            const [basicInfoRes, donationsRes] = await Promise.all([
+                axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+                axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+            ]);
+    
+            setBasicInfo(basicInfoRes.data);
+            console.log(basicInfoRes.data);
+    
+            console.log(donationsRes.data);
+            const donations = donationsRes.data.filter((item: any) => item.donorId === user?.userId);
+            setLatestDonations(donations);
+    
+        } catch (error: any) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     useEffect(() => {
         if (!user?.userId) {
             return;
         }
     
-        const fetch = async () => {
-            setLoading(true);
-            try {
-                const res = await axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                setBasicInfo(res.data);
-                console.log(res.data);
-
-                const res2 = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                console.log(res2.data);
-                const donations = res2.data.filter((item:any)=>item.donorId === user?.userId);
-                setLatestDonations(res2.data);
-
-
-            } catch (error: any) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-    
         fetch();
-    }, [user]);  
+    
+    }, [user]);
+    
 
     if (loading) {
         return (

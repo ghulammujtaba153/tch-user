@@ -6,7 +6,7 @@ const HeroSection: React.FC = () => {
   return (
     <div className="max-w-[1200px] w-full mx-auto p-4 max-h-[800px] flex flex-col md:flex-row justify-between items-center mt-[77px] font-onest">
       {/* Rest of the hero section content stays the same */}
-      <div className="w-full max-h-[560px] relative rounded-[60px] overflow-hidden">
+      <div className="w-full h-[300px] md:h-[560px] relative rounded-[60px] overflow-hidden">
         <img
           src={"/hero-img.png"}
           alt="hero-image"
@@ -25,16 +25,16 @@ const HeroSection: React.FC = () => {
               </div>
               <div className="flex flex-col md:flex-row justify-between text-white mb-4 w-full">
                 <div className="flex items-center">
-                  <p className="text-5xl md:text-7xl font-bold text-primary tracking-wide leading-tight">
+                  <p className="text-4xl md:text-7xl font-bold text-primary tracking-wide leading-tight">
                     Change
                   </p>
-                  <div className="flex flex-col text-white text-xl md:text-2xl font-bold ml-2">
+                  <div className="flex flex-col text-white text-normal md:text-2xl font-bold ml-2">
                     <p>With</p>
                     <p>Donations!</p>
                   </div>
                 </div>
                 <div className="mt-4 md:mt-auto">
-                  <Link to={"/home/campaigns"} className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-lg font-bold w-full sm:w-[210px] h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300">
+                  <Link to={"/home/campaigns"} className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300">
                     Donate Now <ArrowRightIcon className="w-5 h-5 ml-2" />
                   </Link>
                 </div>

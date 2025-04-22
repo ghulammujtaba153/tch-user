@@ -109,7 +109,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
           <button
             type="submit"
             disabled={isPending}
-            className="w-full col-span-4 mt-6 py-3 rounded-lg shadow-md text-sm font-medium text-black outline-none bg-secondary hover:bg-[#a8cc5c] transition-all duration-300 disabled:opacity-50"
+            className="w-full col-span-4 mt-6 py-3 rounded-lg shadow-md text-sm font-medium text-white outline-none bg-secondary hover:scale-105 transition-all duration-300 disabled:opacity-50"
           >
             {isPending ? "Verifying..." : "Verify"}
           </button>

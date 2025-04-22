@@ -8,43 +8,6 @@ import axios from 'axios';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 
-const campaign=[
-  {
-    _id:"1",
-    image:"/campaign-card.png",
-    title:"Campaign 1",
-    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    amount:1000,
-    totalDonations:500,
-    lastDonationDate:"2021-01-01",
-    city:"New York",
-    createdAt:"2021-01-01"  
-
-  },
-  {
-    _id:"2",
-    image:"/campaign-card.png",
-    title:"Campaign 2",
-    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    amount:1000,
-    totalDonations:500,
-    lastDonationDate:"2021-01-01",
-    city:"New York",
-    createdAt:"2021-01-01"  
-  },
-  {
-    _id:"2",
-    image:"/campaign-card.png",
-    title:"Campaign 2",
-    description:"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-    amount:1000,
-    totalDonations:500,
-    lastDonationDate:"2021-01-01",
-    city:"New York",
-    createdAt:"2021-01-01"  
-  },
-  
-]
 
 const MyCampaigns = () => {
     const {user} =useContext(AuthContext) || {};
@@ -124,7 +87,7 @@ const MyCampaigns = () => {
             }
 
             {/* campaign list */}
-            <div className='flex flex-wrap items-center justify-center gap-4'>
+            <div className='flex flex-wrap items-center justify-center lg:justify-between gap-4'>
                 {campaigns.map((campaign: any)=>(
                     <CampaignCard key={campaign._id} campaign={campaign} campaigner={true}/>
                 ))}
