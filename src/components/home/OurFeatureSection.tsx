@@ -55,7 +55,8 @@ const OurFeatureSection: React.FC = () => {
         <div className="w-full flex flex-col items-center md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
             {data?.features.map((card, index) => (
-                <FeatureCard key={index} {...card} reverse={index % 2 === 0 ? true : false} />
+                // reverse={index % 2 === 0 ? true : false}
+                <FeatureCard key={index} {...card} reverse={false} />
             ))}
 
 

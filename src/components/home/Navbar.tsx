@@ -2,11 +2,15 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/userContext';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext) || { user: null, logout: () => { } };
-  // console.log(user);
+  const { config } = useAppConfig();
+
+  
+
 
 
 
@@ -17,7 +21,7 @@ const Navbar: React.FC = () => {
           {/* Rest of the navbar content stays the same */}
           <div className='flex items-center gap-4'>
             <Link to="/">
-              <img src={"/nav-logo.png"} alt="logo" width={100} height={100} className="" />
+              <img src={config?.logo} alt="logo" width={100} height={100} className="" />
             </Link>
             <img src={"/line.png"} alt="logo" className='w-[1px] h-[30px] hidden md:block' />
 

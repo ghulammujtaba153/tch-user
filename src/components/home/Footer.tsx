@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { BsSendFill } from 'react-icons/bs';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Footer: React.FC = () => {
+    const { config } = useAppConfig();
+
     return (
         <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-8 mb-4 font-sans">
 
@@ -46,7 +49,7 @@ const Footer: React.FC = () => {
                 <div className='flex flex-col justify-between gap-4 w-full md:w-1/3 h-full'>
                     <div>
                         <div className='flex mb-8'>
-                            <img src="/nav-logo.png" alt="logo" className='w-[100px] h-[40px]' />
+                            <img src={config?.logo} alt="logo" className='w-[100px] h-[40px]' />
                         </div>
 
                         <div className='flex flex-col md:justify-between md:flex-row gap-4 md:gap-8 mb-8'>

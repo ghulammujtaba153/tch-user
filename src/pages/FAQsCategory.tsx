@@ -1,0 +1,65 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { toast } from 'react-toastify';
+import { BASE_URL } from '../config/url';
+import CategoryCard from '../components/faqs/CategoryCard';
+import Loading from '../components/Loading';
+
+interface Category {
+  _id: string;
+  title: string;
+  icon: string;
+  active: boolean;
+  questionCount?: number;
+}
+
+const FAQsCategory = () => {
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    const fetchCategories = async () => {
+        try {
+            const res = await axios.get(`${BASE_URL}/faqs/categories?active=true`);
+            const faqsRes = await axios.get(`${BASE_URL}/faqs`);
+            
+            // Count questions per category
+            const categoriesWithCount = res.data.map((category: Category) => {
+              const questionCount = faqsRes.data.questions.filter(
+                (q: any) => q.category._id === category._id
+              ).length;
+              return { ...category, questionCount };
+            });
+            
+            setCategories(categoriesWithCount);
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to fetch data");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    if (loading) {
+        return <Loading/>
+    }
+
+    return (
+        <div className='mt-[100px] flex flex-col items-center justify-center p-4 max-w-6xl mx-auto max-w-[1200px] mx-auto'>
+            <h1 className='text-2xl font-bold mb-6'>FAQ Categories</h1>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                {categories.map((category) => (
+                    <CategoryCard 
+                        key={category._id} 
+                        category={category}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default FAQsCategory;

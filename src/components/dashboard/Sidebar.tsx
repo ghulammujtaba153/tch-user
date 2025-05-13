@@ -7,6 +7,7 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/userContext';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 interface MenuItem {
   name: string;
@@ -43,6 +44,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   const location = useLocation();
   const { logout } = useContext(AuthContext) || {};
   const navigate = useNavigate();
+  const {config} = useAppConfig();
 
   const toggleExpand = (itemName: string) => {
     setExpandedItem(expandedItem === itemName ? null : itemName);
@@ -63,7 +65,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">
-          <img src={"/nav-logo.png"} alt="logo" className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} />
+          <img src={config?.logo} alt="logo" className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} />
         </Link>
 
         {/* Menu Items */}

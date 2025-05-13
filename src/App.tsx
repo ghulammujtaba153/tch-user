@@ -35,10 +35,20 @@ import FAQs from './pages/FAQs';
 import FeesPayouts from './pages/Fees&Payouts';
 import Support from './pages/Support';
 import AuthRoutes from './protectedRoutes/AuthRoutes';
+import FAQsCategory from './pages/FAQsCategory';
+import { useEffect } from 'react';
+import { useAppConfig } from './context/AppConfigContext';
 
 
 
 function App() {
+  const { config } = useAppConfig();
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = config.name;
+    }
+  }, [config]);
 
   return (
     <AuthProvider>
@@ -76,7 +86,10 @@ function App() {
 
           <Route path="/works" element={<HowWorks/>} />
           <Route path="/about" element={<About/>} />
-          <Route path="/faqs" element={<FAQs/>} />
+
+          <Route path="/faqs" element={<FAQsCategory/>} />
+          <Route path="/faqs/category/:id" element={<FAQs/>} />
+          
           <Route path="/fees" element={<FeesPayouts/>} />
           <Route path="/support" element={<Support/>}/>
 
