@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import AddPaymentModal from '../../components/dashboard/AddPaymentMethod';
 import { toast } from 'react-toastify';
+import BankAccount from '../../components/dashboard/BankAccount';
 
 const Withdrawal = () => {
   const { user } = useContext(AuthContext)!;
@@ -141,10 +142,11 @@ const Withdrawal = () => {
       {/* Right Section - Payment Methods */}
       <div className='flex flex-col gap-4 flex-1'>
 
-        <button onClick={() => setIsModalOpen(true)} className='text-secondary hover:bg-secondary hover:text-black cursor-pointer border border-secondary max-w-fit mx-auto text-sm px-4 py-2 rounded-full flex items-center gap-2'>
+        {/* <button onClick={() => setIsModalOpen(true)} className='text-secondary hover:bg-secondary hover:text-black cursor-pointer border border-secondary max-w-fit mx-auto text-sm px-4 py-2 rounded-full flex items-center gap-2'>
           Add Card
           <ArrowRightIcon className='w-4 h-4' />
-        </button>
+        </button> */}
+        <BankAccount/>
 
         {isModalOpen && (
           <AddPaymentModal

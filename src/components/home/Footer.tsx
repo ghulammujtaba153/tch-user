@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import { BsSendFill } from 'react-icons/bs';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useAppConfig } from '../../context/AppConfigContext';
+import { useState } from 'react';
+import { BASE_URL } from '../../config/url';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Footer: React.FC = () => {
     const { config } = useAppConfig();
+    const [data, setData] = useState<any>();
+
+    const fetch = async()=>{
+        try {
+            const res = await axios.get(`${BASE_URL}/social`);
+            setData(res.data);
+        } catch (error) {
+            console.log(error);
+            toast.error("Something went wrong");
+        }
+    }
+
+    useEffect(()=>{
+        fetch();
+    },[])
 
     return (
         <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-8 mb-4 font-sans">
@@ -70,35 +89,20 @@ const Footer: React.FC = () => {
                         <p className='text-sm font-bold mb-4'>Follow on</p>
                         <div className="flex items-center gap-2">
                             {/* Social Media Links */}
-                            <a
-                                href="https://www.pinterest.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300"
-                                aria-label="Pinterest"
-                            >
-                                <FaPinterestP className='w-[20px] h-[20px] text-white'/>
-                            </a>
-
-                            <a
-                                href="https://www.facebook.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300"
-                                aria-label="Facebook"
-                            >
-                                <FaFacebookF className='w-[20px] h-[20px] text-white' />
-                            </a>
-
-                            <a
-                                href="https://www.instagram.com"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300"
-                                aria-label="Instagram"
-                            >
-                                <FaInstagram className='w-[20px] h-[20px] text-white' />
-                            </a>
+                            {
+                                data?.map((item: any, index: number) => (
+                                    <a
+                                        href={item.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300"
+                                        aria-label="Pinterest"
+                                    >
+                                        <img src={item.icon} alt='/' className='w-[20px] h-[20px] text-white'/>
+                                    </a>
+                                ))
+                            }
+                            
                         </div>
                     </div>
                 </div>

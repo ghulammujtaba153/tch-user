@@ -34,6 +34,7 @@ const Navbar: React.FC = () => {
               <Link to="/faqs" className="hover:text-secondary transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" className="hover:text-secondary transition-colors duration-300">Fees & Payouts</Link>
               <Link to="/support" className="hover:text-secondary transition-colors duration-300">Support</Link>
+              <Link to="/blogs" className="hover:text-secondary transition-colors duration-300">Blogs</Link>
             </div>
           </div>
 
@@ -91,6 +92,7 @@ const Navbar: React.FC = () => {
               <Link to="/faqs" className="hover:text-secondary w-full transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" className="hover:text-secondary w-full transition-colors duration-300">Fees & Payouts</Link>
               <Link to="/support" className="hover:text-secondary w-full transition-colors duration-300">Support</Link>
+              <Link to="/blogs" className="hover:text-secondary transition-colors duration-300">Blogs</Link>
             </div>
             <div className='flex flex-col gap-3 pt-2'>
 

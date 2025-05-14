@@ -38,6 +38,8 @@ import AuthRoutes from './protectedRoutes/AuthRoutes';
 import FAQsCategory from './pages/FAQsCategory';
 import { useEffect } from 'react';
 import { useAppConfig } from './context/AppConfigContext';
+import Blogs from './pages/blogs/Blogs';
+import Blog from './pages/blogs/Blog';
 
 
 
@@ -92,6 +94,8 @@ function App() {
           
           <Route path="/fees" element={<FeesPayouts/>} />
           <Route path="/support" element={<Support/>}/>
+          <Route path='/blogs' element={<Blogs/>} />
+          <Route path='/blog/:id' element={<Blog/>} />
 
         </Route>
         
