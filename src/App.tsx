@@ -40,6 +40,9 @@ import { useEffect } from 'react';
 import { useAppConfig } from './context/AppConfigContext';
 import Blogs from './pages/blogs/Blogs';
 import Blog from './pages/blogs/Blog';
+import GuideCategories from './components/guides/GuideCategories';
+import Guide from './components/guides/Guide';
+import GuidesMain from './components/guides/GuidesMain';
 
 
 
@@ -96,6 +99,11 @@ function App() {
           <Route path="/support" element={<Support/>}/>
           <Route path='/blogs' element={<Blogs/>} />
           <Route path='/blog/:id' element={<Blog/>} />
+
+
+          <Route path='/guides' element={<GuideCategories/>} />
+          <Route path='/guides/:id' element={<GuidesMain/>} />
+          <Route path='/guide/:id' element={<Guide/>} />
 
         </Route>
         

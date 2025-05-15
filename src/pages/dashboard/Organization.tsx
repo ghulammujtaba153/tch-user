@@ -37,7 +37,18 @@ const Organization = () => {
 
   const fetchOrganization = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/organization/${user.userId}`);
+      let res = await axios.get(`${BASE_URL}/organization/${user.userId}`);
+      console.log("fetch organization", res.data);
+      
+      if(!res?.data){ 
+        console.log("second way")
+        
+        res = await axios.post(`${BASE_URL}/member/email`, {
+          email: user?.email,
+        });
+
+        res= await axios.get(`${BASE_URL}/organization/orgId/${res.data.organization}`);
+      }
       const mergedData = {
         ...initialFormData,
         ...res.data,
