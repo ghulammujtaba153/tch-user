@@ -131,16 +131,30 @@ const Organization = () => {
 
   try {
     const formDataToSend = new FormData();
+    
+     
+
+    // Object.entries(formData).forEach(([key, value]) => {
+    //   if (key === 'socialMediaLinks') {
+        
+    //     value.forEach((link: string, index: number) => {
+    //       formDataToSend.append(`${key}[${index}]`, link);
+    //     });
+    //   } else {
+    //     formDataToSend.append(key, value);
+    //   }
+    // });
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === 'socialMediaLinks') {
-        value.forEach((link: string, index: number) => {
-          formDataToSend.append(`${key}[${index}]`, link);
-        });
-      } else {
-        formDataToSend.append(key, value);
-      }
+  if (key === 'socialMediaLinks' && Array.isArray(value)) {
+    value.forEach((link, index) => {
+      formDataToSend.append(`${key}[${index}]`, link);
     });
+  } else if (typeof value === 'string' || value instanceof Blob) {
+    formDataToSend.append(key, value);
+  }
+});
+
 
     if (supportingFile) {
       formDataToSend.set('supportingDocument', supportingFile); // or 'supportingDoc' based on backend

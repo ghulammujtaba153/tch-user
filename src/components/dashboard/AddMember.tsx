@@ -26,7 +26,7 @@ interface Organization {
 }
 
 const AddMember = () => {
-  const [members, setMembers] = useState<MembersData | null>(null);
+  const [members, setMembers] = useState<any>(null);
   const [owner, setOwner] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ organization: '', name: '', email: '', phone: '', position: '', role: '' });
@@ -218,7 +218,8 @@ const AddMember = () => {
                 <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Owner</span>
               </li>
 
-              {members.length > 0 && (
+              //@ts-ignore
+              {members?.length > 0 && (
                 members.map((member, idx) => (
                   <li key={idx} className="border p-3 rounded-md flex justify-between items-center">
                     <div>
