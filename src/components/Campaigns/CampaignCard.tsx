@@ -11,6 +11,7 @@ dayjs.extend(relativeTime);  //  This is required to enable `fromNow()`
 
 interface Campaign {
     _id: string;
+    organizationId: string | null;
     image: string;
     title: string;
     description: string;
@@ -51,6 +52,12 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
 
             {/* Campaign Image */}
             <img src={campaign.image} alt="campaign-card" className='w-full h-[200px] object-cover rounded-lg' />
+            {
+                campaign?.organizationId ?
+                <p className='text-xs font-bold bg-green-600 w-[70px] text-center text-white p-1 rounded-md'>verified</p>
+                :
+                <p className='text-xs font-bold bg-red-600 w-[70px] text-center text-white p-1 rounded-md'>unverified</p>
+            }
 
             {/* Campaign Title */}
             <div className="flex flex-col gap-2 h-[100px] overflow-hidden">  {/* Fixed height added here */}
@@ -59,6 +66,7 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
                     {campaign.description}
                 </p>
             </div>
+            
 
             {/* Campaign Details */}
             <div className='flex items-center gap-6 text-sm'>
@@ -75,6 +83,8 @@ const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?:
 
             <p className='text-xs font-bold'>Last Donation : <span className='text-xs text-gray-500 font-normal'>{campaign.lastDonationDate ? dayjs(campaign.lastDonationDate).fromNow() : "No donations yet"}</span></p>
 
+            
+            
             {/* Progress Bar */}
             <div className='flex flex-col gap-2'>
                 <div className='flex items-center justify-end'>

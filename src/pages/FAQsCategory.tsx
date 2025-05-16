@@ -49,7 +49,12 @@ const FAQsCategory = () => {
 
     return (
         <div className='mt-[100px] flex flex-col items-center justify-center p-4 max-w-6xl mx-auto max-w-[1200px] mx-auto'>
-            <h1 className='text-2xl font-bold mb-6'>FAQ Categories</h1>
+            <div className="w-full flex items-center justify-center gap-2 mb-10">
+                <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
+                <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px]">
+                FAQ's CATEGORIES
+                </p>
+            </div>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {categories.map((category) => (
                     <CategoryCard 

@@ -32,7 +32,12 @@ const GuidesMain = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 mt-[100px]">
-      <h2 className="text-2xl font-semibold mb-6 text-center">Guides</h2>
+      <div className="w-full flex items-center justify-center gap-2 mb-10">
+        <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
+        <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px]">
+          GUIDE
+        </p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {data.length > 0 ? data.map((item) => (
           <GuideCard key={item._id} data={item} />

@@ -6,7 +6,7 @@ const HowWorks = () => {
   return (
     <div className='pt-20'>
       <OurFeatureSection/>
-      <FAQsSection/>
+      {/* <FAQsSection/> */}
       {/* <TestimonialSection/> */}
     </div>
   )

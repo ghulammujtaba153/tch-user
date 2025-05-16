@@ -54,7 +54,7 @@ const Home: React.FC = () => {
     <ChooseUsSection />
     <OurFeatureSection />
     <Testimonials />
-    <FAQsSection />
+    {/* <FAQsSection /> */}
     {/* <Footer /> */}
   </div>;
 };

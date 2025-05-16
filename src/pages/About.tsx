@@ -8,7 +8,7 @@ const About = () => {
     <div className='pt-20'>
         <AboutUsSection/>
         <ChooseUsSection/>
-        <FAQsSection/>
+        {/* <FAQsSection/> */}
       
     </div>
   )

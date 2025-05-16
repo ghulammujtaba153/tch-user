@@ -32,6 +32,9 @@ const Campaigns = () => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState("");
 
+  
+
+
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -49,11 +52,11 @@ const Campaigns = () => {
     fetch();
   }, []);
 
-  // Apply filters whenever search, category, or amount filters change
+ 
   useEffect(() => {
     let filtered = [...campaigns];
 
-    // Apply search filter
+    
     if (searchQuery) {
       filtered = filtered.filter(campaign =>
         campaign.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -62,14 +65,14 @@ const Campaigns = () => {
       );
     }
 
-    // Apply category filter only if a specific category is selected
+    
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(campaign =>
         campaign?.category === selectedCategory
       );
     }
 
-    // Apply amount range filter
+
     if (minAmount) {
       filtered = filtered.filter(campaign =>
         campaign.amount >= Number(minAmount)
@@ -81,7 +84,6 @@ const Campaigns = () => {
       );
     }
 
-    // Apply sorting
     switch (sortBy) {
       case 'newest':
         filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

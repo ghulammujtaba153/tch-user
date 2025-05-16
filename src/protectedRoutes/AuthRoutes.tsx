@@ -7,7 +7,7 @@ import { AuthContext } from '../context/userContext';
 const AuthRoutes: React.FC = () => {
   const navigate = useNavigate();
 
-  const {user} = useContext(AuthContext);
+  const {user, loading} = useContext(AuthContext);
 
 
   useEffect(() => {
@@ -17,6 +17,14 @@ const AuthRoutes: React.FC = () => {
     }
 
   }, [user, navigate]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="text-lg font-semibold">Loading...</div>
+      </div>
+    );
+  }
 
   
   return user ? null : <Outlet />;

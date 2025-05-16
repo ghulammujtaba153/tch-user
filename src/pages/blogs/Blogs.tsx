@@ -44,6 +44,13 @@ const Blogs: React.FC = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto mt-[100px] p-6">
+
+      <div className="w-full flex items-center justify-center gap-2 mb-10">
+        <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
+        <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px]">
+          BLOGS
+        </p>
+      </div>
       
 
       {/* Search and Filter Section */}

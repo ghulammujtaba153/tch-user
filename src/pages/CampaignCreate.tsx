@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, useTransition } from 'react';
+import React, { useState, ChangeEvent, useTransition, useEffect } from 'react';
 import Notification from '../components/notification/Notification';
 import upload from '../utils/upload';
 import axios from 'axios';
@@ -28,6 +28,7 @@ interface CampaignFormData {
 
 const CreateCampaignForm: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [organization, setOrganization] = useState<string>('');
 
   const [formData, setFormData] = useState<CampaignFormData>({
     image: null,
@@ -52,6 +53,27 @@ const CreateCampaignForm: React.FC = () => {
   const [error, setError] = useState('');
   const { token, user } = useContext(AuthContext) || { token: null, user: null };
   const [isPending, startTransition] = useTransition();
+
+
+  const fetch = async ()=>{
+    try {
+      const res = await axios.post(`${BASE_URL}/organization/check`,{
+        id: user?.userId,
+        email: user?.email
+      });
+
+      console.log(res.data);
+
+      setOrganization(res.data);
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
 
 
@@ -107,6 +129,7 @@ const CreateCampaignForm: React.FC = () => {
           const imageUrl = await upload(formData.image);
           const res = await axios.post(`${BASE_URL}/campaigns/create`, {
             userId: user?.userId,
+            organizationId: organization,
             image: imageUrl,
             title: formData.title,
             description: formData.description,
@@ -305,7 +328,13 @@ const CreateCampaignForm: React.FC = () => {
                 value={formData.endDate}
                 onChange={handleInputChange}
                 className="bg-transparent w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-                min={new Date(Date.now() + 86400000).toISOString().split("T")[0]}
+                min={
+        formData.startDate
+          ? new Date(new Date(formData.startDate).getTime() + 86400000)
+              .toISOString()
+              .split("T")[0]
+          : new Date().toISOString().split("T")[0]
+      }
               />
             </div>
           </div>

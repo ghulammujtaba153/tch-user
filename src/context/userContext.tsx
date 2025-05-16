@@ -2,17 +2,22 @@ import { jwtDecode } from "jwt-decode";
 import React, { createContext, useState, useEffect } from "react";
 import { BASE_URL } from "../config/url";
 
+
+
+
 interface User {
   userId: string;
   email: string;
   name: string;
   role: string;
   profilePicture: "";
+  organization: {any} | null;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
+  loading: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
 }
@@ -23,12 +28,10 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load stored token and user
     const storedToken = localStorage.getItem("token");
-    // const storedUser = localStorage.getItem("user");
-    // console.log(storedToken, storedUser);
 
     if (storedToken) {
         const decodedUser: User = jwtDecode(storedToken);
@@ -43,17 +46,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               email: userData.user.email,
               name: userData.user.name,
               role: userData.user.role,
-              profilePicture: userData.user.profilePicture
+              profilePicture: userData.user.profilePicture,
+              organization: userData.user.organization,
             });
             setToken(userData.token);
           } catch (error) {
             console.log(error);
+          } finally {
+            setLoading(false);
           }
             
         }
         fetchedUser();
-        
-        // setUser(decodedUser);
     }
   }, []);
 
@@ -73,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
