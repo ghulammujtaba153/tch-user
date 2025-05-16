@@ -20,17 +20,17 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: any | null;
   token: string | null;
   loading: boolean;
-  login: (user: User, token: string) => void;
+  login: (user: any, token: string) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -70,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (user: User, token: string) => {
+  const login = (user: any, token: string) => {
     setUser(user);
     setToken(token);
     localStorage.setItem("token", token);

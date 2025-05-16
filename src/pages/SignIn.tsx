@@ -24,8 +24,8 @@ const SignIn = () => {
       email: "",
       name: "",
       role: "",
-      isAdmin: false,
-      profilePicture: ""
+      profilePicture: "",
+      organization: null
     });
 
     const handleChange = (e : any) => {
@@ -49,8 +49,8 @@ const SignIn = () => {
                   email: res.data.user.email,
                   name: res.data.user.name,
                   role: res.data.user.role,
-                  isAdmin: res.data.user.isAdmin,
-                  profilePicture: res.data.user.profilePicture
+                  profilePicture: res.data.user.profilePicture,
+                  organization: res.data.user.organization
                 }
                 login(user, res.data.token);
                 setUser(user);
