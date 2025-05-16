@@ -1,15 +1,36 @@
-
-
 import { jwtDecode } from "jwt-decode";
 import React, { createContext, useState, useEffect } from "react";
 import { BASE_URL } from "../config/url";
 
+interface DecodedToken {
+  userId: string;
+  email?: string;
+  exp?: number;
+  iat?: number;
+  // Add any other fields your token contains
+}
 
-export const AuthContext = createContext(null);
+interface User {
+  userId: string;
+  email: string;
+  name: string;
+  role: string;
+  profilePicture: string;
+  organization: any | null;
+}
 
+interface AuthContextType {
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  login: (user: User, token: string) => void;
+  logout: () => void;
+}
+
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,36 +38,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const storedToken = localStorage.getItem("token");
 
     if (storedToken) {
-        const decodedUser = jwtDecode(storedToken);
-        const fetchedUser = async () => {
-          try {
-            
-            const response = await fetch(`${BASE_URL}/auth/profile?id=${decodedUser?.userId}`);
-            const userData = await response.json();
-            
-            console.log("context user",userData);
-            setUser({
-              userId: userData.user._id,
-              email: userData.user.email,
-              name: userData.user.name,
-              role: userData.user.role,
-              profilePicture: userData.user.profilePicture,
-              organization: userData.user.organization,
-            });
-            setToken(userData.token);
-          } catch (error) {
-            console.log(error);
-          } finally {
-            setLoading(false);
-          }
-            
+      const decodedUser = jwtDecode<DecodedToken>(storedToken);
+
+      const fetchedUser = async () => {
+        try {
+          const response = await fetch(`${BASE_URL}/auth/profile?id=${decodedUser.userId}`);
+          const userData = await response.json();
+
+          console.log("context user", userData);
+
+          setUser({
+            userId: userData.user._id,
+            email: userData.user.email,
+            name: userData.user.name,
+            role: userData.user.role,
+            profilePicture: userData.user.profilePicture,
+            organization: userData.user.organization,
+          });
+
+          setToken(userData.token);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
         }
-        fetchedUser();
+      };
+
+      fetchedUser();
+    } else {
+      setLoading(false);
     }
   }, []);
 
-  const login = (user, token) => {
-    console.log(user)
+  const login = (user: User, token: string) => {
     setUser(user);
     setToken(token);
     localStorage.setItem("token", token);

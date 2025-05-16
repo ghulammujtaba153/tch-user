@@ -9,21 +9,21 @@ import { ClockIcon, MapPinIcon } from '@heroicons/react/24/outline';
 
 dayjs.extend(relativeTime);  //  This is required to enable `fromNow()`
 
-interface Campaign {
-    _id: string;
-    organizationId: string | null;
-    image: string;
-    title: string;
-    description: string;
-    city: string;
-    createdAt: string;
-    amount: number;
-    totalDonations: number;
-    lastDonationDate: string;
-}
+// interface Campaign {
+//     _id: string;
+//     organizationId: string | null;
+//     image: string;
+//     title: string;
+//     description: string;
+//     city: string;
+//     createdAt: string;
+//     amount: number;
+//     totalDonations: number;
+//     lastDonationDate: string;
+// }
 
 
-const CampaignCard: React.FC<{ campaign: Campaign, admin?: boolean, campaigner?: boolean }> = ({ campaign, admin = false, campaigner = false }) => {
+const CampaignCard: React.FC<{ campaign: any, admin?: boolean, campaigner?: boolean }> = ({ campaign, admin = false, campaigner = false }) => {
     const [isPending, startTransition] = useTransition();
     const [isDeleted, setIsDeleted] = useState(false);
     const raised = campaign.totalDonations;
