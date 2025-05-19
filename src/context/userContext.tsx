@@ -15,7 +15,13 @@ interface User {
   email: string;
   name: string;
   role: string;
-  profilePicture: string;
+  isGoogleUse: boolean;
+  isMicrosoftUse: boolean;
+  gender: string | null,
+  dateOfBirth: string | null,
+  nationality: Date | null,
+  
+  profilePicture: string | null;
   organization: any | null;
 }
 
@@ -52,6 +58,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: userData.user.email,
             name: userData.user.name,
             role: userData.user.role,
+            isGoogleUse: userData.user.isGoogleUse,
+            isMicrosoftUse: userData.user.isMicrosoftUse,
+            gender: userData.user.gender,
+            dateOfBirth: userData.user.dateOfBirth,
+            nationality: userData.user.nationality,
             profilePicture: userData.user.profilePicture,
             organization: userData.user.organization,
           });

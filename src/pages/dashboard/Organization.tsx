@@ -6,6 +6,7 @@ import { BASE_URL, SOCKET_URL } from '../../config/url';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/userContext';
 import AddMember from '../../components/dashboard/AddMember';
+import Loading from '../../components/Loading';
 
 const initialFormData = {
   userId: '',
@@ -34,6 +35,9 @@ const Organization = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const { user } = useContext<any>(AuthContext);
   const [pageLoading, setPageLoading] = useState(true);
+
+  
+  
 
   const fetchOrganization = async () => {
     try {
@@ -192,7 +196,7 @@ const Organization = () => {
 
 
 if (pageLoading) {
-  return <div>Loading...</div>;
+  return <div className='flex justify-center items-center'><Loading/></div>
 }
 
 
@@ -284,7 +288,7 @@ if (pageLoading) {
         </form>
       </div>
 
-      <AddMember/>
+      {user?.organization?.role != "editor" && <AddMember/>}
     </div>
   );
 };

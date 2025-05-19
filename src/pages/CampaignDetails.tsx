@@ -260,14 +260,14 @@ const CampaignDetails = () => {
                   Status:
                 </p>
                 <p
-                  className={`text-sm font-bold py-2 font-onest rounded-lg p-2 ${
+                  className={`text-sm font-bold font-onest rounded-lg px-2 py-1 ${
                     status === "active"
-                      ? "bg-secondary text-white"
+                      ? "bg-secondary text-blue-950"
                       : status === "cancelled"
-                      ? "bg-red-500 text-white"
+                      ? "bg-red-500 text-red-800"
                       : status === "pending"
-                      ? "bg-yellow-500 text-black"
-                      : "bg-gray-300 text-black"
+                      ? "bg-yellow-500 text-yellow-700"
+                      : "bg-gray-300 text-gray-800"
                   }`}
                 >
                   {status}

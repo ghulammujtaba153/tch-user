@@ -1,56 +1,46 @@
-import React, { useContext, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
-import CampaignCard from '../../components/Campaigns/CampaignCard';
-import { AuthContext } from '../../context/userContext';
-import { BASE_URL } from '../../config/url';
-import axios from 'axios';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { toast } from 'react-toastify';
+import React, { useContext, useEffect, useState } from "react";
+import dayjs from "dayjs";
+import { Link } from "react-router-dom";
+import CampaignCard from "../../components/Campaigns/CampaignCard";
+import { AuthContext } from "../../context/userContext";
+import { BASE_URL } from "../../config/url";
+import axios from "axios";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { toast } from "react-toastify";
+import Loading from "../../components/Loading";
 
 const MyCampaigns = () => {
   const { user } = useContext(AuthContext) || {};
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [organization, setOrganization] = useState(null);
-
-  // Fetch organization
-  const fetchOrganization = async () => {
-    try {
-      const res = await axios.post(`${BASE_URL}/organization/check`, {
-        id: user?.userId,
-        email: user?.email,
-      });
-      setOrganization(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (user?.userId && user?.email) {
-      fetchOrganization();
-    }
-  }, [user]);
+  // const [organization, setOrganization] = useState(null);
 
   
+
+  // Fetch organization
+
   const fetchAllCampaigns = async () => {
     try {
       const [userRes, orgRes] = await Promise.all([
         axios.get(`${BASE_URL}/campaigns/getAllByUser/${user?.userId}`, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }),
-        organization
-          ? axios.get(`${BASE_URL}/campaigns/organisation/${organization}`)
+        user?.organization?._id
+          ? axios.get(
+              `${BASE_URL}/campaigns/organisation/${user?.organization?._id}`
+            )
           : Promise.resolve({ data: [] }),
       ]);
 
+
+      console.log("getting campaigns by user", userRes.data);
+      console.log("getting campaigns by org", orgRes.data);
+
       const combined = [...userRes.data, ...orgRes.data];
 
-      // Deduplicate by _id and sort by createdAt (newest first)
       const uniqueCampaigns = Array.from(
         new Map(combined.map((item) => [item._id, item])).values()
       ).sort(
@@ -61,31 +51,31 @@ const MyCampaigns = () => {
       console.log("campaigns", uniqueCampaigns);
       console.log("organizagtion", user);
 
-      if(user.organization.role === 'editor'){
-        return setCampaigns(uniqueCampaigns.filter(campaign => campaign.userId === user.userId));
+      if (user.organization.role === "editor") {
+        return setCampaigns(
+          uniqueCampaigns.filter((campaign) => campaign.userId === user.userId)
+        );
       }
 
       setCampaigns(uniqueCampaigns);
     } catch (err) {
       console.error(err);
-      setError('Failed to fetch campaigns');
-      toast.error('Failed to fetch campaigns');
+      setError("Failed to fetch campaigns");
+      toast.error("Failed to fetch campaigns");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (user?.userId && organization !== null) {
+    if (user?.userId && user?.organization._id !== null) {
       fetchAllCampaigns();
     }
-  }, [user, organization]);
+  }, [user, user?.organization?._id]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
+      <div className='flex justify-center items-center'><Loading/></div>
     );
   }
 
@@ -109,16 +99,18 @@ const MyCampaigns = () => {
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">My Campaigns</h1>
           <p className="text-gray-500">
-            {dayjs(new Date()).format('DD MMM YYYY')}
+            {dayjs(new Date()).format("DD MMM YYYY")}
           </p>
         </div>
-        <Link
-          to="/user/dashboard/campaigns/create"
-          className="flex items-center gap-2 bg-secondary text-white px-4 py-2 rounded-full hover:opacity-80 transition-all duration-300"
-        >
-          Create Campaign
-          <ArrowRightIcon className="h-4 w-4 ml-2" />
-        </Link>
+        {user?.organization?._id && (
+          <Link
+            to="/user/dashboard/campaigns/create"
+            className="flex items-center gap-2 bg-secondary text-white px-4 py-2 rounded-full hover:opacity-80 transition-all duration-300"
+          >
+            Create Campaign
+            <ArrowRightIcon className="h-4 w-4 ml-2" />
+          </Link>
+        )}
       </div>
 
       {campaigns.length === 0 && (
@@ -134,6 +126,10 @@ const MyCampaigns = () => {
             key={campaign._id}
             campaign={campaign}
             campaigner={true}
+            onSuccess={() => {
+              fetchAllCampaigns();
+              console.log("success");
+            }}
           />
         ))}
       </div>

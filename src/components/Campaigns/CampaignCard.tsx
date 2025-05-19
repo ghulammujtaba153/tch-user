@@ -23,7 +23,7 @@ dayjs.extend(relativeTime);  //  This is required to enable `fromNow()`
 // }
 
 
-const CampaignCard: React.FC<{ campaign: any, admin?: boolean, campaigner?: boolean }> = ({ campaign, admin = false, campaigner = false }) => {
+const CampaignCard: React.FC<{ campaign: any, admin?: boolean, campaigner?: boolean, onSuccess?: () => void }> = ({ campaign, admin = false, campaigner = false, onSuccess }) => {
     const [isPending, startTransition] = useTransition();
     const [isDeleted, setIsDeleted] = useState(false);
     const raised = campaign.totalDonations;
@@ -34,9 +34,12 @@ const CampaignCard: React.FC<{ campaign: any, admin?: boolean, campaigner?: bool
         startTransition(async () => {
             try {
                 const res = await axios.delete(`${BASE_URL}/campaigns/delete/${campaign._id}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
-                console.log(res);
+                
+                
                 setIsDeleted(true);
-                window.location.reload();
+                onSuccess();
+                
+                // window.location.reload();
             } catch (error) {
                 console.log(error);
             }

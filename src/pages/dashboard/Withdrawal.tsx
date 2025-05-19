@@ -146,7 +146,9 @@ const Withdrawal = () => {
           Add Card
           <ArrowRightIcon className='w-4 h-4' />
         </button> */}
-        <BankAccount/>
+
+        {user.organization.role != "editor" && <BankAccount/>}
+        
 
         {isModalOpen && (
           <AddPaymentModal

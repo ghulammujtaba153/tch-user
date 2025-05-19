@@ -1,9 +1,9 @@
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
-import { BASE_URL } from '../../config/url';
-import { AuthContext } from '../../context/userContext';
-import { toast } from 'react-toastify';
-import { TrashIcon } from '@heroicons/react/24/outline';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { BASE_URL } from "../../config/url";
+import { AuthContext } from "../../context/userContext";
+import { toast } from "react-toastify";
+import { TrashIcon } from "@heroicons/react/24/outline";
 
 interface TeamMember {
   name: string;
@@ -29,7 +29,14 @@ const AddMember = () => {
   const [members, setMembers] = useState<any>(null);
   const [owner, setOwner] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ organization: '', name: '', email: '', phone: '', position: '', role: '' });
+  const [form, setForm] = useState({
+    organization: "",
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    role: "",
+  });
   const { user } = useContext<any>(AuthContext);
   const [pageLoading, setPageLoading] = useState(true);
   const [organization, setOrganization] = useState<Organization | null>(null);
@@ -37,20 +44,22 @@ const AddMember = () => {
   const fetchOrganization = async () => {
     try {
       let res = await axios.get(`${BASE_URL}/organization/${user.userId}`);
-      
 
-      if(!res.data){
-        res = await axios.post(`${BASE_URL}/member/email`, { email: user?.email });
-        res= await axios.get(`${BASE_URL}/organization/orgId/${res.data.organization}`);
+      if (!res.data) {
+        res = await axios.post(`${BASE_URL}/member/email`, {
+          email: user?.email,
+        });
+        res = await axios.get(
+          `${BASE_URL}/organization/orgId/${res.data.organization}`
+        );
       }
 
       console.log("fetch organization", res.data);
 
       setOrganization(res.data);
-      setOwner( res.data.userId);
-
+      setOwner(res.data.userId);
     } catch (error) {
-      console.error('No organization data found for user', error);
+      console.error("No organization data found for user", error);
     } finally {
       setPageLoading(false);
     }
@@ -62,10 +71,17 @@ const AddMember = () => {
       const res = await axios.get(`${BASE_URL}/member/${organization._id}`);
       console.log("fetch members", res.data);
       setMembers(res.data);
-      setForm({ organization: organization._id, name: '', email: '', phone: '', position: '', role: '' });
+      setForm({
+        organization: organization._id,
+        name: "",
+        email: "",
+        phone: "",
+        position: "",
+        role: "",
+      });
     } catch (error) {
-      console.error('Error fetching members', error);
-      toast.error('Error fetching members');
+      console.error("Error fetching members", error);
+      toast.error("Error fetching members");
     }
   };
 
@@ -81,7 +97,9 @@ const AddMember = () => {
     }
   }, [user]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -90,34 +108,37 @@ const AddMember = () => {
     setLoading(true);
     try {
       await axios.post(`${BASE_URL}/member`, form);
-      toast.success('Member added!');
-      setForm({ organization: '', name: '', email: '', phone: '', position: '', role: '' });
+      toast.success("Member added!");
+      setForm({
+        organization: "",
+        name: "",
+        email: "",
+        phone: "",
+        position: "",
+        role: "",
+      });
       fetchOrganization();
     } catch (error) {
       console.error(error);
-      toast.error('Failed to add member');
+      toast.error("Failed to add member");
     } finally {
       setLoading(false);
     }
   };
 
-
   const handleDelete = async (id: string) => {
     try {
       const res = await axios.delete(`${BASE_URL}/member/${id}`);
       console.log(res.data);
-      toast.success('Member deleted successfully');
+      toast.success("Member deleted successfully");
       fetchMembers();
     } catch (error) {
-      toast.error('Error deleting member');
+      toast.error("Error deleting member");
     }
   };
 
-
-
-
-
-  if (pageLoading) return <p className="text-center mt-10 text-gray-500">Loading...</p>;
+  if (pageLoading)
+    return <p className="text-center mt-10 text-gray-500">Loading...</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -127,7 +148,9 @@ const AddMember = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Name
+              </label>
               <input
                 type="text"
                 name="name"
@@ -139,7 +162,9 @@ const AddMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -151,7 +176,9 @@ const AddMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Phone</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Phone
+              </label>
               <input
                 type="text"
                 name="phone"
@@ -163,7 +190,9 @@ const AddMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Position</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Position
+              </label>
               <select
                 name="position"
                 value={form.position}
@@ -178,7 +207,9 @@ const AddMember = () => {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Role</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Role
+              </label>
               <select
                 name="role"
                 value={form.role}
@@ -199,7 +230,7 @@ const AddMember = () => {
               disabled={loading}
               className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition disabled:opacity-50"
             >
-              {loading ? 'Adding...' : 'Add Member'}
+              {loading ? "Adding..." : "Add Member"}
             </button>
           </div>
         </form>
@@ -210,27 +241,29 @@ const AddMember = () => {
         <ul className="space-y-2">
           {members && (
             <>
-              <li className="border p-3 rounded-md flex justify-between items-center">
-                <div>
-                  <p className="font-medium">{owner?.name || 'N/A'}</p>
-                  <p className="text-sm text-gray-600">{owner?.email || 'N/A'}</p>
-                </div>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">Owner</span>
-              </li>
-
-              //@ts-ignore
-              {members?.length > 0 && (
+              {members?.length > 0 &&
                 members.map((member, idx) => (
-                  <li key={idx} className="border p-3 rounded-md flex justify-between items-center">
+                  <li
+                    key={idx}
+                    className="border p-3 rounded-md flex justify-between items-center"
+                  >
                     <div>
                       <p className="font-medium">{member.name}</p>
                       <p className="text-sm text-gray-600">{member.email}</p>
                     </div>
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{member.role}</span>
-                    <span onClick={()=>handleDelete(member._id)} className="text-xs text-gray-500 hover:bg-gray-100 p-2 rounded-full cursor-pointer"><TrashIcon className="h-4 w-4" /></span>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      {member.role}
+                    </span>
+                    {member.role !== "owner" && (
+                      <span
+                        onClick={() => handleDelete(member._id)}
+                        className="text-xs text-gray-500 hover:bg-gray-100 p-2 rounded-full cursor-pointer"
+                      >
+                        <TrashIcon className="h-4 w-4" />
+                      </span>
+                    )}
                   </li>
-                ))
-              )}
+                ))}
             </>
           )}
         </ul>

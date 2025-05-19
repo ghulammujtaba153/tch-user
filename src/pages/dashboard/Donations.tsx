@@ -3,6 +3,7 @@ import { AuthContext } from '../../context/userContext';
 import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import DonationsTabs from '../../components/donation/DonationTabs';
+import Loading from '../../components/Loading';
 
 
 
@@ -37,7 +38,7 @@ const Donations = () => {
     // },[user])
 
 
-    if(loading) return <div>Loading...</div>
+    if(loading) return <div className='flex justify-center items-center'><Loading/></div>
     if(error) return <div>Error: {error.message}</div>
 
 

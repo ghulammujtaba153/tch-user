@@ -16,20 +16,12 @@ const EditProfile = () => {
     gender: "",
     dateOfBirth: "",
     nationality: "",
-    organization: {
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-      city: "",
-      country: "",
-    },
   });
 
   useEffect(() => {
     const fetchData = async () => {
       if (user?.userId) {
-        // Check if user and userId exist
+        
         try {
           const res = await axios.get(
             `${BASE_URL}/auth/profile?id=${user.userId}`
@@ -41,16 +33,7 @@ const EditProfile = () => {
             gender: res.data.user.gender,
             dateOfBirth: res.data.user.dateOfBirth,
             nationality: res.data.user.nationality,
-            organization: res.data.user.organization
-              ? {
-                  name: res.data.user.organization.name,
-                  phone: res.data.user.organization.phone,
-                  email: res.data.user.organization.email,
-                  address: res.data.user.organization.address,
-                  city: res.data.user.organization.city,
-                  country: res.data.user.organization.country,
-                }
-              : {},
+            
           });
         } catch (error) {
           console.error("Error fetching profile data:", error);
@@ -241,7 +224,7 @@ const EditProfile = () => {
         </div>
 
         {/* Organization Information Section */}
-        <div className="flex flex-col gap-4 w-full">
+        {/* <div className="flex flex-col gap-4 w-full">
           <h1 className="text-lg font-semibold">Organization Information</h1>
           <div className="flex items-center flex-col md:flex-row gap-4 w-full">
             <div className="w-full md:w-1/2">
@@ -342,7 +325,7 @@ const EditProfile = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Save and Discard Buttons */}
         <div className="flex items-center w-full gap-4">
