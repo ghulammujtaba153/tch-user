@@ -280,7 +280,7 @@ if (pageLoading) {
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition"
+              className="bg-secondary text-white px-6 py-2 rounded-md hover:scale-105 duration-300 transition-transform"
             >
               {loading ? 'Submitting...' : 'Submit'}
             </button>
@@ -343,6 +343,7 @@ const FileUpload = ({
         {/\.(pdf|doc|docx)$/i.test(previewUrl) ? (
           <a
             href={previewUrl}
+            target="_blank"
             download
             className="text-blue-600 underline"
           >

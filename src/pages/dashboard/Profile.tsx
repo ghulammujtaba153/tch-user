@@ -61,12 +61,12 @@ const Profile = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex md:flex-row flex-col items-center justify-center gap-2">
+      <div className="flex lg:flex-row flex-col items-center justify-center gap-2">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`w-[250px] flex items-center justify-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${
+            className={`w-[210px] flex items-center justify-center gap-2 px-4 py-2 md:text-sm text-xs rounded-full transition-all duration-200 ${
               activeTab === tab.key
                 ? "bg-secondary text-white"
                 : "outline outline-secondary outline-1 text-secondary"

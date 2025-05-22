@@ -10,6 +10,7 @@ type PaymentMethod = 'Test Donation' | 'Cardiant Donation' | 'Office Donation';
 interface FormData {
   donorId: string | undefined;
   campaignId: string;
+  organizationId: string;
   amount: string;
   donorName: string;
   donorEmail: string;
@@ -19,7 +20,7 @@ interface FormData {
   houseNumber: string;
 }
 
-const DonationForm: React.FC<{ id: string, campaigner: string, communication: string }> = ({ id, campaigner, communication }) => {
+const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: string, communication: string }> = ({ id, campaigner, organizationId, communication }) => {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod>('Test Donation');
   const [customAmount, setCustomAmount] = useState('');
   const [selectedAmount, setSelectedAmount] = useState<string>('150');
@@ -34,6 +35,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
   const [formData, setFormData] = useState<FormData>({
     donorId: user?.userId,
     campaignId: id,
+    organizationId: organizationId,
     amount: '150',
     donorName: '',
     donorEmail: '',
@@ -168,6 +170,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, communication: st
           setFormData({
             donorId: user?.userId,
             campaignId: id,
+            organizationId: organizationId,
             amount: '150',
             donorName: '',
             donorEmail: '',

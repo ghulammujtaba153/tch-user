@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { ArrowRightIcon, ClockIcon, LinkIcon, MapPinIcon } from "@heroicons/react/24/outline";
 import Comments from "../components/donationComments/Comments";
+import Loading from "../components/Loading";
 
 
 const CampaignDetails = () => {
@@ -74,6 +75,7 @@ const CampaignDetails = () => {
         (response.data.totalDonations / response.data.amount) * 100;
       setProgress(progress);
       console.log(response.data);
+      
       console.log(response.data.totalDonations);
       setStatus(response.data.status);
     };
@@ -85,7 +87,7 @@ const CampaignDetails = () => {
   if (!campaign)
     return (
       <div className="flex items-center justify-center h-screen">
-        Loading...
+        <Loading />
       </div>
     );
 
@@ -136,7 +138,7 @@ const CampaignDetails = () => {
             {/* avatar and location section */}
 
             <div className="flex items-center gap-2 h-[40px]">
-              <img
+              {/* <img
                 src={
                   campaign?.userDetails[0].profilePicture
                     ? 
@@ -145,7 +147,18 @@ const CampaignDetails = () => {
                 }
                 alt="A"
                 className="w-[40px] h-full rounded-md"
+              /> */}
+
+              <img
+                src={campaign?.userDetails[0]?.profilePicture || "/user.png"}
+                alt="User"
+                className="w-[40px] h-full rounded-md object-cover"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/user.png"; 
+                }}
               />
+
 
               <div className="flex flex-col h-full justify-between">
                 <p className="text-normal font-bold text-black font-onest">
@@ -371,7 +384,7 @@ const CampaignDetails = () => {
 
           
 
-          {!admin && !campaigner && <DonationForm id={id as string} campaigner={campaign?.userDetails[0]?._id} communication={campaign?.donorCommunication	} />}
+          {!admin && !campaigner && <DonationForm id={id as string} campaigner={campaign?.userDetails[0]?._id} organizationId={campaign?.organizationId} communication={campaign?.donorCommunication	} />}
 
           {campaigner && (
             <div className="flex justify-end w-full">

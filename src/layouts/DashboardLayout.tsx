@@ -35,7 +35,7 @@ const CampaignerDashboardLayout: React.FC = () => {
   // Connect to Socket.IO server
   useEffect(() => {
     if (user?.userId) {
-      socketRef.current = io(`${SOCKET_URL}`); // Your server URL
+      socketRef.current = io(`${SOCKET_URL}`); 
 
       // Join the user's room
       socketRef.current.emit('join-room', user.userId);
@@ -57,7 +57,7 @@ const CampaignerDashboardLayout: React.FC = () => {
     }
   }, [user?.userId]);
 
-  // Close the notification section when clicking outside
+  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
@@ -70,7 +70,7 @@ const CampaignerDashboardLayout: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [unSeenIds]); // Add unSeenIds as a dependency
+  }, [unSeenIds]); 
 
   // Mark notifications as seen
   const markNotificationsAsSeen = async () => {
@@ -212,6 +212,10 @@ const CampaignerDashboardLayout: React.FC = () => {
                   src={user?.profilePicture}
                   alt="Profile"
                   className="w-6 h-6 rounded-full"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/user.png"; 
+                  }}
                 />
               ) : (
                 <UserCircleIcon className="w-6 h-6" />
