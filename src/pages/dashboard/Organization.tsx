@@ -23,6 +23,7 @@ const initialFormData = {
   certificate: '',
   cnic: '',
   supportingDocument: '',
+  status: '' 
 };
 
 const Organization = () => {

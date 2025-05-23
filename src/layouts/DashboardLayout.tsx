@@ -213,8 +213,9 @@ const CampaignerDashboardLayout: React.FC = () => {
                   alt="Profile"
                   className="w-6 h-6 rounded-full"
                   onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = "/user.png"; 
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "/user.png"; 
                   }}
                 />
               ) : (

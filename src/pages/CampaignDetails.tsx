@@ -154,8 +154,9 @@ const CampaignDetails = () => {
                 alt="User"
                 className="w-[40px] h-full rounded-md object-cover"
                 onError={(e) => {
-                  e.target.onerror = null;
-                  e.target.src = "/user.png"; 
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = "/user.png"; 
                 }}
               />
 
