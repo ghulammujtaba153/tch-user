@@ -202,8 +202,16 @@ if (pageLoading) {
 
   return (
     <div className="min-h-screen  py-10 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-md rounded-xl p-8">
+      <div className="relative max-w-4xl mx-auto bg-white shadow-md rounded-xl p-8">
+
+        <p className={`absolute top-4 left-4 text-gray-500 cursor-pointer px-2 py-1 rounded-full ${formData?.status === 'active' ? 'bg-green-300 text-green-800' : formData?.status === 'suspended' ? 'bg-red-300 text-red-800' : 'bg-yellow-300 text-yellow-800'}`}>
+          {formData?.status}
+        </p>
+
+
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+
+
           {isUpdateMode ? 'Update Organization' : 'Organization Registration'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">

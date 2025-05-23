@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { BASE_URL } from '../../config/url';
 import CategoryCard from './CategoryCard';
+import Loading from '../Loading';
 
 const GuideCategories = () => {
   const [data, setData] = useState([]);
@@ -23,6 +24,8 @@ const GuideCategories = () => {
   useEffect(() => {
     fetch();
   }, []);
+
+  if(loading) return <div className='flex justify-center items-center min-h-screen'><Loading/></div>
 
   return (
     <div className='max-w-[1200px] mx-auto mt-[100px] px-4'>

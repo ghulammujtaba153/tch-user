@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { BASE_URL } from '../../config/url';
 import { toast } from 'react-toastify';
 import GuideCard from './GuideCard'; // Note: Capitalized component name
+import Loading from '../Loading';
 
 const GuidesMain = () => {
   const { id } = useParams();
@@ -27,7 +28,7 @@ const GuidesMain = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-10">Loading...</div>;
+    return <div className="text-center py-10"><Loading/></div>;
   }
 
   return (

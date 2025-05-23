@@ -30,6 +30,9 @@ const CampaignCard: React.FC<{ campaign: any, admin?: boolean, campaigner?: bool
     const goal = campaign.amount;
     const progress = (raised / goal) * 100;
 
+
+  
+
     const handleDelete = async () => {
         startTransition(async () => {
             try {

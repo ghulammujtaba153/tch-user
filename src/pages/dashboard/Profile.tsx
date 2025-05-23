@@ -100,7 +100,7 @@ const Profile = () => {
             </div>
 
 
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+            <div className="grid lg:grid-cols-2 grid-cols-1  gap-4">
 
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="max-w-[400px] h-full md:max-h-[250px]">

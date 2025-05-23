@@ -119,8 +119,8 @@ const AddMember = () => {
       });
       fetchOrganization();
     } catch (error) {
-      console.error(error);
-      toast.error("Failed to add member");
+      toast.error(error.response.data.error);
+
     } finally {
       setLoading(false);
     }

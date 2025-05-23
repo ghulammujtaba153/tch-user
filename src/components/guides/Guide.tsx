@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../config/url';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Loading from '../Loading';
 
 const Guide = () => {
   const { id } = useParams();
@@ -26,7 +27,7 @@ const Guide = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-10">Loading...</div>;
+    return <div className="text-center py-10"><Loading/></div>;
   }
 
   if (!data) {
