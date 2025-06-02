@@ -3,6 +3,8 @@ import CampaignCard from '../components/Campaigns/CampaignCard';
 import axios from 'axios';
 import { BASE_URL } from '../config/url';
 import { FiFilter } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import Loading from '../components/Loading';
 
 interface Campaign {
   _id: string;
@@ -42,7 +44,7 @@ const Campaigns = () => {
         setCampaigns(res.data);
         setFilteredCampaigns(res.data);
       } catch (error) {
-        console.error('Error fetching campaigns:', error);
+        toast.error("Error fetching campaigns");
         setError("Error fetching campaigns");
       } finally {
         setIsPending(false);
@@ -103,6 +105,16 @@ const Campaigns = () => {
 
     setFilteredCampaigns(filtered);
   }, [searchQuery, selectedCategory, minAmount, maxAmount, sortBy, campaigns]);
+
+
+  if(isPending) {
+    return <div className="flex items-center justify-center h-screen">
+        <Loading />
+      </div>
+  }
+  if(error) {
+    return <div>{error}</div>
+  }
 
   return (
     <div className='max-w-[1200px] mx-auto p-4 flex flex-col gap-5 min-h-screen items-center pt-[100px] overflow-x-hidden font-sans'>

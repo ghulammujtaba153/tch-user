@@ -27,7 +27,9 @@ const Guide = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center py-10"><Loading/></div>;
+    return <div className="flex items-center justify-center h-screen">
+        <Loading />
+      </div>
   }
 
   if (!data) {

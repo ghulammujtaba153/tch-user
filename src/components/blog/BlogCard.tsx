@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 interface BlogCardProps {
@@ -11,13 +11,27 @@ interface BlogCardProps {
 }
 
 const BlogCard: React.FC<BlogCardProps> = ({ data }) => {
+  const [loaded, setLoaded] = useState(false);
+
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-sm mx-auto hover:shadow-xl transition-shadow duration-300 flex flex-col">
-      <img
-        src={data.image}
-        alt={data.title}
-        className="w-full h-56 object-cover"
-      />
+      <div className="relative w-full h-56">
+        {!loaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse z-10">
+            <span className="text-sm text-gray-500">Loading image...</span>
+          </div>
+        )}
+
+        <img
+          src={data.image}
+          alt={data.title}
+          loading="lazy"
+          onLoad={() => setLoaded(true)}
+          className={`w-full h-full object-cover transition-opacity duration-500 ${
+            loaded ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      </div>
 
       <div className="p-4 flex flex-col flex-grow">
         <h2 className="text-lg font-semibold text-gray-800 mb-1 truncate">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../config/url';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import Loading from '../../components/Loading';
 
 const Blog = () => {
   const { id } = useParams();
@@ -24,7 +25,10 @@ const Blog = () => {
     fetchBlog();
   }, []);
 
-  if (loading) return <div className="text-center mt-24 text-lg">Loading...</div>;
+  if (loading) return 
+      <div className="flex items-center justify-center h-screen">
+        <Loading />
+      </div>
 
   if (!blog) return <div className="text-center mt-24 text-red-500">Blog not found.</div>;
 

@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Notification from "../components/notification/Notification";
 import GoogleLoginButton from "../components/home/GoogleButton";
 import MicrosoftLoginButton from "../components/home/MicrosoftButton";
+import { useAppConfig } from "../context/AppConfigContext";
 
 const SignUp = () => {
   const [hide, setHide] = useState(true);
@@ -38,6 +39,8 @@ const SignUp = () => {
   const handleChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
+  const { config } = useAppConfig();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -91,7 +94,7 @@ const SignUp = () => {
       )}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src="/nav-logo.png" alt="logo" className="w-[150px] h-[50px]" />
+          <img src={config?.logo} alt="logo" className="w-[150px] h-[50px]" />
         </div>
 
         <form className="mt-8 space-y-6 font-sans">
