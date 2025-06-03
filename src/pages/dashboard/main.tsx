@@ -57,7 +57,8 @@ const MainDashboard = () => {
             console.log(basicInfoRes.data);
     
             console.log(donationsRes.data);
-            const donations = donationsRes.data.filter((item: any) => item.donorId !== user?.userId);
+            // const donations = donationsRes.data.filter((item: any) => item.donorId !== user?.userId);
+            const donations = donationsRes.data;
             setLatestDonations(donations);
     
         } catch (error: any) {

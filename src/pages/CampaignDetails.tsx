@@ -183,6 +183,11 @@ const CampaignDetails = () => {
               </p>
             </div>
 
+            <div className="flex flex-col items-center ">
+              <img src={campaign.organization[0].logo} alt="/" className="w-[25px] h-[25px]"/>
+              <p className="text-xs">{campaign.organization[0].name}</p>
+            </div>
+
             {/* donate btn */}
 
             <button className="bg-secondary flex items-center justify-center text-white px-4 py-1 md:py-2 rounded-full text-sm font-bold h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300">
