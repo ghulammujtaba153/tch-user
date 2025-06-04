@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/userContext';
 import AddMember from '../../components/dashboard/AddMember';
 import Loading from '../../components/Loading';
+import DonationBtn from '../../components/dashboard/DonationBtn';
 
 const initialFormData = {
   userId: '',
@@ -36,6 +37,7 @@ const Organization = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const { user } = useContext<any>(AuthContext);
   const [pageLoading, setPageLoading] = useState(true);
+  const [organization, setOrganization] = useState<any>(null);
 
   
   
@@ -44,7 +46,7 @@ const Organization = () => {
     try {
       let res = await axios.get(`${BASE_URL}/organization/${user.userId}`);
       console.log("fetch organization", res.data);
-      
+      setOrganization(res.data);
       if(!res?.data){ 
         console.log("second way")
         
@@ -298,6 +300,8 @@ if (pageLoading) {
       </div>
 
       {user?.organization?.role != "editor" && <AddMember/>}
+      {user?.organization?.role != "editor" &&<DonationBtn organizationId={organization?._id}/>}
+
     </div>
   );
 };

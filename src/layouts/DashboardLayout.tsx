@@ -236,7 +236,7 @@ const CampaignerDashboardLayout: React.FC = () => {
               >
                 <Link
                   to={item.path}
-                  className={`w-full px-4 py-2 flex items-center hover:bg-secondary/20 transition-colors duration-200 ${
+                  className={`w-full px-4 py-2 flex text-sm items-center hover:bg-secondary/20 transition-colors duration-200 ${
                     isActive(item.path)
                       ? "bg-secondary/20 border-l-4 text-secondary border-secondary"
                       : ""

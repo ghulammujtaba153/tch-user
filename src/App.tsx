@@ -43,6 +43,7 @@ import Blog from './pages/blogs/Blog';
 import GuideCategories from './components/guides/GuideCategories';
 import Guide from './components/guides/Guide';
 import GuidesMain from './components/guides/GuidesMain';
+import Organization from './pages/Organization';
 
 
 
@@ -88,6 +89,8 @@ function App() {
           <Route path="/home/campaigns" element={<Campaigns />} />
           <Route path="/home/campaigns/:id" element={<CampaignDetails />} />
           <Route path="/home/campaigns/create" element={<CreateCampaignForm />} />
+
+          <Route path="/home/organization/:id" element={<Organization />} />
 
           <Route path="/works" element={<HowWorks/>} />
           <Route path="/about" element={<About/>} />

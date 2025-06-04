@@ -183,10 +183,10 @@ const CampaignDetails = () => {
               </p>
             </div>
 
-            <div className="flex flex-col items-center ">
+            <Link to={`/home/organization/${campaign?.organization[0]?._id}`} className="flex flex-col items-center ">
               <img src={campaign.organization[0].logo} alt="/" className="w-[25px] h-[25px]"/>
               <p className="text-xs">{campaign.organization[0].name}</p>
-            </div>
+            </Link>
 
             {/* donate btn */}
 
