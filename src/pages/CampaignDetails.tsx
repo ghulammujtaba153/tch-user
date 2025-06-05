@@ -97,10 +97,10 @@ const CampaignDetails = () => {
     );
 
   return (
-    <div className="max-w-[1200px] mx-auto p-4 flex md:flex-row flex-col gap-5 justify-between pt-[100px] overflow-x-hidden font-sans">
+    <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-5 justify-between pt-[100px] overflow-x-hidden font-sans">
       {/* upper section */}
-      <div className="flex justify-between md:w-[75%] w-full">
-        <div className="flex flex-col">
+      <div className="flex justify-between md:flex-row flex-col gap-2 w-full">
+        <div className="flex flex-col md:w-[65%]">
           {/* image section */}
           <div className="relative flex items-center border border-b-gray-400 mb-4 gap-2 rounded-xl overflow-hidden">
             <img
@@ -189,17 +189,19 @@ const CampaignDetails = () => {
               </p>
             </div>
 
-            <Link
-              to={`/home/organization/${campaign?.organization[0]?._id}`}
-              className="flex flex-col items-center "
-            >
-              <img
-                src={campaign.organization[0].logo}
-                alt="/"
-                className="w-[25px] h-[25px]"
-              />
-              <p className="text-xs">{campaign.organization[0].name}</p>
-            </Link>
+            {campaign?.organization[0] && (
+              <Link
+                to={`/home/organization/${campaign?.organization[0]?._id}`}
+                className="flex flex-col items-center "
+              >
+                <img
+                  src={campaign.organization[0].logo}
+                  alt="/"
+                  className="w-[25px] h-[25px]"
+                />
+                <p className="text-xs">{campaign.organization[0].name}</p>
+              </Link>
+            )}
 
             {/* donate btn */}
 
@@ -268,7 +270,6 @@ const CampaignDetails = () => {
             >
               <BsTwitter size={20} />
             </a>
-
           </div>
 
           {/* campaign details section */}
@@ -460,29 +461,28 @@ const CampaignDetails = () => {
             </div>
           )}
 
-          {/* comments section */}
-          <Comments campaignId={id} />
-        </div>
-      </div>
 
-      {/* donors section */}
-      <div className="flex flex-col md:w-[25%] w-full">
+
+
+        </div>
+                  {/* donors section */}
+      <div className="flex flex-col md:w-[35%] w-full">
         <p className="text-sm font-bold text-black py-2 font-onest">
           Donations
         </p>
 
-        <div className="flex flex-col bg-white  gap-2 overflow-y-auto max-h-[500px] scrollbar-hide border border-gray-300 rounded-lg p-4">
+        <div className="flex flex-col bg-white gap-2 overflow-y-auto max-h-[500px] scrollbar-hide border border-gray-300 rounded-lg p-4">
           {/* filter section */}
           <div className="flex items-center justify-center gap-2 p-2">
             {["Hot", "All"].map((tab) => (
               <p
                 key={tab}
                 className={`text-sm font-bold w-[100px] flex items-center justify-center cursor-pointer px-4 py-1 rounded-full transition-all duration-300 
-                                ${
-                                  activeTab === tab
-                                    ? "bg-secondary text-white"
-                                    : "bg-white border border-gray-300 text-gray-600"
-                                }`}
+        ${
+          activeTab === tab
+            ? "bg-secondary text-white"
+            : "bg-white border border-gray-300 text-gray-600"
+        }`}
                 onClick={() => setActiveTab(tab as "Hot" | "All")}
               >
                 {tab}
@@ -490,13 +490,27 @@ const CampaignDetails = () => {
             ))}
           </div>
 
-          <p>{campaign?.donations?.donorDetails?.length}</p>
-          {/* card */}
-          {campaign?.donations.map((donor: any) => (
-            <DonorCard key={donor._id} donor={donor} />
-          ))}
+          
+
+          {/* donor cards */}
+          {(activeTab === "Hot"
+            ? [...campaign?.donations]
+                .sort((a, b) => b.amount - a.amount) // sort by highest amount
+                .slice(0, 6) // top 6
+            : campaign?.donations
+          ) // all
+            .map((donor: any) => (
+              <DonorCard key={donor._id} donor={donor} />
+            ))}
         </div>
       </div>
+      </div>
+
+      
+
+      {/* comments section */}
+      <Comments campaignId={id} />
+
     </div>
   );
 };

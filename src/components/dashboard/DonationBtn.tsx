@@ -66,7 +66,7 @@ const DonationBtn = ({ organizationId: propOrgId }) => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-4 border rounded">
+    <div className="max-w-4xl bg-white mx-auto mt-10 p-4 border rounded-[20px]">
       <h2 className="text-xl font-semibold mb-4">
         {edit ? 'Edit Donation Button' : 'Create Donation Button'}
       </h2>

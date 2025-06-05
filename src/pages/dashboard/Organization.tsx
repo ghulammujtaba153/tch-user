@@ -281,7 +281,7 @@ if (pageLoading) {
             previewUrl={certificatePreview}
           />
           <FileUpload
-            label="S18A certification"
+            label="S18A certification (optional)"
             onChange={(e) => handleFileChange(e, 'supportingDocument')}
             previewUrl={documentPreview}
           />

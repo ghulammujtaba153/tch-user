@@ -141,10 +141,10 @@ const AddMember = () => {
     return <p className="text-center mt-10 text-gray-500">Loading...</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
+    <div className="max-w-4xl mx-auto py-6">
       <h2 className="text-2xl font-bold mb-6">Team Members</h2>
 
-      <div className="mb-6 bg-white p-4 rounded shadow">
+      <div className="max-w-4xl mb-6 bg-white p-4 rounded-[20px] shadow">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -236,7 +236,7 @@ const AddMember = () => {
         </form>
       </div>
 
-      <div className="bg-white rounded shadow p-4">
+      <div className="bg-white rounded-[20px] shadow p-4">
         <h3 className="text-lg font-semibold mb-4">Member List</h3>
         <ul className="space-y-2">
           {members && (
