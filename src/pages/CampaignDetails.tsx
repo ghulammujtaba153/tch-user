@@ -269,15 +269,6 @@ const CampaignDetails = () => {
               <BsTwitter size={20} />
             </a>
 
-            <a
-              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(campaign?.title || "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-700 hover:text-blue-900"
-            >
-              <BsLinkedin size={20} />
-            </a>
-
           </div>
 
           {/* campaign details section */}
