@@ -58,7 +58,7 @@ const CampaignCard: React.FC<{
   };
 
   return (
-    <div className="font-sans flex flex-col border border-[#020D1914] bg-primary p-4 gap-4 rounded-lg overflow-hidden max-w-[400px] hover:shadow-lg hover:border-secondary transition-all duration-300">
+<div className="font-sans flex flex-col border bg-primary p-4 gap-4 rounded-lg overflow-hidden w-full max-w-[370px] hover:shadow-lg hover:border-secondary transition-all duration-300">
       {isDeleted && (
         <Notification
           isOpen={isDeleted}
@@ -68,19 +68,19 @@ const CampaignCard: React.FC<{
         />
       )}
 
-      {!loaded && (
-        <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-lg" />
-      )}
+      <div className="relative w-full h-[200px]">
+        <img
+          src={campaign.image}
+          alt="campaign-card"
+          className={`w-full h-full object-cover rounded-lg transition-all duration-500 ${
+            loaded ? "blur-0 opacity-100" : "blur-md opacity-60 animate-pulse"
+          }`}
+          onLoad={() => setLoaded(true)}
+          loading="lazy"
+        />
+      </div>
 
-      <img
-        src={campaign.image}
-        alt="campaign-card"
-        className={`w-full h-[200px] object-cover rounded-lg transition-opacity duration-500 ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-        onLoad={() => setLoaded(true)}
-        loading="lazy"
-      />
+
       {campaign?.organizationId ? (
         <p className="text-xs font-bold bg-green-600 w-[70px] text-center text-white p-1 rounded-md">
           verified

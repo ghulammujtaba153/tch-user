@@ -10,7 +10,7 @@ type PaymentMethod = 'Test Donation' | 'Cardiant Donation' | 'Office Donation';
 interface FormData {
   donorId: string | undefined;
   campaignId: string;
-  organizationId: string;
+  organizationId: any | undefined;
   amount: string;
   donorName: string;
   donorEmail: string;
@@ -30,7 +30,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
   const { user } = useContext(AuthContext)!;
   const [isPending, startTransition] = useTransition();
   const socketRef = useRef<Socket | null>(null);
-  console.log("donation form user", user)
+  console.log("donation form user", organizationId)
 
   const [formData, setFormData] = useState<FormData>({
     donorId: user?.userId,

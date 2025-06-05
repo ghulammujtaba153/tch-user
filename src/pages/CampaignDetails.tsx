@@ -1,4 +1,4 @@
-import  { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import DonationForm from "../components/donation/DonationForm";
 import DonorCard from "../components/donation/DonorCard";
@@ -7,10 +7,15 @@ import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { ArrowRightIcon, ClockIcon, LinkIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowRightIcon,
+  ClockIcon,
+  LinkIcon,
+  MapPinIcon,
+} from "@heroicons/react/24/outline";
 import Comments from "../components/donationComments/Comments";
 import Loading from "../components/Loading";
-
+import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -75,14 +80,14 @@ const CampaignDetails = () => {
         (response.data.totalDonations / response.data.amount) * 100;
       setProgress(progress);
       console.log(response.data);
-      
+
       console.log(response.data.totalDonations);
       setStatus(response.data.status);
     };
     fetchCampaign();
   }, [id]);
 
-
+  const shareUrl = `${window.location.origin}${location.pathname}`;
 
   if (!campaign)
     return (
@@ -101,7 +106,7 @@ const CampaignDetails = () => {
             <img
               src={campaign?.image}
               alt="arrow-left"
-              className="w-full h-full rounded-lg"
+              className="w-full max-h-[500px] object-cover rounded-lg"
             />
 
             {/* gradient overlay */}
@@ -121,14 +126,14 @@ const CampaignDetails = () => {
                 </div>
 
                 <progress
-                    value={raised}
-                    max={goal}
-                    className="w-full h-3 rounded-full overflow-hidden appearance-none
+                  value={raised}
+                  max={goal}
+                  className="w-full h-3 rounded-full overflow-hidden appearance-none
                         [&::-webkit-progress-bar]:bg-gray-300 
                         [&::-webkit-progress-value]:bg-secondary 
                         [&::-webkit-progress-value]:rounded-full 
                         [&::-moz-progress-bar]:bg-secondary"
-                    />
+                />
               </div>
             </div>
           </div>
@@ -156,10 +161,9 @@ const CampaignDetails = () => {
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.onerror = null;
-                  target.src = "/user.png"; 
+                  target.src = "/user.png";
                 }}
               />
-
 
               <div className="flex flex-col h-full justify-between">
                 <p className="text-normal font-bold text-black font-onest">
@@ -167,7 +171,7 @@ const CampaignDetails = () => {
                 </p>
 
                 <div className="flex items-center gap-2">
-                  <ClockIcon  className="w-[15px] h-[15px] text-gray-600" />
+                  <ClockIcon className="w-[15px] h-[15px] text-gray-600" />
                   <p className="text-xs font-bold text-gray-600 font-onest">
                     {dayjs(campaign?.createdAt).fromNow()}
                   </p>
@@ -177,14 +181,23 @@ const CampaignDetails = () => {
 
             {/* funds required section */}
             <div className="flex flex-col md:items-center ">
-              <p className=" font-bold text-black text-sm font-onest">Required Funds</p>
+              <p className=" font-bold text-black text-sm font-onest">
+                Required Funds
+              </p>
               <p className="text-secondary font-bold text-2xl font-onest">
                 R{campaign?.amount}
               </p>
             </div>
 
-            <Link to={`/home/organization/${campaign?.organization[0]?._id}`} className="flex flex-col items-center ">
-              <img src={campaign.organization[0].logo} alt="/" className="w-[25px] h-[25px]"/>
+            <Link
+              to={`/home/organization/${campaign?.organization[0]?._id}`}
+              className="flex flex-col items-center "
+            >
+              <img
+                src={campaign.organization[0].logo}
+                alt="/"
+                className="w-[25px] h-[25px]"
+              />
               <p className="text-xs">{campaign.organization[0].name}</p>
             </Link>
 
@@ -205,18 +218,66 @@ const CampaignDetails = () => {
               rel="noreferrer"
               className="text-sm text-secondary hover:bg-secondary hover:text-white p-2 rounded-lg font-bold"
             >
-              <LinkIcon className="w-4 h-4"/>
+              <LinkIcon className="w-4 h-4" />
             </a>
-            
+
             <a
               href={campaign?.video}
               target="_blank"
               rel="noreferrer"
               className="text-sm text-secondary hover:bg-secondary hover:text-white p-2 rounded-lg font-bold"
             >
-              <LinkIcon className="w-4 h-4"/>
+              <LinkIcon className="w-4 h-4" />
             </a>
-            
+          </div>
+
+          <div className="flex items-center gap-3 mt-2">
+            <p className="text-sm text-gray-600 font-onest">Share: </p>
+
+            {/* WhatsApp Share */}
+            <a
+              href={`https://api.whatsapp.com/send?text=Check%20out%20this%20campaign:%20${encodeURIComponent(
+                `${campaign?.title} - ${shareUrl}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-green-500 hover:text-green-700"
+            >
+              <BsWhatsapp className="w-6 h-6" />
+            </a>
+
+            {/* Facebook Share */}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                `${campaign?.title} - ${shareUrl}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900"
+            >
+              <BsFacebook className="w-6 h-6" />
+            </a>
+
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(
+                `${campaign?.title} - ${shareUrl}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-600"
+            >
+              <BsTwitter size={20} />
+            </a>
+
+            <a
+              href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(campaign?.title || "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-700 hover:text-blue-900"
+            >
+              <BsLinkedin size={20} />
+            </a>
+
           </div>
 
           {/* campaign details section */}
@@ -388,9 +449,14 @@ const CampaignDetails = () => {
             </div>
           )}
 
-          
-
-          {!admin && !campaigner && <DonationForm id={id as string} campaigner={campaign?.userDetails[0]?._id} organizationId={campaign?.organizationId} communication={campaign?.donorCommunication	} />}
+          {!admin && !campaigner && (
+            <DonationForm
+              id={id as string}
+              campaigner={campaign?.userDetails[0]?._id}
+              organizationId={campaign?.organization[0]._id}
+              communication={campaign?.donorCommunication}
+            />
+          )}
 
           {campaigner && (
             <div className="flex justify-end w-full">
@@ -403,9 +469,8 @@ const CampaignDetails = () => {
             </div>
           )}
 
-
           {/* comments section */}
-          <Comments campaignId={id}/>
+          <Comments campaignId={id} />
         </div>
       </div>
 
@@ -441,8 +506,6 @@ const CampaignDetails = () => {
           ))}
         </div>
       </div>
-
-      
     </div>
   );
 };

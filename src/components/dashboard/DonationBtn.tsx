@@ -9,6 +9,7 @@ const DonationBtn = ({ organizationId: propOrgId }) => {
   const organizationId = propOrgId || routeId;
 
   const [data, setData] = useState({
+    _id: '',
     text: '',
     textColor: '#000000',
     color: '#000000',
