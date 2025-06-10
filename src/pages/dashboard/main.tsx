@@ -1,5 +1,5 @@
-import { BellIcon, MagnifyingGlassIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import dayjs, { Dayjs } from 'dayjs';
+
+import dayjs from 'dayjs';
 import React, { useContext, useEffect, useState } from 'react';
 import StatsCard from '../../components/dashboard/StatsCard';
 import LatestDonations from '../../components/dashboard/LatestDonations';
@@ -18,28 +18,54 @@ const MainDashboard = () => {
     const [basicInfo, setBasicInfo] = useState<any>(null);
     const [latestDonations, setLatestDonations] = useState<any>(null);
 
+    console.log("user from context ",user);
+
     const card = [
         {
             title: "Total Funds Raised",
-            value: basicInfo?.fundsRaised
+            value: basicInfo?.fundsRaised || 0
         },
         {
             title: "Active Campaigns",
-            value: basicInfo?.totalActiveCampaigns
+            value: basicInfo?.totalActiveCampaigns || 0
         },
         {
             title: "Pending Withdrawals",
-            value: basicInfo?.withdrawn
+            value: basicInfo?.withdrawn || 0
         },
         {
             title: "Success Rate",
-            value: basicInfo?.successRate
+            value: basicInfo?.successRate || 0
         }
     ]
 
     const fetch = async () => {
         setLoading(true);
         try {
+    
+            if (user?.organization?.role== "owner") {
+                const [basicInfoRes, donationsRes] = await Promise.all([
+                axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+                axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }),
+            ]);
+    
+            setBasicInfo(basicInfoRes.data);
+            console.log(basicInfoRes.data);
+    
+            console.log(donationsRes.data);
+            const donations = donationsRes.data;
+            setLatestDonations(donations);
+
+                return;
+            }
             const [basicInfoRes, donationsRes] = await Promise.all([
                 axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
                     headers: {
@@ -57,7 +83,6 @@ const MainDashboard = () => {
             console.log(basicInfoRes.data);
     
             console.log(donationsRes.data);
-            // const donations = donationsRes.data.filter((item: any) => item.donorId !== user?.userId);
             const donations = donationsRes.data;
             setLatestDonations(donations);
     

@@ -44,6 +44,16 @@ const FundsGraph = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                if (user?.organization?.role== "owner") {
+                    const res= await axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    })
+                    setData(res.data);
+                    return;
+                }
+
                 const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
