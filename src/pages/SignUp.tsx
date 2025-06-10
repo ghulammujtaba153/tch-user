@@ -21,6 +21,7 @@ const SignUp = () => {
   });
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
+  const [passwordPolicy, setPasswordPolicy] = useState<any>({});
 
   const location = useLocation();
 
@@ -28,7 +29,7 @@ const SignUp = () => {
     const queryParams = new URLSearchParams(location.search);
     const name = queryParams.get("name") || "";
     const email = queryParams.get("email") || "";
-
+    
     setData((prev) => ({
       ...prev,
       name,
@@ -42,11 +43,68 @@ const SignUp = () => {
 
   const { config } = useAppConfig();
 
+  const fetchPasswordPolicy = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/password-policy`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log(res.data);
+      setPasswordPolicy(res.data);
+    } catch (error: any) {
+      console.error("Error fetching password policy:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPasswordPolicy();
+  }, []);
+
+
+  const validatePassword = (password: string): { valid: boolean; error?: string } => {
+    if (passwordPolicy.minimumLength && password.length < 8) {
+      return {
+        valid: false,
+        error: "Password must be at least 8 characters long",
+      };
+    }
+
+    if (passwordPolicy.upperCase && !/[A-Z]/.test(password)) {
+      return {
+        valid: false,
+        error: "Password must contain at least one uppercase letter",
+      };
+    }
+
+    if (passwordPolicy.number && !/\d/.test(password)) {
+      return {
+        valid: false,
+        error: "Password must contain at least one number",
+      };
+    }
+
+    if (passwordPolicy.specialCharacter && !/[@$!%*#?&]/.test(password)) {
+      return {
+        valid: false,
+        error: "Password must contain at least one special character",
+      };
+    }
+
+    return { valid: true };
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log(data);
 
     setIsPending(true);
+    const passwordValidation = validatePassword(data.password);
+    if (!passwordValidation.valid) {
+      setError(passwordValidation.error || "Invalid password");
+      setIsPending(false);
+      return;
+    }
 
     try {
       const otp = Math.floor(1000 + Math.random() * 9000).toString();
@@ -157,7 +215,7 @@ const SignUp = () => {
               <img
                 src={hide ? "/hide.png" : "/view.png"}
                 onClick={() => setHide(!hide)}
-                alt="eye-icon"
+                alt="e"
                 className="absolute right-3 top-8 w-6 h-6 cursor-pointer"
               />
             </div>
@@ -182,7 +240,7 @@ const SignUp = () => {
               <img
                 src={hideConfirm ? "/hide.png" : "/view.png"}
                 onClick={() => setHideConfirm(!hideConfirm)}
-                alt="eye-icon"
+                alt="e"
                 className="absolute right-3 top-8 w-6 h-6 cursor-pointer"
               />
             </div>
@@ -198,9 +256,9 @@ const SignUp = () => {
               Register
             </button>
           </div>
-          {error && (
+          {/* {error && (
             <p className="mt-2 text-center text-sm text-red-600">{error}</p>
-          )}
+          )} */}
           <p className="mt-2 text-center text-sm text-gray-600">
             Already have an account?{" "}
             <Link

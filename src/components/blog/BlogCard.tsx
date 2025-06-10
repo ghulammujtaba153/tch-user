@@ -16,20 +16,15 @@ const BlogCard: React.FC<BlogCardProps> = ({ data }) => {
   return (
     <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-sm mx-auto hover:shadow-xl transition-shadow duration-300 flex flex-col">
       <div className="relative w-full h-56">
-        {!loaded && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse z-10">
-            <span className="text-sm text-gray-500">Loading image...</span>
-          </div>
-        )}
 
         <img
           src={data.image}
           alt={data.title}
-          loading="lazy"
-          onLoad={() => setLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${
-            loaded ? 'opacity-100' : 'opacity-0'
+          className={`w-full h-full object-cover rounded-lg transition-all duration-500 ${
+            loaded ? "blur-0 opacity-100" : "blur-md opacity-60 animate-pulse"
           }`}
+          onLoad={() => setLoaded(true)}
+          loading="lazy"
         />
       </div>
 

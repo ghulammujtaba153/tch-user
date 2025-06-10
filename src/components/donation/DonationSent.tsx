@@ -9,12 +9,40 @@ interface DonationSentProps {
 }
 
 const DonationSent = ({ loading, error, donations }: DonationSentProps) => {
+  const handleDownloadCSV = () => {
+    const csvHeader = ['Campaign Title', 'Date', 'Amount'];
+    const csvRows = donations.map((item) => [
+      `"${item.campaignId?.title || 'Unknown Campaign'}"`,
+      `"${dayjs(item.date).format('YYYY-MM-DD')}"`,
+      `"${item.amount}"`,
+    ]);
+
+    const csvContent =
+      [csvHeader, ...csvRows]
+        .map((row) => row.join(','))
+        .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'sent_donations.csv';
+    link.click();
+  };
+
   if (loading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
     <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4">
-      <h1 className="text-lg font-bold">Sent Donations</h1>
+      <div className="flex items-center sm:flex-row flex-col gap-2 justify-between">
+        <h1 className="text-lg font-bold">Sent Donations</h1>
+        <button
+          onClick={handleDownloadCSV}
+          className="bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80"
+        >
+          Download CSV
+        </button>
+      </div>
 
       {donations.length === 0 ? (
         <div className="flex flex-col gap-2">
@@ -22,7 +50,6 @@ const DonationSent = ({ loading, error, donations }: DonationSentProps) => {
         </div>
       ) : (
         <div className="w-full max-h-[400px] overflow-y-auto flex flex-col gap-4">
-          
           <div className="grid grid-cols-4 gap-2 px-2 py-1 text-xs font-semibold text-gray-500 border-b border-gray-200">
             <div className="col-span-2">Campaign</div>
             <div>Image</div>
@@ -31,7 +58,6 @@ const DonationSent = ({ loading, error, donations }: DonationSentProps) => {
 
           {donations.map((item: any) => (
             <div key={item.id} className="grid grid-cols-4 items-center gap-2 p-1 hover:bg-gray-50 rounded">
-              
               <div className="col-span-2 flex items-center gap-2">
                 <div className="flex items-center justify-center bg-gray-100 rounded-full p-2">
                   <ArrowUpIcon className="w-4 h-4 text-red-500" />
@@ -42,7 +68,6 @@ const DonationSent = ({ loading, error, donations }: DonationSentProps) => {
                 </div>
               </div>
 
-
               <div className="flex justify-center">
                 <img
                   src={item.campaignId?.image || '/user.png'}
@@ -50,7 +75,6 @@ const DonationSent = ({ loading, error, donations }: DonationSentProps) => {
                   className="w-10 h-10 rounded-full object-cover"
                 />
               </div>
-
 
               <p className="text-sm font-semibold">
                 R{new Intl.NumberFormat().format(item.amount)}

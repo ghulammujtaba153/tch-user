@@ -85,10 +85,7 @@ const DonationsTabs = () => {
                     <h1 className='text-2xl font-bold'>Donations</h1>
                     <p className='text-xs text-gray-500'>{dayjs().format('DD MMM YYYY')}</p>
                 </div>
-                <button className='bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'>
-                    Download Reports
-                    <ArrowDownIcon className='w-4 h-4' />
-                </button>
+                
             </div>
 
             <div className='flex md:flex-row flex-col items-center justify-center gap-2'>

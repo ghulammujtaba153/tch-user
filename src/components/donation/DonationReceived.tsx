@@ -12,9 +12,42 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
   if (loading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (error) return <div>Error: {error.message}</div>;
 
+  const handleDownloadCSV = () => {
+    const headers = ['Donor', 'Date', 'Campaign', 'Amount'];
+    const rows = donations.map((item) => [
+      `"${item.userName}"`,
+      `"${dayjs(item.date).format('YYYY-MM-DD')}"`,
+      `"${item.campaignName}"`,
+      item.amount,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((e) => e.join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'donations.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4">
-      <h1 className="text-lg font-bold">Received Donations</h1>
+      <div className='flex items-center sm:flex-row flex-col gap-2 justify-between'>
+        <h1 className="text-lg font-bold">Received Donations</h1>
+        <button
+          onClick={handleDownloadCSV}
+          className='bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'
+        >
+          Download Reports
+          <ArrowDownIcon className='w-4 h-4' />
+        </button>
+      </div>
 
       {donations.length === 0 ? (
         <div className="flex flex-col gap-2">
