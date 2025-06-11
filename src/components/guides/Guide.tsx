@@ -10,6 +10,7 @@ const Guide = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
   const fetch = async () => {
     try {
@@ -45,7 +46,11 @@ const Guide = () => {
       <img
         src={data.image}
         alt={data.title}
-        className="w-full h-64 object-cover rounded-md mb-6"
+        className={`w-full h-full object-cover rounded-lg transition-all duration-500 ${
+            loaded ? "blur-0 opacity-100" : "blur-md opacity-60 animate-pulse"
+          }`}
+          onLoad={() => setLoaded(true)}
+          loading="lazy"
       />
 
       {/* Title & Description */}
