@@ -44,7 +44,8 @@ import GuideCategories from './components/guides/GuideCategories';
 import Guide from './components/guides/Guide';
 import GuidesMain from './components/guides/GuidesMain';
 import Organization from './pages/Organization';
-import usePageTracking from './hooks/usePageTracking';
+import PageTracker from './hooks/usePageTracking';
+
 
 
 
@@ -59,11 +60,12 @@ function App() {
     }
   }, [config]);
 
-  usePageTracking();
+  
 
   return (
     <AuthProvider>
       <BrowserRouter>
+      <PageTracker />
       <ToastContainer 
         position="top-right" 
         autoClose={2000} 
