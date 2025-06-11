@@ -25,12 +25,12 @@ const LatestDonations: React.FC<{ latestDonations: any }> = ({ latestDonations }
                                 {/* Donor column */}
                                 <div className='flex items-center gap-2'>
                                     <img 
-                                        src={item.user.profilePicture || '/user.png'} 
+                                        src={item.anonymous ? '/user.png' : item.user.profilePicture || '/user.png'} 
                                         alt="" 
                                         className='w-10 h-10 rounded-full' 
                                     />
                                     <div className='flex flex-col gap-1'>
-                                        <p className='text-sm font-bold truncate'>{item.userName}</p>
+                                        <p className='text-sm font-bold truncate'>{item.anonymous ? 'Anonymous' : item.userName}</p>
                                         <p className='text-xs text-gray-500'>{dayjs(item.date).format('DD/MM/YYYY')}</p>
                                     </div>
                                 </div>

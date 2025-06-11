@@ -15,7 +15,7 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
   const handleDownloadCSV = () => {
     const headers = ['Donor', 'Date', 'Campaign', 'Amount'];
     const rows = donations.map((item) => [
-      `"${item.userName}"`,
+      `"${item.anonymous ? 'Anonymous' : item.userName}"`,
       `"${dayjs(item.date).format('YYYY-MM-DD')}"`,
       `"${item.campaignName}"`,
       item.amount,
@@ -71,7 +71,7 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
                   <ArrowDownIcon className="w-4 h-4 text-green-500" />
                 </div>
                 <div className="flex flex-col">
-                  <p className="text-sm font-bold truncate">{item.userName}</p>
+                  <p className="text-sm font-bold truncate">{item.anonymous ? 'Anonymous' : item.userName}</p>
                   <p className="text-xs text-gray-500">{dayjs(item.date).format('DD MMM YYYY')}</p>
                 </div>
               </div>
