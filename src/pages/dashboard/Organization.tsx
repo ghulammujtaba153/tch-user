@@ -204,7 +204,7 @@ if (pageLoading) {
 
 
   return (
-    <div className="min-h-screen  py-10 px-4 md:px-8">
+    <div className="py-10 px-4 md:px-8">
       <div className="relative max-w-4xl mx-auto bg-white shadow-md rounded-xl p-8">
 
         <p className={`absolute top-4 left-4 text-gray-500 cursor-pointer px-2 py-1 rounded-full ${formData?.status === 'active' ? 'bg-green-300 text-green-800' : formData?.status === 'suspended' ? 'bg-red-300 text-red-800' : 'bg-yellow-300 text-yellow-800'}`}>

@@ -44,17 +44,22 @@ import GuideCategories from './components/guides/GuideCategories';
 import Guide from './components/guides/Guide';
 import GuidesMain from './components/guides/GuidesMain';
 import Organization from './pages/Organization';
+import usePageTracking from './hooks/usePageTracking';
+
 
 
 
 function App() {
   const { config } = useAppConfig();
 
+
   useEffect(() => {
     if (config?.name) {
       document.title = config.name;
     }
   }, [config]);
+
+  usePageTracking();
 
   return (
     <AuthProvider>

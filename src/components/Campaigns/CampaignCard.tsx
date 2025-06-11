@@ -1,4 +1,4 @@
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -6,6 +6,7 @@ import { BASE_URL } from "../../config/url";
 import axios from "axios";
 import Notification from "../notification/Notification";
 import { ClockIcon, MapPinIcon } from "@heroicons/react/24/outline";
+import ReactGA from 'react-ga4';
 
 dayjs.extend(relativeTime); //  This is required to enable `fromNow()`
 
@@ -34,6 +35,16 @@ const CampaignCard: React.FC<{
   const raised = campaign.totalDonations;
   const goal = campaign.amount;
   const progress = (raised / goal) * 100;
+
+
+  useEffect(() => {
+    ReactGA.event({
+      category: 'Campaign',
+      action: 'view_campaign',
+      label: `${campaign.title} | ${campaign._id}`,
+    });
+
+  }, [campaign]);
 
   const handleDelete = async () => {
     startTransition(async () => {

@@ -11,6 +11,8 @@ const DonorCard = ({ donor }: { donor: any }) => {
         return null; // If donor data is missing, return nothing
     }
 
+    
+
     const donorDetail = donor.donorDetails[0];
 
     return (
@@ -19,12 +21,12 @@ const DonorCard = ({ donor }: { donor: any }) => {
                 <div className='flex flex-row lg:flex-row md:flex-col justify-between gap-2'>
                     <div className='flex items-center gap-2'>
                         <img
-                            src={donorDetail.profilePicture || "/user.png"}
+                            src={donor.anonymous ? "/user.png" :   donorDetail.profilePicture || "/user.png"}
                             alt="avatar"
                             className='w-[50px] h-[50px] rounded-md'
                         />
                         <div className='flex flex-col justify-between h-full'>
-                            <p className='text-sm font-bold text-black font-onest'>{donorDetail.name || "Unknown Donor"}</p>
+                            <p className='text-sm font-bold text-black font-onest'>{donor.anonymous ? "Anonymous" : donorDetail.name || "Unknown Donor"}</p>
                             <div className='flex items-center gap-2'>
                                 <ClockIcon className='w-5 h-5 text-gray-600' />
                                 <p className='text-xs text-gray-600'>

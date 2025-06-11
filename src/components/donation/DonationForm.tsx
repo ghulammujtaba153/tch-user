@@ -4,6 +4,9 @@ import { AuthContext } from '../../context/userContext';
 import axios from 'axios';
 import { BASE_URL, SOCKET_URL } from '../../config/url';
 import { io, Socket } from 'socket.io-client';
+import { FormControlLabel, Switch } from '@mui/material';
+import ReactGA from 'react-ga4';
+
 
 type PaymentMethod = 'Test Donation' | 'Cardiant Donation' | 'Office Donation';
 
@@ -18,6 +21,7 @@ interface FormData {
   postalCode: string;
   city: string;
   houseNumber: string;
+  anonymous: boolean;
 }
 
 const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: string, communication: string }> = ({ id, campaigner, organizationId, communication }) => {
@@ -43,9 +47,10 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
     postalCode: '',
     city: '',
     houseNumber: '',
+    anonymous: false
   });
 
-  
+
   useEffect(() => {
     socketRef.current = io(`${SOCKET_URL}`); // Replace with your server URL
 
@@ -65,6 +70,14 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
     { value: '190', label: 'R190' },
     { value: '250', label: 'R250' },
   ];
+
+
+  ReactGA.event({
+    category: 'Donation',
+    action: 'Donate Button Clicked',
+    label: selectedMethod,
+    value: parseFloat(formData.amount),
+  });
 
   const validateForm = () => {
     if (!formData.donorName.trim()) {
@@ -145,9 +158,10 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
     startTransition(async () => {
       try {
         const response = await axios.post(`${BASE_URL}/donations`, formData);
-        
 
-        const res =await axios.post(`${BASE_URL}/notifications/create`, {
+
+
+        const res = await axios.post(`${BASE_URL}/notifications/create`, {
           userId: campaigner,
           title: "New Donation",
           message: `A new donation of R${formData.amount} has been made to your campaign.`,
@@ -158,12 +172,21 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
         });
 
 
+        ReactGA.event({
+          category: 'Donation',
+          action: 'Donate Button Clicked',
+          label: selectedMethod,
+          value: parseFloat(formData.amount),
+        });
+
+
+
         const notification = res.data;
 
-        socketRef.current?.emit('send-notification', {campaigner, notification});
-        
-          
-        
+        socketRef.current?.emit('send-notification', { campaigner, notification });
+
+
+
         if (response.status === 201) {
           setIsDonate(true);
           // Reset form
@@ -178,6 +201,7 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
             postalCode: '',
             city: '',
             houseNumber: '',
+            anonymous: false
           });
           setSelectedAmount('150');
           setCustomAmount('');
@@ -243,8 +267,8 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
                 key={amount.value}
                 onClick={() => handleAmountSelect(amount.value)}
                 className={`px-4 text-sm w-[80px] py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
-                    ? 'bg-secondary text-white'
-                    : 'bg-transparent border border-secondary text-black hover:bg-secondary/10'
+                  ? 'bg-secondary text-white'
+                  : 'bg-transparent border border-secondary text-black hover:bg-secondary/10'
                   }`}
               >
                 {amount.label}
@@ -334,6 +358,29 @@ const DonationForm: React.FC<{ id: string, campaigner: string, organizationId: s
           />
 
         </div>
+
+        <FormControlLabel
+          label="Anonymously: "
+          labelPlacement="start"
+          control={
+            <Switch
+              checked={formData.anonymous}
+              onChange={(e) =>
+                setFormData({ ...formData, anonymous: e.target.checked })
+              }
+              name="anonymous"
+              color="primary"
+            />
+          }
+          sx={{
+            color: 'gray', // label text color
+            '.MuiFormControlLabel-label': {
+              color: 'gray', // ensures the label text is gray
+            }
+          }}
+        />
+
+
       </div>
 
       <div className="flex items-center gap-2 mt-8 mb-4">
