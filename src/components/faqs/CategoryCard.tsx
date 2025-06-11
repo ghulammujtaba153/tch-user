@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import ReactGA from 'react-ga4';
 
 interface CategoryCardProps {
   category: {
@@ -12,6 +13,12 @@ interface CategoryCardProps {
 }
 
 const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
+
+  ReactGA.event({
+    category: 'FAQs',
+    action: 'Category Clicked',
+    label: category.title,
+  })
   return (
     <Link 
       to={`/faqs/category/${category._id}`}

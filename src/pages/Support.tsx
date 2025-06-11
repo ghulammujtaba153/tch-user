@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
 import { BASE_URL } from '../config/url';
+import ReactGA from 'react-ga4';
 
 interface FormData {
   firstName: string;
@@ -79,6 +80,12 @@ const Support = () => {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
+      });
+
+      ReactGA.event({
+        category: 'Support',
+        action: 'Submitted Support Request',
+        label: 'Support Form Submission',
       });
       
       console.log(res.data);

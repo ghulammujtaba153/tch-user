@@ -8,6 +8,7 @@ import Notification from '../components/notification/Notification';
 import GoogleLoginButton from '../components/home/GoogleButton';
 import MicrosoftLoginButton from '../components/home/MicrosoftButton';
 import { useAppConfig } from '../context/AppConfigContext';
+import ReactGA from 'react-ga4';
 
 const SignIn = () => {
     const [hide, setHide] = useState(true);
@@ -57,6 +58,12 @@ const SignIn = () => {
                 }
                 login(user, res.data.token);
                 setUser(user);
+
+                ReactGA.event({
+                  category: 'User',
+                  action: 'Login',
+                  label: 'Login Form Submission',
+                })
                 // navigate('/home/campaigns');
                 toast.success(res.data.message);
                 setSuccess(res.data.message);

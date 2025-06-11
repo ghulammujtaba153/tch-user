@@ -4,6 +4,7 @@ import axios from "axios";
 import {  useLocation } from "react-router-dom"; // Import useLocation
 import { toast } from "react-toastify";
 import Notification from "../components/notification/Notification";
+import ReactGA from 'react-ga4';
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
@@ -56,9 +57,16 @@ const EmailVerification = () => {
     setIsPending(true);
 
     try {
+
       // Register the user with the data from the previous page
       const res = await axios.post(`${BASE_URL}/auth/register`, userData);
       console.log(res.data);
+
+      ReactGA.event({
+        category: 'User',
+        action: 'Created Account',
+        label: 'Signup Form',
+      });
 
       // Show success message and navigate to the home page
       toast.success("Registration successful!");

@@ -16,6 +16,7 @@ import {
 import Comments from "../components/donationComments/Comments";
 import Loading from "../components/Loading";
 import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
+import ReactGA from "react-ga4";
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -60,6 +61,12 @@ const CampaignDetails = () => {
             },
           }
         );
+
+        ReactGA.event({
+          category: "Campaign",
+          action: "Status Updated",
+          label: action,
+        })
         console.log(res);
         setStatus(action);
         toast.success("Campaign status updated successfully");

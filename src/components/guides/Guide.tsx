@@ -5,12 +5,20 @@ import { BASE_URL } from '../../config/url';
 import { toast } from 'react-toastify';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Loading from '../Loading';
+import ReactGA from 'react-ga4';
 
 const Guide = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
+
+
+  ReactGA.event({
+    category: 'Guides',
+    action: 'View Guide',
+    label: data ? data.title : 'Unknown Guide',
+  })
 
   const fetch = async () => {
     try {

@@ -6,6 +6,7 @@ import { BASE_URL } from '../config/url';
 import { AuthContext } from '../context/userContext';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
+import ReactGA from 'react-ga4';
 
 interface CampaignFormData {
   image: File | null;
@@ -150,6 +151,12 @@ const CreateCampaignForm: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+          });
+
+          ReactGA.event({
+            category: 'Campaign',
+            action: 'Create',
+            label: formData.title,
           });
 
           console.log(formData);
