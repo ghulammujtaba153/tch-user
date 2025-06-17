@@ -13,6 +13,7 @@ import FAQsSection from '../components/home/FAQsSection';
 import { AuthContext } from '../context/userContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import ScrollToTop from '../utils/ScrollToTop';
 
 interface User {
   userId: string;
@@ -46,6 +47,7 @@ const Home: React.FC = () => {
 
 
   return <div className=''>
+    <ScrollToTop />
     <Navbar />
     <HeroSection />
     <CollaborationSection />

@@ -8,6 +8,7 @@ import { AuthContext } from '../../context/userContext';
 import AddMember from '../../components/dashboard/AddMember';
 import Loading from '../../components/Loading';
 import DonationBtn from '../../components/dashboard/DonationBtn';
+import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
 
 const initialFormData = {
   userId: '',
@@ -207,9 +208,14 @@ if (pageLoading) {
     <div className="py-10 px-4 md:px-8">
       <div className="relative max-w-4xl mx-auto bg-white shadow-md rounded-xl p-8">
 
-        <p className={`absolute top-4 left-4 text-gray-500 cursor-pointer px-2 py-1 rounded-full ${formData?.status === 'active' ? 'bg-green-300 text-green-800' : formData?.status === 'suspended' ? 'bg-red-300 text-red-800' : 'bg-yellow-300 text-yellow-800'}`}>
-          {formData?.status}
+        <p className={`absolute top-4 left-4 text-gray-500 cursor-pointer flex items-center  px-2 py-1 rounded-full ${formData?.status === 'active' ? 'bg-green-300 text-green-800' : formData?.status === 'suspended' ? 'bg-red-300 text-red-800' : 'bg-yellow-300 text-yellow-800'}`}>
+          {formData?.status} {formData?.status === 'active' && <FaCheckCircle className='inline-block ml-1' />} {formData?.status === 'suspended' && <FaTimesCircle className='inline-block ml-1' />}
+          {formData?.status === 'pending' && <FaClock className='inline-block ml-1' />} 
         </p>
+
+        {formData?.status === 'rejected' && 
+          <p className='mt-4 text-sm text-gray-600'>Please update your details to be active.</p>
+        }
 
 
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">

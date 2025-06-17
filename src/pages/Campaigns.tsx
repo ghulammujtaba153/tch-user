@@ -5,6 +5,7 @@ import { BASE_URL } from '../config/url';
 import { FiFilter } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
+import ScrollToTop from '../utils/ScrollToTop';
 
 interface Campaign {
   _id: string;
@@ -118,6 +119,7 @@ const Campaigns = () => {
 
   return (
     <div className='max-w-[1200px] mx-auto p-4 flex flex-col gap-5 min-h-screen items-center pt-[100px] overflow-x-hidden font-sans'>
+      <ScrollToTop />
       {/* Header Section */}
       <div className="w-full flex items-center justify-center gap-2">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />

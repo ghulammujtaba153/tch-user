@@ -4,6 +4,7 @@ import { BASE_URL } from '../../config/url';
 import axios from 'axios';
 import Loading from '../../components/Loading';
 import BlogCard from '../../components/blog/BlogCard';
+import ScrollToTop from '../../utils/ScrollToTop';
 
 interface Blog {
   _id: string;
@@ -44,6 +45,7 @@ const Blogs: React.FC = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto mt-[100px] p-6">
+      <ScrollToTop />
 
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />

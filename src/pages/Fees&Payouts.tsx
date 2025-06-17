@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../config/url";
 import { Link } from "react-router-dom";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const FeesPayouts: React.FC = () => {
   const [data, setData] = useState<any>();
@@ -39,6 +40,7 @@ const FeesPayouts: React.FC = () => {
 
   return (
     <div className=" pt-[160px] px-4">
+      <ScrollToTop />
       <div className="max-w-[1200px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-14">
         {/* Image Section */}
         <div className="flex flex-col gap-4 w-full lg:w-1/2">

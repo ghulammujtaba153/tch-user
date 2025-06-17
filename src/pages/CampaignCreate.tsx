@@ -7,6 +7,7 @@ import { AuthContext } from '../context/userContext';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import ReactGA from 'react-ga4';
+import ScrollToTop from '../utils/ScrollToTop';
 
 interface CampaignFormData {
   image: File | null;
@@ -175,6 +176,7 @@ const CreateCampaignForm: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-1 pt-[20px] ">
+      <ScrollToTop />
 
       {isSuccess && <Notification isOpen={isSuccess} onClose={() => setIsSuccess(false)} title="Campaign created successfully" message="Campaign created successfully" link={`/user/dashboard/campaigns`} />}
       {error && <Notification isOpen={true} onClose={() => setError("")} title="Error" message={error} />}

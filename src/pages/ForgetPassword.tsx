@@ -4,6 +4,7 @@ import  { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../config/url";
 import Notification from "../components/notification/Notification";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const ForgetPassword = () => {
   const [isPending, startTransition] = useTransition();
@@ -46,6 +47,8 @@ const ForgetPassword = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-15 px-4 sm:px-6 lg:px-8 font-sans">
+      <ScrollToTop />
+
       {success && <Notification isOpen={true} title="Success" message="OTP sent successfully" type="success" onClose={() => setSuccess('')} link={`/verification/${success}`}/>}
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">

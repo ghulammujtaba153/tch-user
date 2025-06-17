@@ -5,6 +5,7 @@ import { BASE_URL } from '../config/url';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import CampaignTabs from '../components/organizationProfile/CampaignTabs';
+import ScrollToTop from '../utils/ScrollToTop';
 
 const Organization = () => {
   const { id } = useParams();
@@ -56,6 +57,7 @@ const Organization = () => {
 
   return (
     <div className="pt-[100px] max-w-[1200px] mx-auto p-4 font-sans">
+      <ScrollToTop />
       {/* Organization Info */}
       <div className="flex flex-col md:flex-row gap-6 items-start">
         {/* Organization Logo */}

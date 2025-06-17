@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { BASE_URL } from '../../config/url';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Loading from '../../components/Loading';
+import ScrollToTop from '../../utils/ScrollToTop';
 
 const Blog = () => {
   const { id } = useParams();
@@ -34,6 +35,7 @@ const Blog = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto pt-[100px] p-6 ">
+      <ScrollToTop />
 
 
       <Link to={'/blogs'} className='p-2 hover:bg-gray-200 cursor-pointer w-[50px] h-[50px] rounded-full flex items-center justify-center'>

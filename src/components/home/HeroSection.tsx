@@ -1,10 +1,12 @@
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import { Link } from "react-router-dom";
+import ScrollToTop from "../../utils/ScrollToTop";
 
 const HeroSection: React.FC = () => {
   return (
     <div className="max-w-[1200px] w-full mx-auto p-4 max-h-[800px] flex flex-col md:flex-row justify-between items-center mt-[77px] font-onest">
+      <ScrollToTop />
       {/* Rest of the hero section content stays the same */}
       <div className="w-full h-[300px] md:h-[560px] relative rounded-[60px] overflow-hidden">
         <img

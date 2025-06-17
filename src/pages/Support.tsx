@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
 import { BASE_URL } from '../config/url';
 import ReactGA from 'react-ga4';
+import ScrollToTop from '../utils/ScrollToTop';
 
 interface FormData {
   firstName: string;
@@ -133,6 +134,7 @@ const Support = () => {
 
   return (
     <div className='pt-20 min-h-screen  px-4'>
+      <ScrollToTop />
       <div className='max-w-[800px] bg-white border border-gray-200 py-8 rounded-[20px] mx-auto px-6 shadow-md mb-10'>
         <h1 className='text-2xl font-bold text-center text-gray-800'>We're here for you</h1>
         <div className='w-full flex items-center justify-center mt-4'>

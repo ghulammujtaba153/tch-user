@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { BASE_URL } from '../../config/url';
 import CategoryCard from './CategoryCard';
 import Loading from '../Loading';
+import ScrollToTop from '../../utils/ScrollToTop';
 
 const GuideCategories = () => {
   const [data, setData] = useState([]);
@@ -29,6 +30,7 @@ const GuideCategories = () => {
 
   return (
     <div className='max-w-[1200px] mx-auto mt-[100px] px-4'>
+      <ScrollToTop />
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
         <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px]">

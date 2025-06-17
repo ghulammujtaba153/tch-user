@@ -57,7 +57,7 @@ const AboutUsSection: React.FC = () => {
         </div>
 
         {/* Text Section */}
-        <div className="flex-1 font-sans flex flex-col gap-10">
+        <div className="flex-1 font-sans flex flex-col gap-10 ">
           {/* Header Section */}
           <div className="w-full flex items-center gap-2">
             <img

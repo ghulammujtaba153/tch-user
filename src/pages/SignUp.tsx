@@ -7,6 +7,7 @@ import Notification from "../components/notification/Notification";
 import GoogleLoginButton from "../components/home/GoogleButton";
 import MicrosoftLoginButton from "../components/home/MicrosoftButton";
 import { useAppConfig } from "../context/AppConfigContext";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const SignUp = () => {
   const [hide, setHide] = useState(true);
@@ -131,6 +132,7 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen my-[80px] px-4 sm:px-6 lg:px-8">
+      <ScrollToTop />
       {success && (
         <Notification
           isOpen={true}

@@ -9,6 +9,7 @@ import GoogleLoginButton from '../components/home/GoogleButton';
 import MicrosoftLoginButton from '../components/home/MicrosoftButton';
 import { useAppConfig } from '../context/AppConfigContext';
 import ReactGA from 'react-ga4';
+import ScrollToTop from '../utils/ScrollToTop';
 
 const SignIn = () => {
     const [hide, setHide] = useState(true);
@@ -75,6 +76,8 @@ const SignIn = () => {
     };
   return (
     <div className="flex flex-col items-center justify-center min-h-screen my-[80px] px-4 sm:px-6 lg:px-8">
+      <ScrollToTop />
+
       {success && <Notification isOpen={true} title="Success" message="login successfully" type="success" onClose={() => setSuccess('')} link={`${user?.role === "admin" ? "/dashboard" : user?.role === "donor" ? "/home/campaigns" : "/user/dashboard/overview"}`}/>}
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white px-8 py-12 rounded-xl shadow-lg">

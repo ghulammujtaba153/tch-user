@@ -4,6 +4,7 @@ import { BASE_URL } from '../config/url';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Notification from '../components/notification/Notification';
+import ScrollToTop from '../utils/ScrollToTop';
 
 const NewPassword = () => {
   const [hide, setHide] = useState(true);
@@ -53,6 +54,7 @@ const NewPassword = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-15 px-4 sm:px-6 lg:px-8 font-sans">
+      <ScrollToTop />
       {success && (
         <Notification
           isOpen={true}

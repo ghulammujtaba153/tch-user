@@ -7,8 +7,13 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        onest: ['Onest', 'sans-serif'],
+        // sora: ['Sora', 'sans-serif'],
+        // libre: ['"Libre Franklin"', 'sans-serif'],
+        // news: ['"News Cycle"', 'sans-serif'],
+        // onest: ['Onest', 'sans-serif'],
+
+        sans: ['"Libre Franklin"', 'sans-serif'],
+        onest: ['"News Cycle"', 'sans-serif'],
       },
       colors: {
         primary: "#BFDCFC", 

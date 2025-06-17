@@ -17,6 +17,7 @@ import Comments from "../components/donationComments/Comments";
 import Loading from "../components/Loading";
 import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import ReactGA from "react-ga4";
+import ScrollToTop from "../utils/ScrollToTop";
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -105,6 +106,7 @@ const CampaignDetails = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-5 justify-between pt-[100px] overflow-x-hidden font-sans">
+      <ScrollToTop />
       {/* upper section */}
       <div className="flex justify-between md:flex-row flex-col gap-2 w-full">
         <div className="flex flex-col md:w-[65%]">

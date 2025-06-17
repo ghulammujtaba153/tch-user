@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Loading from '../Loading';
 import ReactGA from 'react-ga4';
+import ScrollToTop from '../../utils/ScrollToTop';
 
 const Guide = () => {
   const { id } = useParams();
@@ -47,6 +48,7 @@ const Guide = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 mt-[100px]">
+      <ScrollToTop />
       <Link to="/guides" className='flex items-center gap-2 mb-4 w-10 h-10 hover:bg-gray-300 rounded-full p-2 cursor-pointer'>
         <ArrowLeftIcon className="w-6 h-6"/>
       </Link>
