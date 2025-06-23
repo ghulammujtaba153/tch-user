@@ -14,10 +14,12 @@ import { BASE_URL } from "../../config/url";
 import dayjs from "dayjs";
 import Organization from "./Organization";
 import Loading from "../../components/Loading";
+import VerificationOrganization from "./VerificationOrganization";
 
 const tabs = [
   { name: "Personal & Organization", key: "profile", icon: UserCircleIcon },
   { name: "Organization", key: "organization", icon: PencilIcon },
+  { name: "Verification", key: "verification", icon: PencilIcon },
   { name: "Security Settings", key: "security", icon: LockClosedIcon },
   { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
 ];
@@ -82,6 +84,7 @@ const Profile = () => {
         {activeTab === "security" && <Security />}
         {activeTab === "withdraw" && <Withdrawal />}
         {activeTab === "organization" && <Organization />}
+        {activeTab === "verification" && <VerificationOrganization />}
 
         {activeTab === "profile" && (
           <div className="p-4 flex flex-col gap-4">
