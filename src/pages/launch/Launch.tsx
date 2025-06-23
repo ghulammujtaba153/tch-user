@@ -1,0 +1,35 @@
+import React from "react";
+import { useAppConfig } from "../../context/AppConfigContext";
+
+const Launch = () => {
+  const { config } = useAppConfig();
+
+  return (
+    <div className="min-h-screen w-full">
+      {/* Logo Section */}
+      <div className="flex justify-center items-center bg-[#e0f1ff] py-5">
+        <img
+          src={config?.logo}
+          alt="launch"
+          width={150}
+          height={150}
+          className="text-center"
+        />
+      </div>
+
+      {/* Launch Image Section */}
+      <div className="relative w-full h-[calc(100vh-60px)]">
+        <img
+          src="/launch.png"
+          alt="launch"
+          className="w-full h-full object-cover"
+        />
+        <h1 className="absolute bottom-40 left-1/2 transform -translate-x-1/2 text-4xl font-bold text-white">
+          WE ARE LAUNCHING SOON!
+        </h1>
+      </div>
+    </div>
+  );
+};
+
+export default Launch;

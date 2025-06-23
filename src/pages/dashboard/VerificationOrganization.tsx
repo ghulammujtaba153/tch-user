@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import upload from '../../utils/upload';
 import axios from 'axios';
+import Select from 'react-select';
 import { BASE_URL, SOCKET_URL } from '../../config/url';
 import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/userContext';
 import Loading from '../../components/Loading';
 import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
-import { Select, MenuItem } from '@mui/material';
 
 interface VerificationData {
   userId: string;
@@ -45,14 +44,14 @@ const initialFormData: VerificationData = {
   eventCrowdfund: false,
 };
 
-const identificationType = [
+const identificationTypeOptions = [
   { value: 'SAID', label: 'SA ID Number' },
   { value: 'passportNumber', label: 'Passport Number' },
   { value: 'organizationNumber', label: 'Organization Registration Number' },
   { value: 'trustNumber', label: 'Trust Number' },
 ];
 
-const accountType = [
+const accountTypeOptions = [
   { value: 'Saving', label: 'Saving' },
   { value: 'current', label: 'Current' },
   { value: 'business', label: 'Business' },
@@ -70,21 +69,15 @@ const VerificationOrganization = () => {
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const { user } = useContext(AuthContext);
   const [pageLoading, setPageLoading] = useState(true);
-  const [organization, setOrganization] = useState<VerificationData | null>(null);
 
-
-
-  const fetch = async () => {
+  const fetchOrganization = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/verify/${user.userId}`);
       console.log("fetch organization", res.data);
-      setOrganization(res.data);
-      
       
       const mergedData: VerificationData = {
         ...initialFormData,
         ...res.data,
-        socialMediaLinks: res.data.socialMediaLinks ?? [''],
         userId: user?.userId,
         crowdfund: res.data.crowdfund || false,
         eventCrowdfund: res.data.eventCrowdfund || false,
@@ -95,9 +88,7 @@ const VerificationOrganization = () => {
 
       if (res.data.founderId) setFounderIdPreview(`${SOCKET_URL}/${res.data.founderId}`);
       if (res.data.founderDocument) setFounderDocPreview(`${SOCKET_URL}/${res.data.founderDocument}`);
-      if (res.data.bankDocument) {
-        setBankDocPreview(`${SOCKET_URL}/${res.data.bankDocument}`);
-      }
+      if (res.data.bankDocument) setBankDocPreview(`${SOCKET_URL}/${res.data.bankDocument}`);
     } catch (error) {
       console.log('No organization data found for user');
       setFormData({ ...initialFormData, userId: user.userId });
@@ -109,27 +100,28 @@ const VerificationOrganization = () => {
 
   useEffect(() => {
     if (user?.userId) {
-      fetch();
+      fetchOrganization();
     }
   }, [user]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>,
-    index?: number
-  ) => {
-    const { name, value } = e.target as { name: string; value: any };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
 
-     if (name === 'crowdfund' || name === 'eventCrowdfund') {
-      setFormData({ ...formData, [name]: !formData[name] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
   };
 
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-    type: 'founderId' | 'founderDocument' | 'bankDocument'
-  ) => {
+  const handleSelectChange = (name: string, selectedOption: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: selectedOption.value
+    }));
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, type: 'founderId' | 'founderDocument' | 'bankDocument') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -151,63 +143,53 @@ const VerificationOrganization = () => {
     }
   };
 
-
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    const formDataToSend = new FormData();
+    try {
+      const formDataToSend = new FormData();
 
-    // Append all form data fields
-    Object.entries(formData).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        // Convert boolean values to string
-        const formattedValue = typeof value === 'boolean' ? value.toString() : value;
-        formDataToSend.append(key, formattedValue);
+      // Append all form data fields
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formDataToSend.append(key, value.toString());
+        }
+      });
+
+      // Append files if they exist
+      if (founderIdFile) formDataToSend.append('founderId', founderIdFile);
+      if (founderDocFile) formDataToSend.append('founderDocument', founderDocFile);
+      if (bankDocFile) formDataToSend.append('bankDocument', bankDocFile);
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
+      const url = isUpdateMode
+        ? `${BASE_URL}/verify/${user.userId}`
+        : `${BASE_URL}/verify`;
+
+      const method = isUpdateMode ? 'put' : 'post';
+
+      const response = await axios[method](url, formDataToSend, config);
+      toast.success(`Verification ${isUpdateMode ? 'updated' : 'submitted'} successfully!`);
+
+      if (isUpdateMode) {
+        fetchOrganization();
       }
-    });
-
-    // Append files if they exist
-    if (founderIdFile) formDataToSend.append('founderId', founderIdFile);
-    if (founderDocFile) formDataToSend.append('founderDocument', founderDocFile);
-    if (bankDocFile) formDataToSend.append('bankDocument', bankDocFile);
-
-    const config = {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    };
-
-    const url = isUpdateMode
-      ? `${BASE_URL}/verify/${user.userId}`
-      : `${BASE_URL}/verify`;
-
-    const method = isUpdateMode ? 'put' : 'post';
-
-    console.log("Form data to be sent:", {
-      ...formData,
-      founderId: founderIdFile ? 'file present' : 'no file',
-      founderDocument: founderDocFile ? 'file present' : 'no file',
-      bankDocument: bankDocFile ? 'file present' : 'no file'
-    });
-
-    const response = await axios[method](url, formDataToSend, config);
-    toast.success(`Organization ${isUpdateMode ? 'updated' : 'created'} successfully!`);
-
-    if (isUpdateMode) {
-      fetch();
+    } catch (error: any) {
+      console.error('Error:', error);
+      toast.error(error.response?.data?.message || 'Error saving verification');
+    } finally {
+      setLoading(false);
     }
-  } catch (error: any) {
-    console.error('Error:', error);
-    toast.error(error.response?.data?.message || 'Error saving organization');
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   if (pageLoading) {
-    return <div className='flex justify-center items-center'><Loading/></div>
+    return <div className='flex justify-center items-center'><Loading/></div>;
   }
 
   return (
@@ -271,18 +253,13 @@ const VerificationOrganization = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Identification Type</label>
               <Select
-                name="identificationType"
-                value={formData.identificationType}
-                onChange={handleChange}
+                options={identificationTypeOptions}
+                value={identificationTypeOptions.find(opt => opt.value === formData.identificationType)}
+                onChange={(selected) => handleSelectChange('identificationType', selected)}
+                className="basic-single"
+                classNamePrefix="select"
                 required
-                fullWidth
-                displayEmpty
-              >
-                <MenuItem value="" disabled>Select Identification Type</MenuItem>
-                {identificationType.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
-                ))}
-              </Select>
+              />
             </div>
             
             <Input 
@@ -312,18 +289,13 @@ const VerificationOrganization = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
               <Select
-                name="accountType"
-                value={formData.accountType}
-                onChange={handleChange}
+                options={accountTypeOptions}
+                value={accountTypeOptions.find(opt => opt.value === formData.accountType)}
+                onChange={(selected) => handleSelectChange('accountType', selected)}
+                className="basic-single"
+                classNamePrefix="select"
                 required
-                fullWidth
-                displayEmpty
-              >
-                <MenuItem value="" disabled>Select Account Type</MenuItem>
-                {accountType.map((type) => (
-                  <MenuItem key={type.value} value={type.value}>{type.label}</MenuItem>
-                ))}
-              </Select>
+              />
             </div>
           </div>
 
@@ -387,7 +359,7 @@ interface InputProps {
   label: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | { name?: string; value: unknown }>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   required?: boolean;
   type?: string;
 }

@@ -45,6 +45,7 @@ import Guide from './components/guides/Guide';
 import GuidesMain from './components/guides/GuidesMain';
 import Organization from './pages/Organization';
 import PageTracker from './hooks/usePageTracking';
+import Launch from './pages/launch/Launch';
 
 
 
@@ -81,9 +82,12 @@ function App() {
 
       <Routes>
         <Route path='/unauthorized' element={<Unauthorized />} />
+        <Route path="/" element={<Launch />} />
 
         <Route path="/" element={<NavLayout />}>
-          <Route path="/" element={<Home />} />
+          {/* <Route path="/" element={<Home />} /> */}
+          
+
           <Route element={<AuthRoutes />}>
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
