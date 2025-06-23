@@ -7,7 +7,7 @@ const Launch = () => {
   return (
     <div className="min-h-screen w-full">
       {/* Logo Section */}
-      <div className="flex justify-center items-center bg-[#e0f1ff] py-5">
+      <div className="flex justify-center items-center bg-[#DFEEFD] py-5">
         <img
           src={config?.logo}
           alt="launch"
