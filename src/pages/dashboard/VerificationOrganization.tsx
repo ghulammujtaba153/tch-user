@@ -292,7 +292,7 @@ const VerificationOrganization = () => {
                 options={accountTypeOptions}
                 value={accountTypeOptions.find(opt => opt.value === formData.accountType)}
                 onChange={(selected) => handleSelectChange('accountType', selected)}
-                className="basic-single"
+                className="basic-ssingle"
                 classNamePrefix="select"
                 required
               />
