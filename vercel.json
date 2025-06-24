@@ -1,15 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/index.html",
-      "has": [
-        {
-          "type": "missing",
-          "value": "file"
-        }
-      ],
-      "statusCode": 200
+      "destination": "/index.html"
     }
   ],
   "buildCommand": "npm run build",
