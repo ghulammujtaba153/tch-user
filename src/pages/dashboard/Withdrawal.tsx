@@ -145,9 +145,9 @@ const Withdrawal = () => {
         {/* <button onClick={() => setIsModalOpen(true)} className='text-secondary hover:bg-secondary hover:text-black cursor-pointer border border-secondary max-w-fit mx-auto text-sm px-4 py-2 rounded-full flex items-center gap-2'>
           Add Card
           <ArrowRightIcon className='w-4 h-4' />
-        </button> */}
+        </button> 
 
-        {user.organization.role != "editor" && <BankAccount/>}
+        {/* {user.organization.role != "editor" && <BankAccount/>}*/}
         
 
         {isModalOpen && (

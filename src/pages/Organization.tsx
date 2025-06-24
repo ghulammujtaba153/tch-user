@@ -1,11 +1,15 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { BASE_URL } from '../config/url';
+import { BASE_URL, SOCKET_URL } from '../config/url';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import CampaignTabs from '../components/organizationProfile/CampaignTabs';
 import ScrollToTop from '../utils/ScrollToTop';
+
+
+const getFullUrl = (filePath: string) =>
+  filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
 
 const Organization = () => {
   const { id } = useParams();
@@ -20,7 +24,10 @@ const Organization = () => {
   const fetchDonationBtn = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/donate/btn/${id}`);
-      seBtnConfig(res.data);
+      if(res.data){
+        seBtnConfig(res.data);
+      }
+      
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong while fetching donation button');
@@ -62,7 +69,7 @@ const Organization = () => {
       <div className="flex flex-col md:flex-row gap-6 items-start">
         {/* Organization Logo */}
         <img
-          src={logo}
+          src={getFullUrl(logo)}
           alt="Organization Logo"
           className="w-[120px] h-[120px] object-cover rounded-lg shadow"
         />
@@ -92,11 +99,11 @@ const Organization = () => {
         <div className="mt-10 flex items-center gap-4">
           <img
             src={userId.profilePicture}
-            alt="Admin Profile"
+            alt="A"
             className="w-[60px] h-[60px] rounded-full object-cover"
           />
           <div>
-            <p className="font-semibold text-gray-800">Managed by: {userId.name}</p>
+            <p className="font-semibold text-gray-800">Created by: {userId.name}</p>
             <p className="text-sm text-gray-600">{userId.email}</p>
           </div>
         </div>

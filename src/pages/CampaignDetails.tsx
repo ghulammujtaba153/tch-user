@@ -2,7 +2,7 @@ import { useEffect, useState, useTransition } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import DonationForm from "../components/donation/DonationForm";
 import DonorCard from "../components/donation/DonorCard";
-import { BASE_URL } from "../config/url";
+import { BASE_URL, SOCKET_URL } from "../config/url";
 import axios from "axios";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
@@ -18,6 +18,10 @@ import Loading from "../components/Loading";
 import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import ReactGA from "react-ga4";
 import ScrollToTop from "../utils/ScrollToTop";
+
+
+const getFullUrl = (filePath: string) =>
+  filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
 
 const CampaignDetails = () => {
   const { id } = useParams();
@@ -204,7 +208,7 @@ const CampaignDetails = () => {
                 className="flex flex-col items-center "
               >
                 <img
-                  src={campaign.organization[0].logo}
+                  src={getFullUrl(campaign.organization[0].logo)}
                   alt="/"
                   className="w-[25px] h-[25px]"
                 />
