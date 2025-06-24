@@ -145,10 +145,10 @@ const Support = () => {
 
         {/* Contact info */}
         <div className='flex flex-col md:flex-row text-gray-500 items-center justify-center mt-8 gap-10'>
-          <div className='flex flex-col items-center gap-2'>
+          {/* <div className='flex flex-col items-center gap-2'>
             <p>Phone Call</p>
             <p className='text-blue-600 font-bold'>+1 (123) 456-7890</p>
-          </div>
+          </div> */}
           <div className='flex flex-col items-center gap-2'>
             <p>Email</p>
             <p className='text-blue-600 font-bold'>info@givetogrow.co.za</p>

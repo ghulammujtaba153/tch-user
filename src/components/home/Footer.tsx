@@ -72,10 +72,10 @@ const Footer: React.FC = () => {
                         </div>
 
                         <div className='flex flex-col md:justify-between md:flex-row gap-4 md:gap-8 mb-8'>
-                            <div className='flex flex-col gap-2'>
+                            {/* <div className='flex flex-col gap-2'>
                                 <p className='text-sm'>Toll free Customer care</p>
                                 <p className='text-sm font-bold font-onest'>1213 14 1441 1</p>
-                            </div>
+                            </div> */}
 
                             <div className='flex flex-col gap-2'>
                                 <p className='text-sm'>Need live support!</p>
