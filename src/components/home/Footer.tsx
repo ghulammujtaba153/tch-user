@@ -79,7 +79,7 @@ const Footer: React.FC = () => {
 
                             <div className='flex flex-col gap-2'>
                                 <p className='text-sm'>Need live support!</p>
-                                <p className='text-sm font-bold font-onest'>info@tch.com</p>
+                                <p className='text-sm font-bold font-onest'>info@givetogrow.co.za</p>
                             </div>
                         </div>
                         <p>Powered By pfireDigital</p>

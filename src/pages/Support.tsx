@@ -151,7 +151,7 @@ const Support = () => {
           </div>
           <div className='flex flex-col items-center gap-2'>
             <p>Email</p>
-            <p className='text-blue-600 font-bold'>support@crowdfund.com</p>
+            <p className='text-blue-600 font-bold'>info@givetogrow.co.za</p>
           </div>
         </div>
 
