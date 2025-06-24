@@ -36,6 +36,7 @@ const Navbar: React.FC = () => {
               <Link to="/support" className="hover:text-secondary transition-colors duration-300">Support</Link>
               <Link to="/blogs" className="hover:text-secondary transition-colors duration-300">Blogs</Link>
               <Link to="/guides" className="hover:text-secondary transition-colors duration-300">Guide</Link>
+              <Link to="/home-sec" className="hover:text-secondary transition-colors duration-300">LS Home</Link>
             </div>
           </div>
 
