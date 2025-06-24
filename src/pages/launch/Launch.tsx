@@ -1,11 +1,14 @@
 import React from "react";
 import { useAppConfig } from "../../context/AppConfigContext";
+import { Link } from "react-router-dom";
 
 const Launch = () => {
   const { config } = useAppConfig();
 
   return (
     <div className="min-h-screen w-full">
+
+      <Link to={"/home-sec"} >H</Link>
       {/* Logo Section */}
       <div className="flex justify-center items-center bg-[#DFEEFD] py-5">
         <img
