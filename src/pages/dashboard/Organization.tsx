@@ -68,6 +68,7 @@ const Organization = () => {
   const [bankDocFile, setBankDocFile] = useState<File | null>(null);
   const [founderIdPreview, setFounderIdPreview] = useState<string | null>(null);
   const [founderIdFile, setFounderIdFile] = useState<File | null>(null);
+  const [isses, setIssues] = useState<any>("");
 
   const fetchOrganization = async () => {
     const getFullUrl = (filePath: string) =>
@@ -108,6 +109,23 @@ const Organization = () => {
       setPageLoading(false);
     }
   };
+
+
+  const fetchIssues = async()=>{
+    try {
+      const res = await axios.get(`${BASE_URL}/issue-report/${user.userId}`)
+      setIssues(res.data)
+    } catch (error) {
+      toast.error("error while fetching issue")
+    }
+  }
+
+
+  useEffect(()=>{
+    if(formData.status== "rejected"){
+      fetchIssues()
+    }
+  },[formData.status])
 
   useEffect(() => {
     if (user?.userId) {
@@ -218,7 +236,10 @@ const Organization = () => {
         </p>
 
         {formData?.status === 'rejected' &&
+        <>
           <p className='mt-4 text-sm text-gray-600'>Please update your details to be active.</p>
+          <p className='mt-4 text-sm font-bold text-gray-600'>{isses.issue}</p>
+        </>
         }
 
         <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
