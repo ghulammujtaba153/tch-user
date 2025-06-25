@@ -85,7 +85,7 @@ function App() {
         {/* <Route path="/" element={<Launch />} /> */}
 
         <Route path="/" element={<NavLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/home-sec" element={<Home />} />
           
 
           <Route element={<AuthRoutes />}>
