@@ -8,7 +8,7 @@ const Launch = () => {
   return (
     <div className="min-h-screen w-full">
 
-      <Link to={"/home-sec"} >H</Link>
+      {/* <Link to={"/home-sec"} >H</Link> */}
       {/* Logo Section */}
       <div className="flex justify-center items-center bg-[#DFEEFD] py-5">
         <img
@@ -28,7 +28,7 @@ const Launch = () => {
           className="w-full h-full object-cover"
         />
         <h1 className="absolute bottom-40 left-1/2 transform -translate-x-1/2 text-4xl font-bold text-white">
-          WE ARE LAUNCHING SOON!
+          WE ARE LAUNCHING SOON <Link to={"/home-sec"} >!</Link>
         </h1>
       </div>
     </div>
