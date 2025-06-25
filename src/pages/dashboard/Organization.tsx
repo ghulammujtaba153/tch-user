@@ -46,7 +46,7 @@ const initialFormData = {
   crowdfund: false,
   eventCrowdfund: false,
   suppoters: '',
-  status: "pending"
+  status: ""
 };
 
 const Organization = () => {
@@ -206,7 +206,12 @@ const Organization = () => {
       if (bankDocFile) formDataToSend.set('bankDocument', bankDocFile);
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
       const url = isUpdateMode ? `${BASE_URL}/organization/${user.userId}` : `${BASE_URL}/organization`;
+      
       const method = isUpdateMode ? 'put' : 'post';
+
+      if(!isUpdateMode){
+        formDataToSend.delete('status');
+      }
       const response = await axios[method](url, formDataToSend, config);
       toast.success(`Organization ${isUpdateMode ? 'updated' : 'created'} successfully!`);
       if (isUpdateMode) fetchOrganization();

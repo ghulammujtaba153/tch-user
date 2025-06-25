@@ -14,17 +14,9 @@ import { BASE_URL } from "../../config/url";
 import dayjs from "dayjs";
 import Organization from "./Organization";
 import Loading from "../../components/Loading";
-import VerificationOrganization from "./VerificationOrganization";
 import AddMember from "../../components/dashboard/AddMember";
 
-const tabs = [
-  { name: "Personal Details", key: "profile", icon: UserCircleIcon },
-  { name: "Organization Setup", key: "organization", icon: PencilIcon },
-  // { name: "Verification", key: "verification", icon: PencilIcon },
-  { name: "Team Members", key: "members", icon: PencilIcon},
-  { name: "Security Settings", key: "security", icon: LockClosedIcon },
-  { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
-];
+
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
@@ -37,6 +29,20 @@ const Profile = () => {
     nationality: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
+
+
+  let tabs = [
+  { name: "Personal Details", key: "profile", icon: UserCircleIcon },
+  { name: "Organization Setup", key: "organization", icon: PencilIcon },
+  { name: "Security Settings", key: "security", icon: LockClosedIcon },
+  { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
+];
+
+// Only insert "Team Members" if user is owner
+if (user?.organization?.role == "owner") {
+  tabs.splice(2, 0, { name: "Team Members", key: "members", icon: PencilIcon });
+}
+
 
   useEffect(() => {
     if (!user?.userId) return;
