@@ -132,7 +132,7 @@ const MainDashboard = () => {
 
             {/* user info */}
             <div className='flex flex-col gap-2'>
-                <h1 className='text-2xl font-bold'>Hello! {user?.name}</h1>
+                <h1 className='text-2xl font-bold'>Hello! {user?.name} <span className='text-gray-200 text-sm bg-secondary px-2 rounded-full'>{user.organization?.name? "Organization": "Donor"}</span> </h1>
                 <p className='text-gray-500'>{dayjs(new Date()).format('DD MMM YYYY')}</p>
             </div>
 

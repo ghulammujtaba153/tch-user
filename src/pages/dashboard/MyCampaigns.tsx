@@ -113,10 +113,18 @@ const MyCampaigns = () => {
         )}
       </div>
 
+
+      
+
       {campaigns.length === 0 && (
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">No campaigns found</h1>
-          <p className="text-gray-500">Create a campaign to get started</p>
+          {
+            !user?.organization?._id? 
+            <p className="text-gray-500">Register an organization to get started</p>
+            :
+            <p className="text-gray-500">Create a campaign to get started</p>
+          }
         </div>
       )}
 

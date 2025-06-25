@@ -82,10 +82,10 @@ function App() {
 
       <Routes>
         <Route path='/unauthorized' element={<Unauthorized />} />
-        <Route path="/" element={<Launch />} />
+        {/* <Route path="/" element={<Launch />} /> */}
 
         <Route path="/" element={<NavLayout />}>
-          <Route path="/home-sec" element={<Home />} />
+          <Route path="/" element={<Home />} />
           
 
           <Route element={<AuthRoutes />}>
