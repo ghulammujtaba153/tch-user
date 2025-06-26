@@ -46,6 +46,8 @@ import GuidesMain from './components/guides/GuidesMain';
 import Organization from './pages/Organization';
 import PageTracker from './hooks/usePageTracking';
 import Launch from './pages/launch/Launch';
+import TermsCondition from './pages/TermsCondition';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 
 
@@ -86,6 +88,8 @@ function App() {
 
         <Route path="/" element={<NavLayout />}>
           <Route path="/home-sec" element={<Home />} />
+          <Route path="/terms" element={<TermsCondition />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
           
 
           <Route element={<AuthRoutes />}>
