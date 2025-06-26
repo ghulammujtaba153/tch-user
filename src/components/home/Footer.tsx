@@ -95,11 +95,15 @@ const Footer: React.FC = () => {
                   info@givetogrow.co.za
                 </p>
               </div>
+
+              <img src="/mastercard.png" alt="map" className="w-[40px] h-[40px]" />
+              <img src="/visa.png" alt="phone" className="w-[40px] h-[40px]" />
             </div>
            
           </div>
 
           <div className="mt-auto">
+
             <p className="text-sm font-bold mb-4">Follow on</p>
             <div className="flex items-center gap-2">
               {/* Social Media Links */}
