@@ -98,22 +98,30 @@ const PrivacyPolicy = () => {
           <h2 className="font-semibold">
             5. Purpose of Processing Personal Information
           </h2>
+
+          <p>We process your personal information for the following purposes:</p>
+
           <ul className="list-disc pl-5">
-            <li>
-              Account management, Donations, Identity verification, Campaign
-              promotion, Section 18A certificates, Marketing (opt-in), Legal
-              compliance
-            </li>
+
+          <li>To register and manage your account</li>
+          <li>To facilitate donations and financial transactions</li>
+          <li>To verify user and organisation identity (KYC & compliance)</li>
+          <li>To manage, promote, and display campaigns</li>
+          <li>To issue tax-compliant Section 18A certificates</li>
+          <li>To communicate updates, receipts, and relevant marketing (opt-in only)</li>
+          <li>To comply with legal obligations and reporting requirements</li>
           </ul>
         </div>
 
         <div>
           <h2 className="font-semibold">6. Legal Basis for Processing</h2>
-          <ul className="list-disc pl-5">
-            <li>
-              Consent, Contractual necessity, Legal obligations, Legitimate
-              interest
-            </li>
+          <p>Our processing of personal information is based on:</p>
+
+<ul className="list-disc pl-5">
+          <li>Your explicit consent during registration or use of features</li>
+          <li>Contractual necessity (e.g., donations, payouts)</li>
+          <li>Legal obligations (e.g., Section 18A compliance, FICA, tax laws)</li>
+          <li>Legitimate interest (e.g., platform improvement, fraud prevention)</li>
           </ul>
         </div>
 
@@ -121,13 +129,22 @@ const PrivacyPolicy = () => {
           <h2 className="font-semibold">
             7. Disclosure of Personal Information
           </h2>
+
+          
+
+
+
+
           <p>
-            We may disclose information to payment providers, verification
-            partners, regulatory authorities, or platform partners with consent.
+            We may disclose your personal information to:
           </p>
-          <p>
-            <strong>We will never sell your personal information.</strong>
-          </p>
+          <ul>
+            <li>Payment service providers (for secure transactions)</li>
+            <li>Government or regulatory authorities, where required by law</li>
+            <li>Platform partners, only with consent or where necessary to provide a service</li>
+            <li>Other users, if you publicly display your campaign or profile</li>
+          </ul>
+          <p>We will never sell your personal information.</p>
         </div>
 
         <div>
