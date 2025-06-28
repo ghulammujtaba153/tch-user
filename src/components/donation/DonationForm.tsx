@@ -29,6 +29,24 @@ interface FormData {
   anonymous: boolean;
 }
 
+declare global {
+  interface Window {
+    Lightbox: {
+      open: (config: {
+        MerchantUID: string;
+        MerchantReference: string;
+        Amount: string;
+        Currency: string;
+        TransactionType: string;
+        Checksum: string;
+        RedirectSuccessfulUrl: string;
+        RedirectFailedUrl: string;
+      }) => void;
+    };
+  }
+}
+
+
 const DonationForm: React.FC<{
   id: string;
   campaigner: string;
