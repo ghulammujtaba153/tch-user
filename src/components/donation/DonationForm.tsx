@@ -31,18 +31,7 @@ interface FormData {
 
 declare global {
   interface Window {
-    Lightbox: {
-      open: (config: {
-        MerchantUID: string;
-        MerchantReference: string;
-        Amount: string;
-        Currency: string;
-        TransactionType: string;
-        Checksum: string;
-        RedirectSuccessfulUrl: string;
-        RedirectFailedUrl: string;
-      }) => void;
-    };
+    hpp: any
   }
 }
 
@@ -182,25 +171,18 @@ const DonationForm: React.FC<{
   };
 
 
-  const loadLightboxScript = (url: string): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    if (window.Lightbox) return resolve(); // already loaded
-
+  useEffect(() => {
+  const scriptExists = document.querySelector("script[src*='ecentric']");
+  if (!scriptExists) {
     const script = document.createElement("script");
-    script.src = url;
+    script.src = "https://sandbox.ecentric.co.za/hpp/api/js";
     script.async = true;
-
-    script.onload = () => {
-      if (window.Lightbox) resolve();
-      else reject(new Error("Lightbox failed to initialize."));
-    };
-
-    script.onerror = () =>
-      reject(new Error("Failed to load Ecentric Lightbox script."));
-
+    script.onload = () => console.log("Ecentric Lightbox loaded");
+    script.onerror = () => console.error("Failed to load Ecentric script");
     document.body.appendChild(script);
-  });
-};
+  }
+}, []);
+
 
 
   const handleDonate = async () => {
@@ -246,41 +228,36 @@ const DonationForm: React.FC<{
         //   notification,
         // });
 
-        try {
-  const paymentRes = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
-    amount: formData.amount,
-    reference: `DONATION-${Date.now()}`
-  });
 
-  const data = paymentRes.data;
 
-  // ✅ Attempt to load production Lightbox first
-  try {
-    await loadLightboxScript("https://secure.ecentric.co.za/hpp/api/js");
-  } catch (prodError) {
-    console.warn("Production Lightbox failed. Trying sandbox...", prodError);
-    // ⛔ Only use sandbox if acceptable
-    await loadLightboxScript("https://sandbox.ecentric.co.za/hpp/api/js");
-  }
+         const reference = `DONATE${Date.now()}`; // Unique alphanumeric
+    const amountCents = parseFloat(formData.amount) * 100;
 
-  if (window.Lightbox) {
-    window.Lightbox.open({
-      MerchantUID: data.MerchantUID,
-      MerchantReference: data.MerchantReference,
-      Amount: data.Amount,
-      Currency: data.Currency,
-      TransactionType: data.TransactionType,
-      Checksum: data.Checksum,
-      RedirectSuccessfulUrl: "https://www.givetogrow.co.za/payment-success",
-      RedirectFailedUrl: "https://www.givetogrow.co.za/payment-failed",
+    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate`, {
+      amount: amountCents.toFixed(0),
+      reference,
+      userId: user?.userId, // optional
+      transactionType: "Payment"
     });
-  } else {
-    throw new Error("Lightbox is not available after loading.");
-  }
-} catch (error) {
-  setErrors("Failed to initiate payment. Please try again.");
-  console.error("Payment Error:", error);
-}
+
+    // Check if Lightbox is ready
+    if (window.hpp?.payment) {
+      window.hpp.payment(
+        paymentData,
+        (successData: any) => {
+          console.log("Payment Success", successData);
+          alert("Payment completed successfully!");
+          // Redirect to success page or show notification
+        },
+        (failData: any) => {
+          console.error("Payment Failed", failData);
+          alert("Payment failed. Please try again.");
+        }
+      );
+    } else {
+      alert("Payment system not ready. Please refresh the page.");
+    }
+
 
 
         // if (response.status === 201) {
