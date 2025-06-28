@@ -244,12 +244,12 @@ const DonationForm: React.FC<{
     if (window.hpp?.payment) {
       window.hpp.payment(
         paymentData,
-        (successData: any) => {
+        (successData) => {
           console.log("Payment Success", successData);
           alert("Payment completed successfully!");
           // Redirect to success page or show notification
         },
-        (failData: any) => {
+        (failData) => {
           console.error("Payment Failed", failData);
           alert("Payment failed. Please try again.");
         }
