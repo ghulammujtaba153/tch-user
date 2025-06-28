@@ -72,7 +72,7 @@ const DonationForm: React.FC<{
 
 useEffect(() => {
   const script = document.createElement("script");
-  script.src = "https://secure.ecentric.co.za/hpp/api/js";
+  script.src = "https://sandbox.ecentric.co.za/hpp/api/js";
   script.async = true;
   script.onload = () => {
     console.log("Ecentric Lightbox loaded");
