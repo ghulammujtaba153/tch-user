@@ -70,18 +70,7 @@ const DonationForm: React.FC<{
 
   
 
-useEffect(() => {
-  const script = document.createElement("script");
-  script.src = "https://sandbox.ecentric.co.za/hpp/api/js";
-  script.async = true;
-  script.onload = () => {
-    console.log("Ecentric Lightbox loaded");
-  };
-  script.onerror = () => {
-    console.error("Failed to load Ecentric Lightbox script");
-  };
-  document.body.appendChild(script);
-}, []);
+
 
 
 
@@ -192,6 +181,28 @@ useEffect(() => {
     setErrors("");
   };
 
+
+  const loadLightboxScript = (url: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    if (window.Lightbox) return resolve(); // already loaded
+
+    const script = document.createElement("script");
+    script.src = url;
+    script.async = true;
+
+    script.onload = () => {
+      if (window.Lightbox) resolve();
+      else reject(new Error("Lightbox failed to initialize."));
+    };
+
+    script.onerror = () =>
+      reject(new Error("Failed to load Ecentric Lightbox script."));
+
+    document.body.appendChild(script);
+  });
+};
+
+
   const handleDonate = async () => {
     if (!validateForm()) {
       return;
@@ -235,25 +246,42 @@ useEffect(() => {
         //   notification,
         // });
 
-        const paymentRes = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
-          amount: formData.amount,
-          reference: `DONATION-${Date.now()}`
-        });
+        try {
+  const paymentRes = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
+    amount: formData.amount,
+    reference: `DONATION-${Date.now()}`
+  });
 
-    const data = paymentRes.data;
+  const data = paymentRes.data;
 
-        if (window.Lightbox) {
-          window.Lightbox.open({
-            MerchantUID: data.MerchantUID,
-            MerchantReference: data.MerchantReference,
-            Amount: data.Amount,
-            Currency: data.Currency,
-            TransactionType: data.TransactionType,
-            Checksum: data.Checksum,
-            RedirectSuccessfulUrl: "https://www.givetogrow.co.za/payment-success",
-            RedirectFailedUrl: "https://www.givetogrow.co.za/payment-failed",
-      });
-    }
+  // ✅ Attempt to load production Lightbox first
+  try {
+    await loadLightboxScript("https://secure.ecentric.co.za/hpp/api/js");
+  } catch (prodError) {
+    console.warn("Production Lightbox failed. Trying sandbox...", prodError);
+    // ⛔ Only use sandbox if acceptable
+    await loadLightboxScript("https://sandbox.ecentric.co.za/hpp/api/js");
+  }
+
+  if (window.Lightbox) {
+    window.Lightbox.open({
+      MerchantUID: data.MerchantUID,
+      MerchantReference: data.MerchantReference,
+      Amount: data.Amount,
+      Currency: data.Currency,
+      TransactionType: data.TransactionType,
+      Checksum: data.Checksum,
+      RedirectSuccessfulUrl: "https://www.givetogrow.co.za/payment-success",
+      RedirectFailedUrl: "https://www.givetogrow.co.za/payment-failed",
+    });
+  } else {
+    throw new Error("Lightbox is not available after loading.");
+  }
+} catch (error) {
+  setErrors("Failed to initiate payment. Please try again.");
+  console.error("Payment Error:", error);
+}
+
 
         // if (response.status === 201) {
         //   setIsDonate(true);
