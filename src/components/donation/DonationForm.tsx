@@ -50,6 +50,23 @@ const DonationForm: React.FC<{
   const tipOptions = [5, 10, 15, 20]; // in percentages
   const [selectedTip, setSelectedTip] = useState(0);
 
+  
+
+useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://sandbox.ecentric.co.za/hpp/api/js";
+  script.async = true;
+  script.onload = () => {
+    console.log("Ecentric Lightbox loaded");
+  };
+  script.onerror = () => {
+    console.error("Failed to load Ecentric Lightbox script");
+  };
+  document.body.appendChild(script);
+}, []);
+
+
+
   const handleTipSelect = (tip: number) => {
     setSelectedTip(tip);
   };
@@ -170,56 +187,76 @@ const DonationForm: React.FC<{
     formData.donorId = user.userId;
     startTransition(async () => {
       try {
-        const response = await axios.post(`${BASE_URL}/donations`, formData);
+        // const response = await axios.post(`${BASE_URL}/donations`, formData);
 
-        const res = await axios.post(
-          `${BASE_URL}/notifications/create`,
-          {
-            userId: campaigner,
-            title: "New Donation",
-            message: `A new donation of R${formData.amount} has been made to your campaign.`,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
+        // const res = await axios.post(
+        //   `${BASE_URL}/notifications/create`,
+        //   {
+        //     userId: campaigner,
+        //     title: "New Donation",
+        //     message: `A new donation of R${formData.amount} has been made to your campaign.`,
+        //   },
+        //   {
+        //     headers: {
+        //       Authorization: `Bearer ${localStorage.getItem("token")}`,
+        //     },
+        //   }
+        // );
 
-        ReactGA.event({
-          category: "Donation",
-          action: "Donate Button Clicked",
-          label: selectedMethod,
-          value: parseFloat(formData.amount),
+        // ReactGA.event({
+        //   category: "Donation",
+        //   action: "Donate Button Clicked",
+        //   label: selectedMethod,
+        //   value: parseFloat(formData.amount),
+        // });
+
+        // const notification = res.data;
+
+        // socketRef.current?.emit("send-notification", {
+        //   campaigner,
+        //   notification,
+        // });
+
+        const paymentRes = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
+          amount: formData.amount,
+          reference: `DONATION-${Date.now()}`
         });
 
-        const notification = res.data;
+    const data = paymentRes.data;
 
-        socketRef.current?.emit("send-notification", {
-          campaigner,
-          notification,
-        });
+        if (window.Lightbox) {
+          window.Lightbox.open({
+            MerchantUID: data.MerchantUID,
+            MerchantReference: data.MerchantReference,
+            Amount: data.Amount,
+            Currency: data.Currency,
+            TransactionType: data.TransactionType,
+            Checksum: data.Checksum,
+            RedirectSuccessfulUrl: "https://www.givetogrow.co.za/payment-success",
+            RedirectFailedUrl: "https://www.givetogrow.co.za/payment-failed",
+      });
+    }
 
-        if (response.status === 201) {
-          setIsDonate(true);
-          // Reset form
-          setFormData({
-            donorId: user?.userId,
-            campaignId: id,
-            organizationId: organizationId,
-            amount: "150",
-            donorName: "",
-            donorEmail: "",
-            companyName: "",
-            postalCode: "",
-            city: "",
-            houseNumber: "",
-            anonymous: false,
-          });
-          setSelectedAmount("150");
-          setCustomAmount("");
-          setAgreeToTerms(false);
-        }
+        // if (response.status === 201) {
+        //   setIsDonate(true);
+        //   // Reset form
+        //   setFormData({
+        //     donorId: user?.userId,
+        //     campaignId: id,
+        //     organizationId: organizationId,
+        //     amount: "150",
+        //     donorName: "",
+        //     donorEmail: "",
+        //     companyName: "",
+        //     postalCode: "",
+        //     city: "",
+        //     houseNumber: "",
+        //     anonymous: false,
+        //   });
+        //   setSelectedAmount("150");
+        //   setCustomAmount("");
+        //   setAgreeToTerms(false);
+        // }
       } catch (error) {
         setErrors("Failed to process donation. Please try again.");
         console.error("Donation error:", error);
