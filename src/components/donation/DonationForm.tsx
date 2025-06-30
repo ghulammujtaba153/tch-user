@@ -233,7 +233,7 @@ const DonationForm: React.FC<{
          const reference = `DONATE${Date.now()}`; // Unique alphanumeric
     const amountCents = parseFloat(formData.amount) * 100;
 
-    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate`, {
+    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
       amount: amountCents.toFixed(0),
       reference,
       userId: user?.userId, // optional
