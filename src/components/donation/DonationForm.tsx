@@ -175,7 +175,7 @@ const DonationForm: React.FC<{
   const scriptExists = document.querySelector("script[src*='ecentric']");
   if (!scriptExists) {
     const script = document.createElement("script");
-    script.src = "https://sandbox.ecentric.co.za/hpp/api/js";
+    script.src = "https://sandbox.ecentric.co.za/HPP/API/js";
     script.async = true;
     script.onload = () => console.log("Ecentric Lightbox loaded");
     script.onerror = () => console.error("Failed to load Ecentric script");
@@ -186,110 +186,101 @@ const DonationForm: React.FC<{
 
 
   const handleDonate = async () => {
-    if (!validateForm()) {
-      return;
-    }
-    if (!user) {
-      setErrors("Please log in to donate");
-      return;
-    }
-    console.log(formData);
-    console.log(user);
+  if (!validateForm()) return;
+
+  if (!user) {
+    setErrors("Please log in to donate");
+    return;
+  }
+
+  try {
+    console.log("Form Data:", formData);
+    console.log("User:", user);
+
+    const reference = `DONATE${Date.now()}`; // Unique transaction reference
+    const amountCents = parseFloat(formData.amount) * 100;
+
+    // Add user info to form data
     formData.donorId = user.userId;
-    startTransition(async () => {
-      try {
-        // const response = await axios.post(`${BASE_URL}/donations`, formData);
 
-        // const res = await axios.post(
-        //   `${BASE_URL}/notifications/create`,
-        //   {
-        //     userId: campaigner,
-        //     title: "New Donation",
-        //     message: `A new donation of R${formData.amount} has been made to your campaign.`,
+    // Request payment initiation
+    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
+      amount: amountCents.toFixed(0),
+      reference,
+      userId: user.userId, // optional
+      transactionType: "Payment",
+    });
+
+    // Check Lightbox availability
+    if (!window.hpp?.payment) {
+      alert("Payment system not ready. Please refresh the page or try later.");
+      return;
+    }
+
+    // Launch payment Lightbox
+    window.hpp.payment(
+      paymentData,
+      async (successData) => {
+        console.log("✅ Payment Success", successData);
+        alert("Payment completed successfully!");
+
+        // Optionally save donation
+        // await axios.post(`${BASE_URL}/donations`, formData);
+
+        // Send notification to campaigner
+        // await axios.post(`${BASE_URL}/notifications/create`, {
+        //   userId: campaigner,
+        //   title: "New Donation",
+        //   message: `A new donation of R${formData.amount} has been made to your campaign.`,
+        //   headers: {
+        //     Authorization: `Bearer ${localStorage.getItem("token")}`,
         //   },
-        //   {
-        //     headers: {
-        //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //     },
-        //   }
-        // );
-
-        // ReactGA.event({
-        //   category: "Donation",
-        //   action: "Donate Button Clicked",
-        //   label: selectedMethod,
-        //   value: parseFloat(formData.amount),
         // });
 
-        // const notification = res.data;
-
+        // Emit socket event
         // socketRef.current?.emit("send-notification", {
         //   campaigner,
         //   notification,
         // });
 
-
-
-         const reference = `DONATE${Date.now()}`; // Unique alphanumeric
-    const amountCents = parseFloat(formData.amount) * 100;
-
-    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
-      amount: amountCents.toFixed(0),
-      reference,
-      userId: user?.userId, // optional
-      transactionType: "Payment"
-    });
-
-    // Check if Lightbox is ready
-    if (window.hpp?.payment) {
-      window.hpp.payment(
-        paymentData,
-        (successData) => {
-          console.log("Payment Success", successData);
-          alert("Payment completed successfully!");
-          // Redirect to success page or show notification
-        },
-        (failData) => {
-          console.error("Payment Failed", failData);
-          alert("Payment failed. Please try again.");
-        }
-      );
-    } else {
-      alert("Payment system not ready. Please refresh the page.");
-    }
-
-
-
-        // if (response.status === 201) {
-        //   setIsDonate(true);
-        //   // Reset form
-        //   setFormData({
-        //     donorId: user?.userId,
-        //     campaignId: id,
-        //     organizationId: organizationId,
-        //     amount: "150",
-        //     donorName: "",
-        //     donorEmail: "",
-        //     companyName: "",
-        //     postalCode: "",
-        //     city: "",
-        //     houseNumber: "",
-        //     anonymous: false,
-        //   });
-        //   setSelectedAmount("150");
-        //   setCustomAmount("");
-        //   setAgreeToTerms(false);
-        // }
-      } catch (error) {
-        setErrors("Failed to process donation. Please try again.");
-        console.error("Donation error:", error);
-        alert("Failed to process donation. Please try again.");
+        // Reset form (optional)
+        setIsDonate(true);
+        setFormData({
+          donorId: user.userId,
+          campaignId: id,
+          organizationId: organizationId,
+          amount: "150",
+          donorName: "",
+          donorEmail: "",
+          companyName: "",
+          postalCode: "",
+          city: "",
+          houseNumber: "",
+          anonymous: false,
+        });
+        setSelectedAmount("150");
+        setCustomAmount("");
+        setAgreeToTerms(false);
+      },
+      (failData) => {
+        console.error("❌ Payment Failed", failData);
+        alert("Payment failed. Please try again.");
       }
-    });
-  };
+    );
+  } catch (error) {
+    console.error("Donation error:", error);
+    setErrors("Failed to process donation. Please try again.");
+    alert("Failed to process donation. Please try again.");
+  }
+};
+
 
   return (
     <div className="w-full mx-auto p-1">
+
+
+      
+
       {isDonate && (
         <Notification
           isOpen={isDonate}
