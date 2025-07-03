@@ -5,12 +5,15 @@ import { toast } from "react-toastify";
 import { BASE_URL } from "../config/url";
 import Notification from "../components/notification/Notification";
 import ScrollToTop from "../utils/ScrollToTop";
+import { useAppConfig } from "../context/AppConfigContext";
 
 const ForgetPassword = () => {
   const [isPending, startTransition] = useTransition();
   const [email, setEmail] = useState("");
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const { config } = useAppConfig();
   
 
   const handleChange = (e:any) => {
@@ -53,7 +56,7 @@ const ForgetPassword = () => {
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src="/nav-logo.png" alt="logo" className="w-[150px] h-[50px]" />
+          <img src={config?.logo} alt="logo" className="w-[250px] h-[100px]" />
         </div>
 
         <div className="flex flex-col items-center justify-center">

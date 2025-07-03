@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
+
 import { BsSendFill } from "react-icons/bs";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { useAppConfig } from "../../context/AppConfigContext";
@@ -72,168 +72,137 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col md:flex-row items-start justify-between gap-8">
-        <div className="flex flex-col justify-between gap-4 w-full md:w-1/3 h-full">
-          <div>
-            <div className="flex mb-8">
+      {/* Divider - visible only on desktop */}
+      {/* <div className="hidden md:block w-[1px] max-h-[200px] bg-[#E5E5E5] self-stretch"></div> */}
+
+      {/* Right Section */}
+      <div className="flex flex-col gap-6 w-full w-full">
+        <div className="flex items-center justify-between gap-4">
+          <input
+            type="text"
+            placeholder="Enter your email"
+            className="w-full h-[40px] border border-gray-300 rounded-full px-4 py-2 outine-none bg-transparent"
+          />
+          <button className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300">
+            <BsSendFill className="text-white text-lg" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-sm font-bold mb-2 font-onest">GROW WITH US</h2>
+
+            <Link
+              to="/signup"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Register
+            </Link>
+
+            <Link
+              to="/works"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              How it Works
+            </Link>
+
+            <Link
+              to="/guides"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Help Guides
+            </Link>
+
+            <Link
+              to="/fees"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Fees & Payouts
+            </Link>
+
+            <Link
+              to="/faqs"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              FAQ’s
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <h2 className="text-sm font-bold mb-2 font-onest">Quick Links</h2>
+
+            <a
+              href="/about"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              About Us
+            </a>
+
+            <a
+              href="/"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Contact Us
+            </a>
+
+            <a
+              href="/support"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Support
+            </a>
+            {/* <a
+                href="/blog"
+                className="text-sm hover:text-secondary transition-colors duration-300"
+              >
+                Articles
+              </a> */}
+
+            <Link
+              to="/privacy"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Privacy Policy
+            </Link>
+
+            <Link
+              to="/terms"
+              className="text-sm hover:text-secondary transition-colors duration-300"
+            >
+              Terms & Conditions
+            </Link>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <h2 className="text-sm font-bold mb-2 font-onest">POWERED BY</h2>
+            <div className="flex">
               <img
                 src={config?.logo}
                 alt="logo"
                 className="w-[100px] h-[40px]"
               />
             </div>
-
-            <div className="flex flex-col md:justify-between md:flex-row gap-4 md:gap-8 mb-8">
-              {/* <div className='flex flex-col gap-2'>
-                                <p className='text-sm'>Toll free Customer care</p>
-                                <p className='text-sm font-bold font-onest'>1213 14 1441 1</p>
-                            </div> */}
-
-              <div className="flex flex-col gap-2">
-                <p className="text-sm">Need live support!</p>
-                <p className="text-sm font-bold font-onest">
-                  info@givetogrow.co.za
-                </p>
-              </div>
-
-              <img src="/mastercard.png" alt="map" className="w-[40px] h-[40px]" />
-              <img src="/visa.png" alt="phone" className="w-[40px] h-[40px]" />
-            </div>
-           
-          </div>
-
-          <div className="mt-auto">
-
-            <p className="text-sm font-bold mb-4">Follow on</p>
-            <div className="flex items-center gap-2">
-              {/* Social Media Links */}
-              {data?.map((item: any, index: number) => (
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300"
-                  aria-label="Pinterest"
-                >
-                  <img
-                    src={item.icon}
-                    alt="/"
-                    className="w-[20px] h-[20px] text-white"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Divider - visible only on desktop */}
-        <div className="hidden md:block w-[1px] max-h-[200px] bg-[#E5E5E5] self-stretch"></div>
-
-        {/* Right Section */}
-        <div className="flex flex-col gap-6 w-full md:w-2/3">
-          <div className="flex items-center justify-between gap-4">
-            <input
-              type="text"
-              placeholder="Enter your email"
-              className="w-full h-[40px] border border-gray-300 rounded-full px-4 py-2 outine-none bg-transparent"
+            <img
+              src="/mastercard.png"
+              alt="map"
+              className="w-[80px] h-[40px]"
             />
-            <button className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300">
-              <BsSendFill className="text-white text-lg" />
-            </button>
+            <img src="/visa.png" alt="phone" className="w-[80px] h-[40px]" />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest">Quick Links</h2>
-              <a
-                href="/"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Home
-              </a>
-              <a
-                href="/about"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                About Us
-              </a>
-              <a
-                href="/services"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Services
-              </a>
-              <a
-                href="/blog"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Blog
-              </a>
-            </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-sm font-bold mb-2 font-onest">INFORMATION</h2>
 
-            <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest">Services</h2>
-              <a
-                href="/food-security"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Food Security Initiative
-              </a>
-              <a
-                href="/healthcare"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Healthcare Access
-              </a>
-              <a
-                href="/education"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Education
-              </a>
-              <a
-                href="/women-empowerment"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Women Empowerment
-              </a>
-            </div>
+            <p className="text-sm font-bold mb-2 font-onest">General Contact</p>
+            <p>info@givetogrow.co.za</p>
 
-            <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest">Support</h2>
-              <Link
-                to="/faqs"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                FAQ
-              </Link>
-              <Link
-                to="/support"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Support
-              </Link>
-              <Link
-                to="/terms"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Terms & Conditions
-              </Link>
-              <Link
-                to="/privacy"
-                className="text-sm hover:text-secondary transition-colors duration-300"
-              >
-                Privacy Policy
-              </Link>
-            </div>
+            <p className="text-sm font-bold mb-2 font-onest">Support</p>
+            <p>Email: info@givetogrow.co.za </p>
+            <p>Hours: Mon – Fri 9am-4pm</p>
+            <p>Closed Weekends & Public Holidays</p>
           </div>
         </div>
-
-        
       </div>
-      <p className="text-sm text-center">
-          © GivetoGrow - Standard Bank SA. Powered by pfireDigital
-        </p>
     </div>
   );
 };
