@@ -48,6 +48,8 @@ import PageTracker from './hooks/usePageTracking';
 import Launch from './pages/launch/Launch';
 import TermsCondition from './pages/TermsCondition';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 
 
 
@@ -99,6 +101,8 @@ function App() {
             <Route path="/verification/:id" element={<Verification />} />
             <Route path="/email/verification" element={<EmailVerification />} />
             <Route path="/newpassword/:id" element={<NewPassword />} />
+            <Route path='payment-successfull' element={<PaymentSuccess/>} />
+            <Route path='payment-failure' element={<PaymentFailure/>} />
           </Route>
           
           <Route path="/home/campaigns" element={<Campaigns />} />

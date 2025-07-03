@@ -12,6 +12,8 @@ import { BASE_URL, SOCKET_URL } from "../../config/url";
 import { io, Socket } from "socket.io-client";
 import { FormControlLabel, Switch } from "@mui/material";
 import ReactGA from "react-ga4";
+import PaymentTypeModal from "./PaymentTypeModal";
+import EFTModal from "./EFTModal";
 
 type PaymentMethod = "Test Donation" | "Cardiant Donation" | "Office Donation";
 
@@ -31,10 +33,9 @@ interface FormData {
 
 declare global {
   interface Window {
-    hpp: any
+    hpp: any;
   }
 }
-
 
 const DonationForm: React.FC<{
   id: string;
@@ -52,16 +53,15 @@ const DonationForm: React.FC<{
   const { user } = useContext(AuthContext)!;
   const [isPending, startTransition] = useTransition();
   const socketRef = useRef<Socket | null>(null);
-  console.log("donation form user", organizationId);
+  const [paymentModal, setPaymentModal] = useState(false);
+  const [type, setType] = useState("ecentric");
+
+  const handlePaymentModal = () => {
+    setPaymentModal(!setPaymentModal);
+  };
 
   const tipOptions = [5, 10, 15, 20]; // in percentages
   const [selectedTip, setSelectedTip] = useState(0);
-
-  
-
-
-
-
 
   const handleTipSelect = (tip: number) => {
     setSelectedTip(tip);
@@ -170,121 +170,132 @@ const DonationForm: React.FC<{
     setErrors("");
   };
 
-
   useEffect(() => {
-  const scriptExists = document.querySelector("script[src*='ecentric']");
-  if (!scriptExists) {
-    const script = document.createElement("script");
-    script.src = "https://sandbox.ecentric.co.za/HPP/API/js";
-    script.async = true;
-    script.onload = () => console.log("Ecentric Lightbox loaded");
-    script.onerror = () => console.error("Failed to load Ecentric script");
-    document.body.appendChild(script);
+    const scriptExists = document.querySelector("script[src*='ecentric']");
+    if (!scriptExists) {
+      const script = document.createElement("script");
+      script.src = "https://sandbox.ecentric.co.za/HPP/API/js";
+      script.async = true;
+      script.onload = () => console.log("Ecentric Lightbox loaded");
+      script.onerror = () => console.error("Failed to load Ecentric script");
+      document.body.appendChild(script);
+    }
+  }, []);
+
+
+  const handleEftDonate = async () => {
+    console.log("Form Data:", formData);
   }
-}, []);
-
-
 
   const handleDonate = async () => {
-  if (!validateForm()) return;
+    if (!validateForm()) return;
 
-  if (!user) {
-    setErrors("Please log in to donate");
-    return;
-  }
-
-  try {
-    console.log("Form Data:", formData);
-    console.log("User:", user);
-
-    // Generate RRN (12 characters) → DON + timestamp (10 digits)
-    const timestamp = Math.floor(Date.now() / 1000); // Seconds since epoch
-    const randomDigits = Math.floor(Math.random() * 90 + 10); // Random 2-digit number
-    const reference = `DON${timestamp}${randomDigits}`;
-
-    const amountCents = parseFloat(formData.amount) * 100;
-
-    // Add user info to form data
-    formData.donorId = user.userId;
-
-    // Request payment initiation
-    const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
-      amount: amountCents.toFixed(0),
-      reference,
-      userId: user.userId, // optional
-      transactionType: "Payment",
-    });
-
-    // Check Lightbox availability
-    if (!window.hpp?.payment) {
-      alert("Payment system not ready. Please refresh the page or try later.");
+    if (!user) {
+      setErrors("Please log in to donate");
       return;
     }
 
-    // Launch payment Lightbox
-    window.hpp.payment(
-      paymentData,
-      async (successData) => {
-        console.log("✅ Payment Success", successData);
-        alert("Payment completed successfully!");
+    try {
+      console.log("Form Data:", formData);
+      console.log("User:", user);
 
-        // Optionally save donation
-        // await axios.post(`${BASE_URL}/donations`, formData);
+      const randomPrefix = [...Array(3)]
+        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26))) 
+        .join("");
 
-        // Send notification to campaigner
-        // await axios.post(`${BASE_URL}/notifications/create`, {
-        //   userId: campaigner,
-        //   title: "New Donation",
-        //   message: `A new donation of R${formData.amount} has been made to your campaign.`,
-        //   headers: {
-        //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-        //   },
-        // });
+      const timestamp = new Date().toISOString().slice(2, 10).replace(/-/g, ""); 
 
-        // Emit socket event
-        // socketRef.current?.emit("send-notification", {
-        //   campaigner,
-        //   notification,
-        // });
+      const randomSuffix = [...Array(6)]
+        .map(() => Math.random().toString(36)[2].toUpperCase())
+        .join("");
 
-        // Reset form (optional)
-        setIsDonate(true);
-        setFormData({
-          donorId: user.userId,
-          campaignId: id,
-          organizationId: organizationId,
-          amount: "150",
-          donorName: "",
-          donorEmail: "",
-          companyName: "",
-          postalCode: "",
-          city: "",
-          houseNumber: "",
-          anonymous: false,
-        });
-        setSelectedAmount("150");
-        setCustomAmount("");
-        setAgreeToTerms(false);
-      },
-      (failData) => {
-        console.error("❌ Payment Failed", failData);
-        alert("Payment failed. Please try again.");
+      const reference = `${randomPrefix}${timestamp}${randomSuffix}`;
+
+      const amountCents = parseFloat(formData.amount) * 100;
+
+      // Add user info to form data
+      formData.donorId = user.userId;
+
+      // Request payment initiation
+      const { data: paymentData } = await axios.post(
+        `${BASE_URL}/ecentric/initiate-payment`,
+        {
+          amount: amountCents.toFixed(0),
+          reference,
+          userId: user.userId, // optional
+          transactionType: "Payment",
+        }
+      );
+
+      // Check Lightbox availability
+      if (!window.hpp?.payment) {
+        alert(
+          "Payment system not ready. Please refresh the page or try later."
+        );
+        return;
       }
-    );
-  } catch (error) {
-    console.error("Donation error:", error);
-    setErrors("Failed to process donation. Please try again.");
-    alert("Failed to process donation. Please try again.");
-  }
-};
 
+      // Launch payment Lightbox
+      window.hpp.payment(
+        paymentData,
+        async (successData) => {
+          console.log("✅ Payment Success", successData);
+          // alert("Payment completed successfully!");
+
+        
+
+          // save donation
+          // await axios.post(`${BASE_URL}/donations`, formData);
+
+          // Send notification to campaigner
+          // await axios.post(`${BASE_URL}/notifications/create`, {
+          //   userId: campaigner,
+          //   title: "New Donation",
+          //   message: `A new donation of R${formData.amount} has been made to your campaign.`,
+          //   headers: {
+          //     Authorization: `Bearer ${localStorage.getItem("token")}`,
+          //   },
+          // });
+
+          // Emit socket event
+          // socketRef.current?.emit("send-notification", {
+          //   campaigner,
+          //   notification,
+          // });
+
+          // Reset form (optional)
+          setIsDonate(true);
+          setFormData({
+            donorId: user.userId,
+            campaignId: id,
+            organizationId: organizationId,
+            amount: "150",
+            donorName: "",
+            donorEmail: "",
+            companyName: "",
+            postalCode: "",
+            city: "",
+            houseNumber: "",
+            anonymous: false,
+          });
+          setSelectedAmount("150");
+          setCustomAmount("");
+          setAgreeToTerms(false);
+        },
+        (failData) => {
+          console.error("❌ Payment Failed", failData);
+          alert("Payment failed. Please try again.");
+        }
+      );
+    } catch (error) {
+      console.error("Donation error:", error);
+      setErrors("Failed to process donation. Please try again.");
+      alert("Failed to process donation. Please try again.");
+    }
+  };
 
   return (
     <div className="w-full mx-auto p-1">
-
-
-      
-
       {isDonate && (
         <Notification
           isOpen={isDonate}
@@ -305,6 +316,30 @@ const DonationForm: React.FC<{
           type="error"
         />
       )}
+
+
+      {paymentModal && (
+    <PaymentTypeModal
+      onClose={handlePaymentModal}
+      setType={(type) => {
+        setType(type);
+        if (type === 'card') {
+          handleDonate();
+        }
+      }}
+      handleDonate={handleDonate}
+  />
+)}
+
+
+      {
+        type === "eft" && (
+          <EFTModal
+            onClose={handlePaymentModal}
+            handleDonate={handleEftDonate}
+          />
+        )
+      }
 
       {/* Payment Method Selection */}
       <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
@@ -391,7 +426,8 @@ const DonationForm: React.FC<{
         </div>
 
         <p className="text-center mt-2 text-sm text-gray-600">
-          You selected a {selectedTip}% tip ({parseInt(formData.amount)/100 * selectedTip})
+          You selected a {selectedTip}% tip (
+          {(parseInt(formData.amount) / 100) * selectedTip})
         </p>
       </div>
 
@@ -508,7 +544,10 @@ const DonationForm: React.FC<{
       <div className="flex items-center gap-4">
         <button
           disabled={isPending}
-          onClick={handleDonate}
+          onClick={() => {
+          if (!validateForm()) return;
+          setPaymentModal(true);
+        }}
           className="bg-secondary text-white py-3 px-6 mt-4 rounded-full font-xs hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isPending ? "Donating..." : "DONATE NOW"}
