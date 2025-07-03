@@ -44,7 +44,7 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Buttons */}
-      <div className="absolute flex flex-col md:flex-row items-center px-6 py-4 gap-4 bottom-[-5px] bg-white right-[5%] md:right-[25%] shadow-lg rounded-md">
+      <div className="absolute flex flex-col md:flex-row items-center px-6 py-4 gap-4 bottom-[-10px] bg-white right-[5%] md:right-[22%] shadow-lg rounded-md">
         <Link
           to={"/home/campaigns"}
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
@@ -64,7 +64,7 @@ const HeroSection: React.FC = () => {
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
           Create Organization
-          <ArrowRightIcon className="w-5 h-5 ml-2" />
+          
         </Link>
       </div>
     </div>
