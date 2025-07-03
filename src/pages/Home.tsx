@@ -53,7 +53,7 @@ const Home: React.FC = () => {
     
     {/* <AboutUsSection /> */}
     <CampaignsSection />
-    <ChooseUsSection />
+    {/* <ChooseUsSection /> */}
     {/*<OurFeatureSection />
     <Testimonials />*/}
 
