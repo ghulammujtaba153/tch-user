@@ -197,7 +197,11 @@ const DonationForm: React.FC<{
     console.log("Form Data:", formData);
     console.log("User:", user);
 
-    const reference = `DONATE${Date.now()}`; // Unique transaction reference
+    // Generate RRN (12 characters) → DON + timestamp (10 digits)
+    const timestamp = Math.floor(Date.now() / 1000); // Seconds since epoch
+    const randomDigits = Math.floor(Math.random() * 90 + 10); // Random 2-digit number
+    const reference = `DON${timestamp}${randomDigits}`;
+
     const amountCents = parseFloat(formData.amount) * 100;
 
     // Add user info to form data
