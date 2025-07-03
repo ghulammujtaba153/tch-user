@@ -51,11 +51,12 @@ const Home: React.FC = () => {
     <Navbar />
     <HeroSection />
     
-    <AboutUsSection />
+    {/* <AboutUsSection /> */}
     <CampaignsSection />
     <ChooseUsSection />
-    <OurFeatureSection />
-    <Testimonials />
+    {/*<OurFeatureSection />
+    <Testimonials />*/}
+
     <CollaborationSection />
     {/* <FAQsSection /> */}
     {/* <Footer /> */}
