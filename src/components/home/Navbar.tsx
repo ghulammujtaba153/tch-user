@@ -21,7 +21,7 @@ const Navbar: React.FC = () => {
           {/* Rest of the navbar content stays the same */}
           <div className='flex items-center gap-4'>
             <Link to="/">
-              <img src={config?.logo} alt="logo" width={100} height={100} className="" />
+              <img src={config?.logo} alt="logo" className="h-[70px] w-[200px]" />
             </Link>
             <img src={"/line.png"} alt="logo" className='w-[1px] h-[30px] hidden md:block' />
 
@@ -30,13 +30,13 @@ const Navbar: React.FC = () => {
               <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link>
               {/* <Link to="/home/campaigns/create" className="hover:text-secondary transition-colors duration-300">Start Campaign</Link> */}
               <Link to="/works" className="hover:text-secondary transition-colors duration-300">How it works</Link>
-              <Link to="/about" className="hover:text-secondary transition-colors duration-300">About</Link>
-              <Link to="/faqs" className="hover:text-secondary transition-colors duration-300">FAQ's</Link>
+              {/* <Link to="/about" className="hover:text-secondary transition-colors duration-300">About</Link> */}
+              {/* <Link to="/faqs" className="hover:text-secondary transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" className="hover:text-secondary transition-colors duration-300">Fees & Payouts</Link>
               <Link to="/support" className="hover:text-secondary transition-colors duration-300">Support</Link>
               <Link to="/blogs" className="hover:text-secondary transition-colors duration-300">Blogs</Link>
               <Link to="/guides" className="hover:text-secondary transition-colors duration-300">Guide</Link>
-              <Link to="/home-sec" className="hover:text-secondary transition-colors duration-300">LS Home</Link>
+              <Link to="/home-sec" className="hover:text-secondary transition-colors duration-300">LS Home</Link> */}
             </div>
           </div>
 
@@ -90,12 +90,12 @@ const Navbar: React.FC = () => {
               <Link to="/home/campaigns" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Find Campaigns</Link>
               {/* <Link to="/home/campaigns/create" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Start Campaign</Link> */}
               <Link to="/works" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">How it works</Link>
-              <Link to="/about" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">About</Link>
+              {/* <Link to="/about" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">About</Link>
               <Link to="/faqs" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Fees & Payouts</Link>
               <Link to="/support" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Support</Link>
               <Link to="/blogs" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary transition-colors duration-300">Blogs</Link>
-              <Link to="/guides" onClick={()=> setIsMenuOpen(false)} className="hover:text-secondary transition-colors duration-300">Guide</Link>
+              <Link to="/guides" onClick={()=> setIsMenuOpen(false)} className="hover:text-secondary transition-colors duration-300">Guide</Link> */}
             </div>
             <div className='flex flex-col gap-3 pt-2'>
 

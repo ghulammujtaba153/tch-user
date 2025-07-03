@@ -50,12 +50,13 @@ const Home: React.FC = () => {
     <ScrollToTop />
     <Navbar />
     <HeroSection />
-    <CollaborationSection />
+    
     <AboutUsSection />
     <CampaignsSection />
     <ChooseUsSection />
     <OurFeatureSection />
     <Testimonials />
+    <CollaborationSection />
     {/* <FAQsSection /> */}
     {/* <Footer /> */}
   </div>;

@@ -179,7 +179,7 @@ const Footer: React.FC = () => {
               <img
                 src={config?.logo}
                 alt="logo"
-                className="w-[100px] h-[40px]"
+                className="w-[200px] h-[70px]"
               />
             </div>
             <img
