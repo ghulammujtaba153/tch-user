@@ -29,7 +29,8 @@ const Footer: React.FC = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-8 mb-4 font-sans">
-      <div className="flex flex-col md:flex-row items-center justify-between bg-secondary max-h-[300px] rounded-xl overflow-hidden">
+      <div>
+        <div className="flex flex-col md:flex-row items-center justify-between bg-secondary max-h-[300px] rounded-xl overflow-hidden">
         {/* Left Section */}
         <div className="w-full md:w-1/2 h-full flex justify-center md:justify-start">
           <img
@@ -46,8 +47,7 @@ const Footer: React.FC = () => {
           </h1>
           <p className="text-sm md:text-xs text-white">
             Join us in creating brighter futures by providing hope, delivering
-            help, and fostering lasting change for communities in need around
-            the world.
+            help, and fostering lasting change for school in need across South Africa.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-start">
             <Link
@@ -72,12 +72,9 @@ const Footer: React.FC = () => {
         </div>
       </div>
 
-      {/* Divider - visible only on desktop */}
-      {/* <div className="hidden md:block w-[1px] max-h-[200px] bg-[#E5E5E5] self-stretch"></div> */}
-
-      {/* Right Section */}
-      <div className="flex flex-col gap-6 w-full w-full">
-        <div className="flex items-center justify-between gap-4">
+      
+      <div className="flex flex-col gap-6 w-full mt-[40px]">
+        {/* <div className="flex items-center justify-between gap-4">
           <input
             type="text"
             placeholder="Enter your email"
@@ -86,7 +83,7 @@ const Footer: React.FC = () => {
           <button className="w-[40px] h-[40px] bg-secondary rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-all duration-300">
             <BsSendFill className="text-white text-lg" />
           </button>
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
           <div className="flex flex-col gap-2">
@@ -131,26 +128,26 @@ const Footer: React.FC = () => {
           <div className="flex flex-col gap-2">
             <h2 className="text-sm font-bold mb-2 font-onest">Quick Links</h2>
 
-            <a
-              href="/about"
+            <Link
+              to="/about"
               className="text-sm hover:text-secondary transition-colors duration-300"
             >
               About Us
-            </a>
+            </Link>
 
-            <a
-              href="/"
+            <Link
+              to="/support"
               className="text-sm hover:text-secondary transition-colors duration-300"
             >
               Contact Us
-            </a>
+            </Link>
 
-            <a
-              href="/support"
+            <Link
+              to="/support"
               className="text-sm hover:text-secondary transition-colors duration-300"
             >
               Support
-            </a>
+            </Link>
             {/* <a
                 href="/blog"
                 className="text-sm hover:text-secondary transition-colors duration-300"
@@ -182,12 +179,15 @@ const Footer: React.FC = () => {
                 className="w-[200px] h-[70px]"
               />
             </div>
-            <img
+            <div className="flex gap-2">
+              <img src="/visa.png" alt="/" className="w-[80px] h-[40px]" />
+              <img
               src="/mastercard.png"
               alt="map"
               className="w-[80px] h-[40px]"
             />
-            <img src="/visa.png" alt="phone" className="w-[80px] h-[40px]" />
+            
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">
@@ -197,12 +197,17 @@ const Footer: React.FC = () => {
             <p>info@givetogrow.co.za</p>
 
             <p className="text-sm font-bold mb-2 font-onest">Support</p>
-            <p>Email: info@givetogrow.co.za </p>
-            <p>Hours: Mon – Fri 9am-4pm</p>
+            <p>info@givetogrow.co.za </p>
+            <p>Mon – Fri 9am-4pm</p>
             <p>Closed Weekends & Public Holidays</p>
           </div>
         </div>
       </div>
+      </div>
+
+      <div className="flex items-center justify-center w-full">
+        <p>© 2025 Give To Grow. All rights reserved</p>
+        </div>
     </div>
   );
 };

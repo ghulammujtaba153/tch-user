@@ -27,9 +27,9 @@ const Navbar: React.FC = () => {
 
             <div className="hidden lg:flex items-center text-sm gap-4 xl:gap-6">
               {/* <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link> */}
-              <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link>
+              {/* <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link> */}
               {/* <Link to="/home/campaigns/create" className="hover:text-secondary transition-colors duration-300">Start Campaign</Link> */}
-              <Link to="/works" className="hover:text-secondary transition-colors duration-300">How it works</Link>
+              {/* <Link to="/works" className="hover:text-secondary transition-colors duration-300">How it works</Link> */}
               {/* <Link to="/about" className="hover:text-secondary transition-colors duration-300">About</Link> */}
               {/* <Link to="/faqs" className="hover:text-secondary transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" className="hover:text-secondary transition-colors duration-300">Fees & Payouts</Link>
@@ -87,9 +87,9 @@ const Navbar: React.FC = () => {
           <div className="flex flex-col p-4 gap-4">
             <div className="flex flex-col text-sm gap-4">
               <Link to="/" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Home</Link>
-              <Link to="/home/campaigns" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Find Campaigns</Link>
+              {/* <Link to="/home/campaigns" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Find Campaigns</Link> */}
               {/* <Link to="/home/campaigns/create" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Start Campaign</Link> */}
-              <Link to="/works" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">How it works</Link>
+              {/* <Link to="/works" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">How it works</Link> */}
               {/* <Link to="/about" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">About</Link>
               <Link to="/faqs" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Fees & Payouts</Link>

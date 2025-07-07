@@ -30,9 +30,15 @@ const CollaborationSection: React.FC = () => {
   return (
     <section className="max-w-[1200px] mx-auto py-6 font-onest text-black">
       <div className="flex flex-col items-center justify-center gap-10">
-        <p className="text-xs md:text-base lg:text-lg text-gray-500 text-center">
-          Featured Organizations
-        </p>
+        {/* Header */}
+      <div className='flex flex-col items-center justify-center gap-4'>
+        <div className='flex items-center justify-center gap-2'>
+          <img src="/home-header.png" alt="aboutus" className="w-[20px] h-[14px]" />
+          <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px] font-onest">ORGANIZATION</p>
+        </div>
+        <h1 className='text-4xl font-bold font-onest'>Featured Organization</h1>
+        <p className='text-sm text-gray-500 font-sans'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+      </div>
 
         <div className="relative flex flex-wrap justify-between items-center gap-6 w-[90%] max-w-6xl">
           {/* Gradient Overlays */}
