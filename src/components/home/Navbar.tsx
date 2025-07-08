@@ -8,8 +8,9 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, logout } = useContext(AuthContext) || { user: null, logout: () => { } };
   const { config } = useAppConfig();
+  const [isOpen, setIsOpen] = useState(false);
 
-  
+
 
 
 
@@ -26,14 +27,56 @@ const Navbar: React.FC = () => {
             <img src={"/line.png"} alt="logo" className='w-[1px] h-[30px] hidden md:block' />
 
             <div className="hidden lg:flex items-center text-sm gap-4 xl:gap-6">
-              {/* <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link> */}
-              {/* <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link> */}
+
+
+              <Link to="/" className="hover:text-secondary transition-colors duration-300">Home</Link>
+              <Link to="/home/campaigns" className="hover:text-secondary transition-colors duration-300">Find Campaigns</Link>
+              <Link to="/support" className="hover:text-secondary transition-colors duration-300">Contact Us</Link>
+
+              <div className="relative">
+                <p
+                  className="cursor-pointer hover:text-secondary transition-colors duration-300"
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  Need Help?
+                </p>
+
+                {isOpen && (
+                  <div
+                    className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+                    onMouseLeave={() => setIsOpen(false)}
+                  >
+                    <Link
+                      to="/faqs"
+                      className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      FAQ
+                    </Link>
+                    <Link
+                      to="/guides"
+                      className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Help Guides
+                    </Link>
+                    <Link
+                      to="/support"
+                      className="block px-4 py-2 hover:bg-gray-100 text-gray-700"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Support
+                    </Link>
+                  </div>
+                )}
+              </div>
+
               {/* <Link to="/home/campaigns/create" className="hover:text-secondary transition-colors duration-300">Start Campaign</Link> */}
               {/* <Link to="/works" className="hover:text-secondary transition-colors duration-300">How it works</Link> */}
               {/* <Link to="/about" className="hover:text-secondary transition-colors duration-300">About</Link> */}
               {/* <Link to="/faqs" className="hover:text-secondary transition-colors duration-300">FAQ's</Link>
               <Link to="/fees" className="hover:text-secondary transition-colors duration-300">Fees & Payouts</Link>
-              <Link to="/support" className="hover:text-secondary transition-colors duration-300">Support</Link>
+              
               <Link to="/blogs" className="hover:text-secondary transition-colors duration-300">Blogs</Link>
               <Link to="/guides" className="hover:text-secondary transition-colors duration-300">Guide</Link>
               <Link to="/home-sec" className="hover:text-secondary transition-colors duration-300">LS Home</Link> */}
@@ -86,8 +129,9 @@ const Navbar: React.FC = () => {
         `}>
           <div className="flex flex-col p-4 gap-4">
             <div className="flex flex-col text-sm gap-4">
-              <Link to="/" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Home</Link>
-              {/* <Link to="/home/campaigns" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Find Campaigns</Link> */}
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="hover:text-secondary w-full transition-colors duration-300">Home</Link>
+              <Link to="/home/campaigns" onClick={() => setIsMenuOpen(false)} className="hover:text-secondary w-full transition-colors duration-300">Find Campaigns</Link>
+              <Link to="/support" className="hover:text-secondary transition-colors duration-300">Contact Us</Link>
               {/* <Link to="/home/campaigns/create" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">Start Campaign</Link> */}
               {/* <Link to="/works" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">How it works</Link> */}
               {/* <Link to="/about" onClick={()=> setIsMenuOpen(false)}  className="hover:text-secondary w-full transition-colors duration-300">About</Link>
@@ -107,20 +151,20 @@ const Navbar: React.FC = () => {
               {user ? <>
 
                 {
-                  <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} onClick={()=> setIsMenuOpen(false)}  className="bg-secondary flex items-center justify-center text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
+                  <Link to={user?.role === "admin" ? "/dashboard" : "/user/dashboard/overview"} onClick={() => setIsMenuOpen(false)} className="bg-secondary flex items-center justify-center text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
                     Dashboard
                   </Link>
                 }
-                <button onClick={logout}  className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
+                <button onClick={logout} className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
                   Logout
                 </button>
               </>
 
                 : <>
-                  <Link to="/signup" onClick={()=> setIsMenuOpen(false)}  className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
+                  <Link to="/signup" onClick={() => setIsMenuOpen(false)} className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 trnasition-trnasform duration-300">
                     Signup
                   </Link>
-                  <Link to="/signin" onClick={()=> setIsMenuOpen(false)}  className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
+                  <Link to="/signin" onClick={() => setIsMenuOpen(false)} className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300">
                     Login
                   </Link>
                 </>

@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
           </h1>
           <p className="text-sm md:text-xs text-white">
             Join us in creating brighter futures by providing hope, delivering
-            help, and fostering lasting change for school in need across South Africa.
+            help, and fostering lasting change for schools in need across South Africa.
           </p>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-center md:justify-start">
             <Link
@@ -126,7 +126,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-bold mb-2 font-onest">Quick Links</h2>
+            <h2 className="text-sm font-bold mb-2 font-onest uppercase">Quick Links</h2>
 
             <Link
               to="/about"
@@ -180,12 +180,8 @@ const Footer: React.FC = () => {
               />
             </div>
             <div className="flex gap-2">
-              <img src="/visa.png" alt="/" className="w-[80px] h-[40px]" />
-              <img
-              src="/mastercard.png"
-              alt="map"
-              className="w-[80px] h-[40px]"
-            />
+              <img src="/mastercard_visa_logo.png" alt="/" className="w-[130px] h-[40px]" />
+              
             
             </div>
           </div>
@@ -206,7 +202,8 @@ const Footer: React.FC = () => {
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <p>© 2025 Give To Grow. All rights reserved</p>
+        <p>© GivetoGrow - Standard Bank SA. Powered by<Link to="https://pfire.co.za/" className="underline"> pfireDigital</Link></p>
+        
         </div>
     </div>
   );
