@@ -411,8 +411,8 @@ const DonationForm: React.FC<{
           </div>
         </div>
 
-        {/* <div className="flex flex-col items-center gap-2">
-          <div className="flex md:flex-row gap-4 mb-6">
+        <div className="flex flex-col items-center gap-2">
+          {/* <div className="flex md:flex-row gap-4 mb-6">
             {["Test Donation", "Cardiant Donation", "Office Donation"].map(
               (method) => (
                 <label
@@ -433,7 +433,7 @@ const DonationForm: React.FC<{
                 </label>
               )
             )}
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {predefinedAmounts.map((amount) => (
@@ -450,7 +450,7 @@ const DonationForm: React.FC<{
               </button>
             ))}
           </div>
-        </div> */}
+        </div>
       </div>
 
       <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex flex-col items-center justify-between">
