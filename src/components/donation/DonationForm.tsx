@@ -314,7 +314,7 @@ const DonationForm: React.FC<{
           // Emit socket event
           socketRef.current?.emit("send-notification", {
             campaigner,
-            "notification made"
+            notification: `A new donation of R${totalAmount.toFixed(2)} has been made to your campaign.`
           }
         );
 
