@@ -314,8 +314,9 @@ const DonationForm: React.FC<{
           // Emit socket event
           socketRef.current?.emit("send-notification", {
             campaigner,
-            notification,
-          });
+            "notification made"
+          }
+        );
 
           // Reset form (optional)
           setIsDonate(true);
