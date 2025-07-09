@@ -398,7 +398,7 @@ const DonationForm: React.FC<{
       {/* Payment Method Selection */}
       <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
         <div className="flex flex-col items-center gap-2">
-          <h2 className="text-xl font-semibold mb-4">Select Payment Method</h2>
+          <h2 className="text-xl font-semibold mb-4">Enter Your Amount </h2>
           <div className="md:col-span-1">
             <input
               type="number"
@@ -411,7 +411,7 @@ const DonationForm: React.FC<{
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-2">
+        {/* <div className="flex flex-col items-center gap-2">
           <div className="flex md:flex-row gap-4 mb-6">
             {["Test Donation", "Cardiant Donation", "Office Donation"].map(
               (method) => (
@@ -450,7 +450,7 @@ const DonationForm: React.FC<{
               </button>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex flex-col items-center justify-between">
