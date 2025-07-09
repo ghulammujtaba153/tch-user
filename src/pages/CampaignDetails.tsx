@@ -522,7 +522,7 @@ const CampaignDetails = () => {
       
 
       {/* comments section */}
-      <Comments campaignId={id} />
+      {/* <Comments campaignId={id} /> */}
 
     </div>
   );

@@ -2,10 +2,12 @@ import React from "react";
 
 interface EFTModalProps {
   onClose: () => void;
+  setType: (type: string) => void;
+  amount: any;
   handleDonate: () => void;
 }
 
-const EFTModal: React.FC<EFTModalProps> = ({ onClose, handleDonate }) => {
+const EFTModal: React.FC<EFTModalProps> = ({ onClose, setType, amount, handleDonate }) => {
   const getReferenceNumber = () => {
     const randomPrefix = [...Array(3)]
       .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
@@ -26,13 +28,21 @@ const EFTModal: React.FC<EFTModalProps> = ({ onClose, handleDonate }) => {
         <h2 className="text-2xl font-semibold text-gray-800">EFT Details</h2>
 
         <div className="text-gray-600 space-y-1">
-          <p><span className="font-semibold">Bank Name:</span> FNB</p>
-          <p><span className="font-semibold">Account Name:</span> Givetogrow NPC</p>
+       
+
+
+          <p><span className="font-semibold">Bank: </span> Standard Bank</p>
+          <p><span className="font-semibold">Account Name:</span> Givetogrow</p>
           <p><span className="font-semibold">Account Number:</span> 1234567899</p>
-          <p><span className="font-semibold">Branch Code:</span> 143334</p>
-          <p><span className="font-semibold">SWIFT Code:</span> 1231</p>
+          <p><span className="font-semibold">Account Type:</span> Cheque</p>
+          <p><span className="font-semibold">Account Number:</span> 1234567899</p>
+          
+          <p><span className="font-semibold">Branch Code:</span> 051001</p>
+          <p><span className="font-semibold">SWIFT Code:</span> SBZAZAJJ</p>
+          <p><span className="font-semibold">Amount:</span> {amount}</p>
+
           <p>
-            <span className="font-semibold">Custom Reference:</span>{" "}
+            <span className="font-semibold">Unique Ref:</span>{" "}
             {getReferenceNumber()}
           </p>
         </div>
@@ -45,7 +55,7 @@ const EFTModal: React.FC<EFTModalProps> = ({ onClose, handleDonate }) => {
             I've Paid
           </button>
           <button
-            onClick={onClose}
+            onClick={()=>setType("ecentric")}
             className="bg-red-500 hover:bg-red-600 text-white py-2 rounded transition-colors"
           >
             Cancel

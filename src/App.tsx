@@ -61,7 +61,7 @@ function App() {
 
   useEffect(() => {
     if (config?.name) {
-      document.title = config.name;
+      document.title = `Home | ${config.name}`;
     }
   }, [config]);
 

@@ -21,7 +21,7 @@ const PaymentTypeModal: React.FC<Props> = ({ onClose, setType, handleDonate }) =
             }}
             className="bg-blue-500 hover:bg-blue-600 text-white py-2 rounded transition-colors"
           >
-            Pay with Card
+            Pay with Debit/Credit Card
           </button>
 
           <button

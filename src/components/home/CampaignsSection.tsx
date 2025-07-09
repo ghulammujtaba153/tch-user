@@ -54,7 +54,7 @@ const CampaignsSection: React.FC = () => {
           <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px] font-onest">CAMPAIGNS</p>
         </div>
         <h1 className='text-4xl font-bold font-onest'>Featured Campaigns</h1>
-        <p className='text-sm text-gray-500 font-sans'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.</p>
+        <p className='text-sm text-gray-500 font-sans'>Your donations will help grow a lasting legacy.</p>
       </div>
 
       {/* Carousel with Campaign Cards */}

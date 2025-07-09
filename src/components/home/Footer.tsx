@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
             </Link>
 
             <Link
-              to="/fees"
+              to="/terms"
               className="text-sm hover:text-secondary transition-colors duration-300"
             >
               Fees & Payouts
@@ -174,7 +174,7 @@ const Footer: React.FC = () => {
             <h2 className="text-sm font-bold mb-2 font-onest">POWERED BY</h2>
             <div className="flex">
               <img
-                src={config?.logo}
+                src="nav-logo.png"
                 alt="logo"
                 className="w-[200px] h-[70px]"
               />
@@ -190,19 +190,19 @@ const Footer: React.FC = () => {
             <h2 className="text-sm font-bold mb-2 font-onest">INFORMATION</h2>
 
             <p className="text-sm font-bold mb-2 font-onest">General Contact</p>
-            <p>info@givetogrow.co.za</p>
+            <p className="text-sm mb-2 ">info@givetogrow.co.za</p>
 
             <p className="text-sm font-bold mb-2 font-onest">Support</p>
-            <p>info@givetogrow.co.za </p>
-            <p>Mon – Fri 9am-4pm</p>
-            <p>Closed Weekends & Public Holidays</p>
+            <p className="text-sm mb-2 ">info@givetogrow.co.za </p>
+            <p className="text-sm mb-2 ">Mon – Fri 9am-4pm</p>
+            <p className="text-sm mb-2 ">Closed Weekends & Public Holidays</p>
           </div>
         </div>
       </div>
       </div>
 
       <div className="flex items-center justify-center w-full">
-        <p>© GivetoGrow - Standard Bank SA. Powered by<Link to="https://pfire.co.za/" className="underline"> pfireDigital</Link></p>
+        <p>© GivetoGrow - Standard Bank SA. Powered by<a href="https://pfire.co.za/" target="_blank" className="underline"> pfireDigital</a></p>
         
         </div>
     </div>
