@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../config/url";
 import axios from "axios";
 import {  useLocation } from "react-router-dom"; // Import useLocation
 import { toast } from "react-toastify";
 import Notification from "../components/notification/Notification";
 import ReactGA from 'react-ga4';
+import { useAppConfig } from "../context/AppConfigContext";
 
 const EmailVerification = () => {
   const [otp, setOtp] = useState<string[]>(Array(4).fill(""));
@@ -13,6 +14,14 @@ const EmailVerification = () => {
   const location = useLocation(); // Use useLocation to access state
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `EmailVerification | ${config.name}`;
+    }
+  }, [config]);
 
   // Retrieve data passed from the previous page
   const { otp: sentOtp, userData } = location.state || {};

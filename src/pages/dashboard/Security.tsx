@@ -1,15 +1,24 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../context/userContext';
 import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import { toast } from 'react-toastify';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Security = () => {
     // State to manage password visibility for each field
     const [showOldPassword, setShowOldPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Security | ${config.name}`;
+    }
+  }, [config]);
 
     // State to manage password values
     const [oldPassword, setOldPassword] = useState('');

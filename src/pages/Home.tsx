@@ -14,6 +14,7 @@ import { AuthContext } from '../context/userContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 interface User {
   userId: string;
@@ -28,6 +29,15 @@ const Home: React.FC = () => {
   const { login } = useContext(AuthContext)!;
   const location = useLocation();
   const navigate = useNavigate();
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Home | ${config.name}`;
+    }
+  }, [config]);
+
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);

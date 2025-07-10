@@ -8,6 +8,7 @@ import AddMember from '../../components/dashboard/AddMember';
 import Loading from '../../components/Loading';
 import DonationBtn from '../../components/dashboard/DonationBtn';
 import { FaCheckCircle, FaClock, FaTimesCircle } from 'react-icons/fa';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const initialFormData = {
   userId: '',
@@ -69,6 +70,15 @@ const Organization = () => {
   const [founderIdPreview, setFounderIdPreview] = useState<string | null>(null);
   const [founderIdFile, setFounderIdFile] = useState<File | null>(null);
   const [isses, setIssues] = useState<any>("");
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Organization | ${config.name}`;
+    }
+  }, [config]);
+
 
   const fetchOrganization = async () => {
     const getFullUrl = (filePath: string) =>

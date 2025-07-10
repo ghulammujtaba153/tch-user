@@ -1,6 +1,17 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAppConfig } from "../context/AppConfigContext";
 
 const Unauthorized = () => {
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Unauthorized | ${config.name}`;
+    }
+  }, [config]);
+
     return (
         <div className="flex items-center justify-center h-screen">
             <div className="text-center">

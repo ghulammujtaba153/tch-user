@@ -5,6 +5,7 @@ import axios from 'axios';
 import Loading from '../../components/Loading';
 import BlogCard from '../../components/blog/BlogCard';
 import ScrollToTop from '../../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 interface Blog {
   _id: string;
@@ -19,6 +20,15 @@ const Blogs: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('All');
   const [search, setSearch] = useState('');
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Blogs | ${config.name}`;
+    }
+  }, [config]);
+
 
   const fetch = async () => {
     try {

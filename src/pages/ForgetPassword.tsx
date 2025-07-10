@@ -1,5 +1,5 @@
 import axios from "axios";
-import  { useState, useTransition } from "react";
+import  { useEffect, useState, useTransition } from "react";
 
 import { toast } from "react-toastify";
 import { BASE_URL } from "../config/url";
@@ -14,6 +14,14 @@ const ForgetPassword = () => {
   const [success, setSuccess] = useState('');
 
   const { config } = useAppConfig();
+  ;
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `ForgetPass | ${config.name}`;
+    }
+  }, [config]);
   
 
   const handleChange = (e:any) => {

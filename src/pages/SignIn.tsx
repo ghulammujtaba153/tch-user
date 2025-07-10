@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useState, useTransition } from 'react';
+import { useContext, useEffect, useState, useTransition } from 'react';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import { toast } from 'react-toastify';
@@ -30,12 +30,20 @@ const SignIn = () => {
       profilePicture: "",
       organization: null
     });
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Signin | ${config.name}`;
+    }
+  }, [config]);
 
     const handleChange = (e : any) => {
         setData({ ...data, [e.target.name]: e.target.value });
     };
 
-    const { config } = useAppConfig();
+  
 
     const handleSubmit = async (e : any) => {
         e.preventDefault();

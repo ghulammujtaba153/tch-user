@@ -6,6 +6,7 @@ import { BASE_URL } from '../../config/url';
 import AddPaymentModal from '../../components/dashboard/AddPaymentMethod';
 import { toast } from 'react-toastify';
 import BankAccount from '../../components/dashboard/BankAccount';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Withdrawal = () => {
   const { user } = useContext(AuthContext)!;
@@ -15,6 +16,14 @@ const Withdrawal = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [withdrawalAmount, setWithdrawalAmount] = useState<number>(0);
   const [apiLoading, setAPILoading] = useState<boolean>(false);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `WithDrawal | ${config.name}`;
+    }
+  }, [config]);
 
   useEffect(() => {
     const fetchWithdrawalData = async () => {

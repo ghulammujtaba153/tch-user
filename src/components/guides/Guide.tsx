@@ -7,12 +7,21 @@ import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Loading from '../Loading';
 import ReactGA from 'react-ga4';
 import ScrollToTop from '../../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Guide = () => {
   const { id } = useParams();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Guide | ${config.name}`;
+    }
+  }, [config]);
 
 
   ReactGA.event({

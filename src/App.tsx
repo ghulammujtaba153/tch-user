@@ -62,7 +62,20 @@ function App() {
   useEffect(() => {
     if (config?.name) {
       document.title = `Home | ${config.name}`;
+     // Update favicon
+    
+     // Update favicon
+    let link = document.querySelector("link[rel*='icon']") as HTMLLinkElement;
+
+    if (!link) {
+      link = document.createElement("link");
+      link.rel = "shortcut icon";
+      link.type = "image/png";
+      document.head.appendChild(link);
     }
+
+    link.href = "/Favicon Crowdfunding.png"; 
+  }
   }, [config]);
 
   

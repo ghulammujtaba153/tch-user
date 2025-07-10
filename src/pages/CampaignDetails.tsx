@@ -18,6 +18,7 @@ import Loading from "../components/Loading";
 import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import ReactGA from "react-ga4";
 import ScrollToTop from "../utils/ScrollToTop";
+import { useAppConfig } from "../context/AppConfigContext";
 
 
 const getFullUrl = (filePath: string) =>
@@ -35,6 +36,14 @@ const CampaignDetails = () => {
   const [isPending, startTransition] = useTransition();
   const [status, setStatus] = useState("");
   const [campaigner, setCampaigner] = useState(false);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `CampaignDetails | ${config.name}`;
+    }
+  }, [config]);
 
   useEffect(() => {
     const path = location.pathname;

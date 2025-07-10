@@ -8,6 +8,7 @@ import axios from "axios";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import Loading from "../../components/Loading";
+import { useAppConfig } from "../../context/AppConfigContext";
 
 const MyCampaigns = () => {
   const { user } = useContext(AuthContext) || {};
@@ -15,6 +16,14 @@ const MyCampaigns = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   // const [organization, setOrganization] = useState(null);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `MyCampaigns | ${config.name}`;
+    }
+  }, [config]);
 
   
 

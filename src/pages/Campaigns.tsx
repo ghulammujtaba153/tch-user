@@ -6,6 +6,7 @@ import { FiFilter } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 interface Campaign {
   _id: string;
@@ -34,6 +35,14 @@ const Campaigns = () => {
   const [filteredCampaigns, setFilteredCampaigns] = useState<Campaign[]>([]);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState("");
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Campaigns | ${config.name}`;
+    }
+  }, [config]);
 
   
 

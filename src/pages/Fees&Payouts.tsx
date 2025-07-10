@@ -4,12 +4,21 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../config/url";
 import { Link } from "react-router-dom";
 import ScrollToTop from "../utils/ScrollToTop";
+import { useAppConfig } from "../context/AppConfigContext";
 
 const FeesPayouts: React.FC = () => {
   const [data, setData] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [mainLoaded, setMainLoaded] = useState(false);
   const [secondaryLoaded, setSecondaryLoaded] = useState(false);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Fees | ${config.name}`;
+    }
+  }, [config]);
 
   useEffect(() => {
     const fetchData = async () => {

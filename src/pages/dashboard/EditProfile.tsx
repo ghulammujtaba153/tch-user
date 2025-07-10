@@ -4,6 +4,7 @@ import { BASE_URL } from "../../config/url";
 import axios from "axios";
 import { AuthContext } from "../../context/userContext";
 import upload from "../../utils/upload";
+import { useAppConfig } from "../../context/AppConfigContext";
 
 const EditProfile = () => {
   const { user } = useContext(AuthContext)!;
@@ -17,6 +18,14 @@ const EditProfile = () => {
     dateOfBirth: "",
     nationality: "",
   });
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Profile | ${config.name}`;
+    }
+  }, [config]);
 
   useEffect(() => {
     const fetchData = async () => {

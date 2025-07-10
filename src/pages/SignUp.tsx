@@ -23,6 +23,14 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [isPending, setIsPending] = useState(false);
   const [passwordPolicy, setPasswordPolicy] = useState<any>({});
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Signup | ${config.name}`;
+    }
+  }, [config]);
 
   const location = useLocation();
 
@@ -42,7 +50,7 @@ const SignUp = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const { config } = useAppConfig();
+  
 
   const fetchPasswordPolicy = async () => {
     try {

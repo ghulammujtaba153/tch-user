@@ -7,6 +7,7 @@ import FundsGraph from '../../components/dashboard/FundsGraph';
 import { AuthContext } from '../../context/userContext';
 import { BASE_URL } from '../../config/url';
 import axios from 'axios';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 
 
@@ -17,6 +18,14 @@ const MainDashboard = () => {
     const [error, setError] = useState(null);
     const [basicInfo, setBasicInfo] = useState<any>(null);
     const [latestDonations, setLatestDonations] = useState<any>(null);
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Dashboard | ${config.name}`;
+    }
+  }, [config]);
 
     console.log("user from context ",user);
 

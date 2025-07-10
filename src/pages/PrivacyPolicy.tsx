@@ -4,6 +4,7 @@ import { BASE_URL } from "../config/url";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Loading from "../components/Loading";
+import { useAppConfig } from "../context/AppConfigContext";
 
 interface DynamicPageData {
   _id: string;
@@ -16,6 +17,14 @@ interface DynamicPageData {
 const PrivacyPolicy = () => {
   const [data, setData] = useState<DynamicPageData | null>(null);
     const [loading, setLoading] = useState(false);
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Privacy | ${config.name}`;
+    }
+  }, [config]);
 
   const fetch = async () => {
       try {

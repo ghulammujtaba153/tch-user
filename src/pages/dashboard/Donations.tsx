@@ -4,6 +4,7 @@ import axios from 'axios';
 import { BASE_URL } from '../../config/url';
 import DonationsTabs from '../../components/donation/DonationTabs';
 import Loading from '../../components/Loading';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 
 
@@ -14,6 +15,14 @@ const Donations = () => {
     const [donations, setDonations]=useState([]);
     const [loading, setLoading] =useState(false);
     const [error, setError]=useState(null);
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Donation | ${config.name}`;
+    }
+  }, [config]);
 
     // useEffect(()=>{
     //     if(user?.userId){

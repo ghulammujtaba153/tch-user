@@ -1,10 +1,11 @@
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { useParams } from 'react-router-dom';
 import { BASE_URL } from '../config/url';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Notification from '../components/notification/Notification';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 const NewPassword = () => {
   const [hide, setHide] = useState(true);
@@ -18,6 +19,14 @@ const NewPassword = () => {
   
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `NewPassword | ${config.name}`;
+    }
+  }, [config]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

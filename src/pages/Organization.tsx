@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import Loading from '../components/Loading';
 import CampaignTabs from '../components/organizationProfile/CampaignTabs';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 
 const getFullUrl = (filePath: string) =>
@@ -20,6 +21,14 @@ const Organization = () => {
     color: "#3b82f6",
     textColor: "#fff",
   });
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Organization | ${config.name}`;
+    }
+  }, [config]);
 
   const fetchDonationBtn = async () => {
     try {

@@ -1,9 +1,10 @@
 import axios from 'axios';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
 import { BASE_URL } from '../config/url';
 import ReactGA from 'react-ga4';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 interface FormData {
   firstName: string;
@@ -39,6 +40,14 @@ const Support = () => {
   const [fileName, setFileName] = useState('');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Support | ${config.name}`;
+    }
+  }, [config]);
 
  
 

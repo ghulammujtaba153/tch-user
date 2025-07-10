@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import Organization from "./Organization";
 import Loading from "../../components/Loading";
 import AddMember from "../../components/dashboard/AddMember";
+import { useAppConfig } from "../../context/AppConfigContext";
 
 
 
@@ -29,6 +30,14 @@ const Profile = () => {
     nationality: "",
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Profile | ${config.name}`;
+    }
+  }, [config]);
 
 
   let tabs = [

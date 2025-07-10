@@ -5,6 +5,7 @@ import { BASE_URL } from '../config/url';
 import CategoryCard from '../components/faqs/CategoryCard';
 import Loading from '../components/Loading';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 interface Category {
   _id: string;
@@ -17,6 +18,14 @@ interface Category {
 const FAQsCategory = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+    const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `FAQsCategory | ${config.name}`;
+    }
+  }, [config]);
 
     const fetchCategories = async () => {
         try {

@@ -5,11 +5,20 @@ import { BASE_URL } from '../../config/url';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Loading from '../../components/Loading';
 import ScrollToTop from '../../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const Blog = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [blog, setBlog] = useState<any>(null);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Blog | ${config.name}`;
+    }
+  }, [config]);
 
   const fetchBlog = async () => {
     try {

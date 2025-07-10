@@ -17,7 +17,7 @@ import EFTModal from "./EFTModal";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-type PaymentMethod = "Test Donation" | "Cardiant Donation" | "Office Donation";
+type PaymentMethod = "Test Donation" | "Cardiant Donation" | "Office Donation" | "Visa/Debit Card" | "EFT";
 
 interface FormData {
   donorId: string | undefined;
@@ -59,7 +59,8 @@ const DonationForm: React.FC<{
   const [isPending, startTransition] = useTransition();
   const socketRef = useRef<Socket | null>(null);
   const [paymentModal, setPaymentModal] = useState(false);
-  const [type, setType] = useState("ecentric");
+  const [type, setType] = useState<string | null>(null); // Only for modal control
+  const [selectedPaymentType, setSelectedPaymentType] = useState<PaymentMethod>(() => "Visa/Debit Card");
   console.log("type", type);
 
   const handlePaymentModal = () => {
@@ -99,7 +100,7 @@ const DonationForm: React.FC<{
     province: "",
     address: "",
     city: "",
-    
+
     anonymous: false,
   });
 
@@ -167,7 +168,7 @@ const DonationForm: React.FC<{
       return false;
     }
 
-    
+
 
     if (!agreeToTerms) {
       setErrors("Please agree to the Terms of Service");
@@ -201,7 +202,7 @@ const DonationForm: React.FC<{
     const scriptExists = document.querySelector("script[src*='ecentric']");
     if (!scriptExists) {
       const script = document.createElement("script");
-      script.src = "https://sandbox.ecentric.co.za/HPP/API/js";
+      script.src = "https://secure1.ecentricpaymentgateway.co.za/HPP";
       script.async = true;
       script.onload = () => console.log("Ecentric Lightbox loaded");
       script.onerror = () => console.error("Failed to load Ecentric script");
@@ -215,8 +216,8 @@ const DonationForm: React.FC<{
 
     const donationData = {
       ...formData,
-      tipAmount: (calculateTipAmount() - parseFloat(formData.amount) ).toFixed(2).toString(),
-      amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(), 
+      tipAmount: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
+      amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
       paymentMethod: "EFT"
     };
 
@@ -228,10 +229,19 @@ const DonationForm: React.FC<{
       toast.error("error")
     }
 
-    
+
 
 
   };
+
+
+  const handleBothDonate = () => {
+    if (type == "Visa/Debit Card") {
+      handleDonate()
+    } else {
+      setType("eft")
+    }
+  }
 
   const handleDonate = async () => {
     if (!validateForm()) return;
@@ -293,8 +303,8 @@ const DonationForm: React.FC<{
           // Save donation with total amount (including tip)
           const donationData = {
             ...formData,
-            tipAmount: (calculateTipAmount() - parseFloat(formData.amount) ).toFixed(2).toString(),
-            amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(), 
+            tipAmount: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
+            amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
             paymentMethod: "card",
             status: "completed"
           };
@@ -316,7 +326,7 @@ const DonationForm: React.FC<{
             campaigner,
             notification: `A new donation of R${totalAmount.toFixed(2)} has been made to your campaign.`
           }
-        );
+          );
 
           // Reset form (optional)
           setIsDonate(true);
@@ -334,7 +344,7 @@ const DonationForm: React.FC<{
             address: "",
             postalCode: "",
             city: "",
-            
+
             anonymous: false,
           });
           setSelectedAmount("150");
@@ -377,28 +387,17 @@ const DonationForm: React.FC<{
         />
       )}
 
-      {paymentModal && (
-        <PaymentTypeModal
-          onClose={handlePaymentModal}
-          setType={(type) => {
-            setType(type);
-            if (type === "card") {
-              handleDonate();
-            }
-          }}
-          handleDonate={handleDonate}
-        />
-      )}
+
 
       {type === "eft" && (
 
-        <EFTModal onClose={handlePaymentModal} setType={()=>setType("ecentric")} amount={parseFloat(formData.amount) + calculateTipAmount()} handleDonate={handleEftDonate} />
+        <EFTModal onClose={handlePaymentModal} setType={() => setType("ecentric")} amount={parseFloat(formData.amount) + calculateTipAmount()} handleDonate={handleEftDonate} />
       )}
 
       {/* Payment Method Selection */}
       <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
         <div className="flex flex-col items-center gap-2">
-          <h2 className="text-xl font-semibold mb-4">Enter Your Amount </h2>
+          <h2 className="text-xl font-semibold mb-4">Select Payment Method </h2>
           <div className="md:col-span-1">
             <input
               type="number"
@@ -412,39 +411,32 @@ const DonationForm: React.FC<{
         </div>
 
         <div className="flex flex-col items-center gap-2">
-          {/* <div className="flex md:flex-row gap-4 mb-6">
-            {["Test Donation", "Cardiant Donation", "Office Donation"].map(
-              (method) => (
-                <label
-                  key={method}
-                  className="flex items-center cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value={method}
-                    checked={selectedMethod === method}
-                    onChange={(e) =>
-                      setSelectedMethod(e.target.value as PaymentMethod)
-                    }
-                    className="form-radio bg-transparent h-4 w-4 accent-secondary border-gray-300"
-                  />
-                  <span className="ml-2 text-gray-700">{method}</span>
-                </label>
-              )
-            )}
-          </div> */}
+          <div className="flex md:flex-row flex-col gap-4 mb-6">
+            {( ["Visa/Debit Card", "EFT"] as PaymentMethod[] ).map((method: PaymentMethod) => (
+              <label key={method} className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value={method}
+                  checked={selectedPaymentType === method}
+                  onChange={(e) => setSelectedPaymentType(e.target.value as PaymentMethod)}
+                  className="form-radio bg-transparent h-4 w-4 accent-secondary border-gray-300"
+                />
+                <span className="ml-2 text-gray-700">{method}</span>
+              </label>
+            ))}
+          </div>
+
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
             {predefinedAmounts.map((amount) => (
               <button
                 key={amount.value}
                 onClick={() => handleAmountSelect(amount.value)}
-                className={`px-4 text-sm w-[80px] py-2 rounded-full transition-colors duration-200 ${
-                  selectedAmount === amount.value
+                className={`px-4 text-sm w-[80px] py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
                     ? "bg-secondary text-white"
                     : "bg-transparent border border-secondary text-black hover:bg-secondary/10"
-                }`}
+                  }`}
               >
                 {amount.label}
               </button>
@@ -461,11 +453,10 @@ const DonationForm: React.FC<{
             <button
               key={tip}
               onClick={() => handleTipSelect(tip)}
-              className={`px-4 py-2 rounded-full border ${
-                selectedTip === tip
+              className={`px-4 py-2 rounded-full border ${selectedTip === tip
                   ? "bg-secondary text-white"
                   : "bg-white text-black"
-              }`}
+                }`}
             >
               {tip}%
             </button>
@@ -677,7 +668,11 @@ const DonationForm: React.FC<{
           disabled={isPending}
           onClick={() => {
             if (!validateForm()) return;
-            setPaymentModal(true);
+            if (selectedPaymentType === "Visa/Debit Card") {
+              handleDonate(); // Show Ecentric payment lightbox
+            } else if (selectedPaymentType === "EFT") {
+              setType("eft"); // Show EFT modal
+            }
           }}
           className="bg-secondary text-white py-3 px-6 mt-4 rounded-full font-xs hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >

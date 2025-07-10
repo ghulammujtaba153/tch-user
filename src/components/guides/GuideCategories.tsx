@@ -5,10 +5,19 @@ import { BASE_URL } from '../../config/url';
 import CategoryCard from './CategoryCard';
 import Loading from '../Loading';
 import ScrollToTop from '../../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const GuideCategories = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `GuidesCategories | ${config.name}`;
+    }
+  }, [config]);
 
   const fetch = async () => {
     try {

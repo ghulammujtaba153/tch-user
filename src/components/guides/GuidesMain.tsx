@@ -6,11 +6,20 @@ import { toast } from 'react-toastify';
 import GuideCard from './GuideCard'; // Note: Capitalized component name
 import Loading from '../Loading';
 import ScrollToTop from '../../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
 
 const GuidesMain = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<any[]>([]);
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Guides | ${config.name}`;
+    }
+  }, [config]);
 
   const fetchData = async () => {
     try {

@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppConfig } from "../../context/AppConfigContext";
 import { Link } from "react-router-dom";
 
 const Launch = () => {
   const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Launch | ${config.name}`;
+    }
+  }, [config]);
 
   return (
     <div className="min-h-screen w-full">

@@ -8,6 +8,7 @@ import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import ReactGA from 'react-ga4';
 import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../context/AppConfigContext';
 
 interface CampaignFormData {
   image: File | null;
@@ -55,6 +56,14 @@ const CreateCampaignForm: React.FC = () => {
   const [error, setError] = useState('');
   const { token, user } = useContext(AuthContext) || { token: null, user: null };
   const [isPending, startTransition] = useTransition();
+  const { config } = useAppConfig();
+
+
+  useEffect(() => {
+    if (config?.name) {
+      document.title = `Create | ${config.name}`;
+    }
+  }, [config]);
 
 
   const fetch = async ()=>{
