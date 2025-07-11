@@ -202,7 +202,7 @@ const DonationForm: React.FC<{
     const scriptExists = document.querySelector("script[src*='ecentric']");
     if (!scriptExists) {
       const script = document.createElement("script");
-      script.src = "https://secure1.ecentricpaymentgateway.co.za/HPP";
+      script.src = "https://secure1.ecentricpaymentgateway.co.za/HPP/API/js";
       script.async = true;
       script.onload = () => console.log("Ecentric Lightbox loaded");
       script.onerror = () => console.error("Failed to load Ecentric script");
