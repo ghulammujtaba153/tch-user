@@ -12,7 +12,7 @@ const HeroSection: React.FC = () => {
 
       {/* Hero Carousel */}
       <div className="w-full h-[300px] md:h-[560px] relative overflow-hidden ">
-        <Carousel
+        {/* <Carousel
           showThumbs={false}
           autoPlay
           infiniteLoop
@@ -41,10 +41,13 @@ const HeroSection: React.FC = () => {
               className="w-full h-full object-cover"
             />
           </div>
-        </Carousel>
+        </Carousel> */}
+
+        <img src="/hero-img1.jpg" alt="/" className="w-full h-full object-cover" />
+
 
         {/* Text overlay */}
-        <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 w-[90%] flex flex-col justify-end">
+        {/* <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 w-[90%] flex flex-col justify-end">
           <div className="flex flex-col gap-2 text-white mb-4 w-full">
             <div className="flex text-white w-full">
               <p className="text-2xl md:text-4xl font-bold">Make.</p>
@@ -61,7 +64,7 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Buttons */}
