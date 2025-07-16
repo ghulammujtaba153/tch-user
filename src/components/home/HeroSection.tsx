@@ -84,10 +84,10 @@ const HeroSection: React.FC = () => {
         </Link>
 
         <Link
-          to={"/user/dashboard/profile"}
+          to={"/faqs"}
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
-          Register Organization
+          FAQ's
         </Link>
       </div>
     </div>

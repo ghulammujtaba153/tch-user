@@ -7,16 +7,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // sora: ['Sora', 'sans-serif'],
-        // libre: ['"Libre Franklin"', 'sans-serif'],
-        // news: ['"News Cycle"', 'sans-serif'],
-        // onest: ['Onest', 'sans-serif'],
-
-        sans: ['"Libre Franklin"', 'sans-serif'],
-        onest: ['"News Cycle"', 'sans-serif'],
+        sans: ['"Benton Sans"', 'sans-serif'],
+        onest: ['"Benton Sans"', 'sans-serif'],
       },
       colors: {
         primary: "#BFDCFC", 
+        primarylight: "#0051ff",
         secondary: "#0033AA",
         bg: "#F2F6FF",
       },
@@ -24,4 +20,3 @@ export default {
   },
   plugins: [],
 }
-

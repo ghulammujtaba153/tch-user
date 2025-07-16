@@ -3,6 +3,7 @@ import { BASE_URL } from "../../../config/url";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Notification from "../../notification/Notification";
+import { useAppConfig } from "../../../context/AppConfigContext";
 
 interface OtpCardProps {
   id: string;
@@ -14,6 +15,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
   // const navigate = useNavigate();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { config } = useAppConfig();
 
   // Handle input change & auto-focus next field
   const handleChange = (index: number, value: string) => {
@@ -76,14 +78,14 @@ const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
       <div className="w-full max-w-md bg-white p-6 rounded-xxxl shadow-lg">
         {/* Logo */}
         <div className="flex items-center justify-center mb-4">
-          <img src="/nav-logo.png" alt="logo" className="w-[180px] h-[50px]" />
+          <img src={config.logo} alt="logo" className="h-[60px] w-[190px]" />
         </div>
 
         {/* Heading */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900">Email Verification</h1>
-          <p className="text-gray-500 mt-2">Enter the verification code sent to your email:</p>
-          <p className="text-secondary font-semibold">example@gmail.com</p>
+          <p className="text-gray-500 mt-2">Enter the verification code sent to your email</p>
+          {/* <p className="text-secondary font-semibold">example@gmail.com</p> */}
         </div>
 
         {/* OTP Inputs */}

@@ -116,7 +116,7 @@ const Support = () => {
       email: '',
       confirmEmail: '',
       phone: '',
-      existingProject: '',
+      existingProject: 'no',
       department: '',
       subject: '',
       message: '',
@@ -145,7 +145,7 @@ const Support = () => {
     <div className='pt-20 min-h-screen  px-4'>
       <ScrollToTop />
       <div className='max-w-[800px] bg-white border border-gray-200 py-8 rounded-[20px] mx-auto px-6 shadow-md mb-10'>
-        <h1 className='text-2xl font-bold text-center text-gray-800'>We're here for you</h1>
+        <h1 className='text-2xl font-bold text-center text-gray-800'>We're here for you!</h1>
         <div className='w-full flex items-center justify-center mt-4'>
           <p className='max-w-[500px] text-center text-gray-500 mt-2'>
             Need help? Our team of Customer Support Specialists is here to guide you throughout your crowdfunding journey.
@@ -158,10 +158,7 @@ const Support = () => {
             <p>Phone Call</p>
             <p className='text-blue-600 font-bold'>+1 (123) 456-7890</p>
           </div> */}
-          <div className='flex flex-col items-center gap-2'>
-            <p>Email</p>
-            <p className='text-blue-600 font-bold'>info@givetogrow.co.za</p>
-          </div>
+          
         </div>
 
         {/* Form */}
@@ -241,38 +238,7 @@ const Support = () => {
             </div>
           </div>
 
-          {/* Project radio buttons */}
-          <div className='flex flex-col gap-2'>
-            <label className='font-medium'>Do you have any existing project?*</label>
-            <div className='flex gap-6 mt-1'>
-              <div className='flex items-center gap-2'>
-                <input
-                  type='radio'
-                  name='existingProject'
-                  id='yes'
-                  value="yes"
-                  checked={formData.existingProject === 'yes'}
-                  onChange={handleChange}
-                  className='h-4 w-4 text-blue-600 focus:ring-blue-500'
-                  required
-                />
-                <label htmlFor="yes">Yes</label>
-              </div>
-              <div className='flex items-center gap-2'>
-                <input
-                  type='radio'
-                  name='existingProject'
-                  id='no'
-                  value="no"
-                  checked={formData.existingProject === 'no'}
-                  onChange={handleChange}
-                  className='h-4 w-4 text-blue-600 focus:ring-blue-500'
-                />
-                <label htmlFor="no">No</label>
-              </div>
-            </div>
-            {errors.existingProject && <p className="text-red-500 text-sm">{errors.existingProject}</p>}
-          </div>
+         
 
           {/* Department and subject */}
           <div className='flex flex-col md:flex-row w-full gap-4'>

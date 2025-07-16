@@ -64,7 +64,7 @@ const ForgetPassword = () => {
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src={config?.logo} alt="logo" className="w-[250px] h-[100px]" />
+          <img src={config?.logo} alt="logo" className="h-[60px] w-[190px]" />
         </div>
 
         <div className="flex flex-col items-center justify-center">

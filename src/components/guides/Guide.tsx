@@ -58,14 +58,13 @@ const Guide = () => {
   return (
     <div className="max-w-[1200px] mx-auto p-4 mt-[100px]">
       <ScrollToTop />
-      <Link to="/guides" className='flex items-center gap-2 mb-4 w-10 h-10 hover:bg-gray-300 rounded-full p-2 cursor-pointer'>
-        <ArrowLeftIcon className="w-6 h-6"/>
-      </Link>
+      <ArrowLeftIcon className="w-6 h-6 cursor-pointer my-4" onClick={() => window.history.back()} />
+      
       {/* Cover Image */}
       <img
         src={data.image}
         alt={data.title}
-        className={`w-full h-full object-cover rounded-lg transition-all duration-500 ${
+        className={`w-full h-full object-cover shadow-lg mb-12 rounded-lg transition-all duration-500 ${
             loaded ? "blur-0 opacity-100" : "blur-md opacity-60 animate-pulse"
           }`}
           onLoad={() => setLoaded(true)}
@@ -73,7 +72,7 @@ const Guide = () => {
       />
 
       {/* Title & Description */}
-      <h1 className="text-3xl font-bold mb-2">{data.title}</h1>
+      <h1 className="text-3xl font-bold mb-2 text-secondary">{data.title}</h1>
       <p className="text-gray-600 mb-4">{data.description}</p>
 
       {/* Rich Text Content */}

@@ -15,7 +15,7 @@ const CategoryCard = ({ data }: { data: any }) => {
       <img
         src={data.icon}
         alt={data.name}
-        className='w-24 h-24 object-contain mb-3 rounded-full border'
+        className='w-24 h-24 object-cover mb-3 rounded-full border'
       />
       <p className='text-lg font-medium text-center'>{data.name}</p>
     </Link>

@@ -51,7 +51,7 @@ const PrivacyPolicy = () => {
       <ScrollToTop />
 
 
-      <h1 className="text-3xl font-bold text-center mb-10">{data?.heading}</h1>
+      <h1 className="text-3xl font-bold text-center mb-10 text-secondary my-8">{data?.heading}</h1>
 
       
       {/* Render HTML content */}

@@ -38,7 +38,7 @@ const GuideCategories = () => {
   if(loading) return <div className='flex justify-center items-center min-h-screen'><Loading/></div>
 
   return (
-    <div className='max-w-[1200px] mx-auto mt-[100px] px-4'>
+    <div className='max-w-[1200px] h-screen mx-auto mt-[100px] px-4'>
       <ScrollToTop />
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />

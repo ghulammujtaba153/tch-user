@@ -7,6 +7,7 @@ import GuideCard from './GuideCard'; // Note: Capitalized component name
 import Loading from '../Loading';
 import ScrollToTop from '../../utils/ScrollToTop';
 import { useAppConfig } from '../../context/AppConfigContext';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const GuidesMain = () => {
   const { id } = useParams();
@@ -42,12 +43,14 @@ const GuidesMain = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 mt-[100px]">
+    <div className="max-w-6xl mx-auto px-4 mt-[100px] h-screen">
       <ScrollToTop />
+      <FaArrowLeft className="text-2xl cursor-pointer" onClick={() => window.history.back()}/>
+
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
         <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px]">
-          GUIDE
+          HELP GUIDE
         </p>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">

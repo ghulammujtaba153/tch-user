@@ -3,5 +3,41 @@
 @tailwind utilities;
 
 body {
-    background-color:rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+}
+
+/* Use consistent font-family and correct weights */
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Benton_Sans-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/BentonSans-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/BentonSans-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Benton_Sans-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MyFont';
+  src: url('/fonts/Benton_Sans-black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
 }
