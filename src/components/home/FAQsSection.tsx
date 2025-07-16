@@ -75,10 +75,11 @@ const FAQsSection: React.FC = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto py-16 flex flex-col gap-2">
-      <FaArrowLeft
-        onClick={() => history.back()}
-        className="w-6 h-6 cursor-pointer"
-      />
+      <div className='flex items-center px-2 gap-2 cursor-pointer' onClick={() => window.history.back()}>
+        <FaArrowLeft className="w-6 h-6 cursor-pointer" />
+        <p className='text-sm'>Back to Categories</p>
+      </div>
+
       <div className="flex items-center justify-center gap-2">
         <img
           src="/home-header.png"
@@ -87,7 +88,7 @@ const FAQsSection: React.FC = () => {
           className="w-[15px] h-[10px]"
         />
         <p className="text-xs font-bold tracking-[3.5px] font-onest">
-          {data?.heading}
+          {data?.questions[0]?.category?.title || 'FAQs'}
         </p>
       </div>
 
@@ -98,13 +99,14 @@ const FAQsSection: React.FC = () => {
       <div className="w-full flex justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4 px-2">
           {data.questions.map((q, index) => (
-            <Question
-              key={q._id}
-              question={q.question}
-              answer={q.answer}
-              isOpen={openIndex === index}
-              onToggle={() => setOpenIndex(openIndex === index ? null : index)}
-            />
+            <div key={q._id} className="h-full">
+              <Question
+                question={q.question}
+                answer={q.answer}
+                isOpen={openIndex === index}
+                onToggle={() => setOpenIndex(openIndex === index ? null : index)}
+              />
+            </div>
           ))}
         </div>
       </div>

@@ -167,7 +167,7 @@ const Footer: React.FC = () => {
               <h2 className="text-sm font-bold mb-2 text-primarylight font-onest">POWERED BY</h2>
               <div className="flex">
                 <img
-                  src="nav-logo.png"
+                  src="SBBluelogo.png"
                   alt="logo"
                   className="w-[200px] h-[70px]"
                 />

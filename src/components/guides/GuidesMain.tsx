@@ -45,7 +45,10 @@ const GuidesMain = () => {
   return (
     <div className="max-w-6xl mx-auto px-4 mt-[100px] h-screen">
       <ScrollToTop />
-      <FaArrowLeft className="text-2xl cursor-pointer" onClick={() => window.history.back()}/>
+      <div className='flex items-center px-2 gap-2 cursor-pointer' onClick={() => window.history.back()}>
+        <FaArrowLeft className="w-6 h-6 cursor-pointer" />
+        <p className='text-sm'>Back to Categories</p>
+      </div>
 
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />

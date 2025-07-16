@@ -8,6 +8,7 @@ import Loading from '../Loading';
 import ReactGA from 'react-ga4';
 import ScrollToTop from '../../utils/ScrollToTop';
 import { useAppConfig } from '../../context/AppConfigContext';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Guide = () => {
   const { id } = useParams();
@@ -58,7 +59,10 @@ const Guide = () => {
   return (
     <div className="max-w-[1200px] mx-auto p-4 mt-[100px]">
       <ScrollToTop />
-      <ArrowLeftIcon className="w-6 h-6 cursor-pointer my-4" onClick={() => window.history.back()} />
+      <div className='flex items-center px-2 gap-2 cursor-pointer' onClick={() => window.history.back()}>
+        <FaArrowLeft className="w-6 h-6 cursor-pointer" />
+        <p className='text-sm'>Back to Guides</p>
+      </div>
       
       {/* Cover Image */}
       <img

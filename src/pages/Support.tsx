@@ -14,6 +14,7 @@ interface FormData {
   phone: string;
   existingProject: string;
   department: string;
+  enquiryType: string;
   subject: string;
   message: string;
   image: File | null;
@@ -29,6 +30,7 @@ const Support = () => {
     phone: '',
     existingProject: '',
     department: '',
+    enquiryType: '',
     subject: '',
     message: '',
     image: null,
@@ -42,14 +44,21 @@ const Support = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { config } = useAppConfig();
 
+  // Enquiry type options
+  const enquiryTypes = [
+    'Donor / Donation',
+    'Campaign',
+    'General Enquiry',
+    'Media',
+    'Report Fraud',
+    'Support'
+  ];
 
   useEffect(() => {
     if (config?.name) {
       document.title = `Support | ${config.name}`;
     }
   }, [config]);
-
- 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -118,6 +127,7 @@ const Support = () => {
       phone: '',
       existingProject: 'no',
       department: '',
+      enquiryType: '',
       subject: '',
       message: '',
       image: null,
@@ -142,7 +152,7 @@ const Support = () => {
   };
 
   return (
-    <div className='pt-20 min-h-screen  px-4'>
+    <div className='pt-20 min-h-screen px-4'>
       <ScrollToTop />
       <div className='max-w-[800px] bg-white border border-gray-200 py-8 rounded-[20px] mx-auto px-6 shadow-md mb-10'>
         <h1 className='text-2xl font-bold text-center text-gray-800'>We're here for you!</h1>
@@ -150,15 +160,6 @@ const Support = () => {
           <p className='max-w-[500px] text-center text-gray-500 mt-2'>
             Need help? Our team of Customer Support Specialists is here to guide you throughout your crowdfunding journey.
           </p>
-        </div>
-
-        {/* Contact info */}
-        <div className='flex flex-col md:flex-row text-gray-500 items-center justify-center mt-8 gap-10'>
-          {/* <div className='flex flex-col items-center gap-2'>
-            <p>Phone Call</p>
-            <p className='text-blue-600 font-bold'>+1 (123) 456-7890</p>
-          </div> */}
-          
         </div>
 
         {/* Form */}
@@ -238,9 +239,7 @@ const Support = () => {
             </div>
           </div>
 
-         
-
-          {/* Department and subject */}
+          {/* Department and Enquiry Type */}
           <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
               <label htmlFor="department" className='font-medium'>Select the department*</label>
@@ -260,18 +259,39 @@ const Support = () => {
               {errors.department && <p className="text-red-500 text-sm">{errors.department}</p>}
             </div>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="subject" className='font-medium'>Subject*</label>
-              <input
-                type="text"
-                name="subject"
-                id="subject"
-                value={formData.subject}
+              <label htmlFor="enquiryType" className='font-medium'>Enquiry Type*</label>
+              <select
+                name="enquiryType"
+                id="enquiryType"
+                value={formData.enquiryType}
                 onChange={handleChange}
-                className={`border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                className={`border ${errors.enquiryType ? 'border-red-500' : 'border-gray-300'} bg-transparent rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 required
-              />
-              {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
+              >
+                <option value="">Select enquiry type</option>
+                {enquiryTypes.map((type) => (
+                  <option key={type} value={type.toLowerCase().replace(' ', '_')}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+              {errors.enquiryType && <p className="text-red-500 text-sm">{errors.enquiryType}</p>}
             </div>
+          </div>
+
+          {/* Subject */}
+          <div className='flex flex-col gap-2'>
+            <label htmlFor="subject" className='font-medium'>Subject*</label>
+            <input
+              type="text"
+              name="subject"
+              id="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              className={`border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              required
+            />
+            {errors.subject && <p className="text-red-500 text-sm">{errors.subject}</p>}
           </div>
 
           {/* Message */}
