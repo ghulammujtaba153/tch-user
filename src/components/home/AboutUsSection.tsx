@@ -92,7 +92,7 @@ const AboutUsSection: React.FC = () => {
 
           {/* Numbers Section */}
 
-          <div className='flex flex-col md:flex-row items-center justify-between p-4 gap-2'>
+          {/* <div className='flex flex-col md:flex-row items-center justify-between p-4 gap-2'>
             {
               aboutData?.stats?.map((stat) =>
                 <div className="flex flex-col items-center gap-2">
@@ -103,7 +103,7 @@ const AboutUsSection: React.FC = () => {
             }
 
 
-          </div>
+          </div> */}
 
         </div>
       </div>
