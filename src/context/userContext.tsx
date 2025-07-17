@@ -83,15 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (user: any, token: string, redirectToProfile= false) => {
+  const login = (user: any, token: string) => {
     setUser(user);
     setToken(token);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
 
-    if(redirectToProfile){
-      navigate("/user/dashboad/profile")
-    }
+    
   };
 
   const logout = () => {
