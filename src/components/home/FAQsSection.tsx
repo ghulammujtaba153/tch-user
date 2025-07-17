@@ -88,12 +88,13 @@ const FAQsSection: React.FC = () => {
           className="w-[15px] h-[10px]"
         />
         <p className="text-xs font-bold tracking-[3.5px] font-onest">
-          {data?.questions[0]?.category?.title || 'FAQs'}
+        FAQ's
+        {/* {data?.subHeading} */}
         </p>
       </div>
 
-      <h1 className="text-4xl font-bold text-center mb-4 font-onest">
-        {data?.subHeading}
+      <h1 className="text-4xl font-bold text-center mb-5 mt-2 font-onest text-[#0033AA] ">
+        {data?.questions[0]?.category?.title || 'FAQs'}
       </h1>
 
       <div className="w-full flex justify-center">

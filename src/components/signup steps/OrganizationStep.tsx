@@ -70,6 +70,8 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({ data, setData, onNe
           Next
         </button>
       </div>
+      <p className="col-span-4 mt-6 text-sm text-center">Version 1.2.0</p>
+
     </form>
   );
 };

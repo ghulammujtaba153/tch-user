@@ -78,7 +78,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ id }) => {
       <div className="w-full max-w-md bg-white p-6 rounded-xxxl shadow-lg">
         {/* Logo */}
         <div className="flex items-center justify-center mb-4">
-          <img src={config.logo} alt="logo" className="h-[60px] w-[190px]" />
+          <img src={config.logo} alt="logo" className="h-[70px] w-[190px]" />
         </div>
 
         {/* Heading */}

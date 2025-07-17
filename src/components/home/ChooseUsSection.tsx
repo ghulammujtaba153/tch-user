@@ -71,7 +71,7 @@ const ChooseUsSection: React.FC = () => {
             </p>
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-bold font-onest">
+          <h1 className="text-3xl md:text-4xl font-bold font-onest text-[#0033A0]">
             {data?.title}
           </h1>
           
