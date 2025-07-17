@@ -66,9 +66,9 @@ const Home: React.FC = () => {
     {/* <ChooseUsSection /> */}
     {/*<OurFeatureSection />
     <Testimonials />*/}
-     <AboutUsSection /> 
+     {/* <AboutUsSection />  */}
 
-    <CollaborationSection />
+    {/* <CollaborationSection /> */}
     {/* <FAQsSection /> */}
     {/* <Footer /> */}
   </div>;

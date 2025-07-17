@@ -33,6 +33,7 @@ interface FormData {
   postalCode: string;
   city: string;
   anonymous: boolean;
+  referenceId: string | undefined
 }
 
 declare global {
@@ -99,6 +100,7 @@ const DonationForm: React.FC<{
     province: "",
     address: "",
     city: "",
+    referenceId: "",
 
     anonymous: false,
   });
@@ -209,13 +211,14 @@ const DonationForm: React.FC<{
     }
   }, []);
 
-  const handleEftDonate = async () => {
+  const handleEftDonate = async (reference: string) => {
     console.log("Form Data:", formData);
     const totalAmount = calculateTotalAmount();
 
     const donationData = {
       ...formData,
-      tipAmount: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
+      referenceId: reference,
+      tip: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
       amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
       paymentMethod: "EFT"
     };
@@ -302,6 +305,7 @@ const DonationForm: React.FC<{
           // Save donation with total amount (including tip)
           const donationData = {
             ...formData,
+            referenceId: reference,
             tipAmount: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
             amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
             paymentMethod: "card",
@@ -342,6 +346,7 @@ const DonationForm: React.FC<{
             province: "",
             address: "",
             postalCode: "",
+            referenceId: "",
             city: "",
 
             anonymous: false,
@@ -474,7 +479,7 @@ const DonationForm: React.FC<{
             You selected a {selectedTip}% tip (R{calculateTipAmount().toFixed(2)})
           </p>
           <p className="text-lg font-semibold text-gray-800">
-            Base Amount: R{formData.amount} + Tip: R{calculateTipAmount().toFixed(2)} = Total: R{calculateTotalAmount().toFixed(2)}
+            Donation Amount: R{formData.amount} + Tip: R{calculateTipAmount().toFixed(2)} = Total: R{calculateTotalAmount().toFixed(2)}
           </p>
         </div>
       </div>

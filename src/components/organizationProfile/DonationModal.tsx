@@ -23,6 +23,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
   const [formData, setFormData] = useState({
     donorName: user?.name || "",
     donorEmail: user?.email || "",
+    referenceId: "",
     address: "",
     city: "",
     province: "",
@@ -68,6 +69,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
         donorId: user?.userId,
         organizationId,
         amount: calculateNetAmount(),
+
         donorName: formData.donorName,
         donorEmail: formData.donorEmail,
         address: formData.address,
@@ -120,31 +122,39 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
     }
   };
 
-  const handleEFTDonate = async () => {
-    try {
-      await axios.post(`${BASE_URL}/donations`, {
-        donorId: user?.userId,
-        organizationId,
-        amount: calculateNetAmount(),
-        donorName: formData.donorName,
-        donorEmail: formData.donorEmail,
-        address: formData.address,
-        city: formData.city,
-        province: formData.province,
-        postalCode: formData.postalCode,
-        mobile: formData.mobile,
-        comment: formData.comment,
-        anonymous: formData.anonymous,
-        paymentMethod: "EFT",
-        status: "pending",
-      });
-      toast.success("EFT donation recorded! Complete payment manually.");
-      setShowEFTModal(false);
-      onClose();
-    } catch (error) {
-      toast.error("Failed to record EFT donation");
-    }
-  };
+  const handleEFTDonate = async (reference: string) => {
+  try {
+    setLoading(true);
+    await axios.post(`${BASE_URL}/donations`, {
+      donorId: user?.userId,
+      organizationId,
+      amount: calculateNetAmount(),
+      platFormFee: 10,
+      transactionFee: 30,
+      
+      donorName: formData.donorName,
+      donorEmail: formData.donorEmail,
+      address: formData.address,
+      city: formData.city,
+      province: formData.province,
+      postalCode: formData.postalCode,
+      mobile: formData.mobile,
+      comment: formData.comment,
+      anonymous: formData.anonymous,
+      paymentMethod: "EFT",
+      status: "pending",
+      referenceId: reference, // ✅ Send reference number here
+    });
+    toast.success("EFT donation recorded! Complete payment manually.");
+    setShowEFTModal(false);
+    onClose();
+  } catch (error) {
+    toast.error("Failed to record EFT donation");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
