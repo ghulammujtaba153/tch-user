@@ -7,7 +7,7 @@ interface EFTModalProps {
   handleDonate: () => void;
 }
 
-const EFTModal: React.FC<EFTModalProps> = ({ onClose, setType, amount, handleDonate }) => {
+const EFTModal: React.FC<EFTModalProps> = ({ setType, amount, handleDonate }) => {
   const getReferenceNumber = () => {
     const randomPrefix = [...Array(3)]
       .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))

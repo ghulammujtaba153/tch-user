@@ -29,35 +29,48 @@ const Security = () => {
     const { user } = useContext(AuthContext)!;
 
     const handleSubmit = async () => {
-        // Validate that new password and confirm new password match
-        if (newPassword !== confirmNewPassword) {
-            toast.error('New password and confirm new password do not match.');
-            return;
-        }
+    // Validate that fields are not empty
+    if (!oldPassword.trim() || !newPassword.trim() || !confirmNewPassword.trim()) {
+        toast.error('All fields are required.');
+        return;
+    }
 
-        setLoading(true);
-        try {
-            const res = await axios.post(`${BASE_URL}/auth/reset-password`, {
-                id: user?.userId,
-                oldPassword, // Include old password for verification
-                newPassword,
-                confirmPassword: confirmNewPassword,
-            });
+    // Validate new password and confirm password match
+    if (newPassword !== confirmNewPassword) {
+        toast.error('New password and confirm password do not match.');
+        return;
+    }
 
-            if (res.data) {
-                toast.success('Password changed successfully!');
-                // Clear the form fields
-                setOldPassword('');
-                setNewPassword('');
-                setConfirmNewPassword('');
-            }
-        } catch (error: any) {
-            console.error(error);
-            toast.error(error.response?.data?.message || 'Failed to change password.');
-        } finally {
-            setLoading(false);
+    // Validate password length (recommended)
+    if (newPassword.length < 6) {
+        toast.error('New password must be at least 6 characters long.');
+        return;
+    }
+
+    setLoading(true);
+    try {
+        const res = await axios.post(`${BASE_URL}/auth/reset-password`, {
+            id: user?.userId,
+            oldPassword,
+            newPassword,
+            confirmPassword: confirmNewPassword,
+        });
+
+        if (res.data) {
+            toast.success('Password changed successfully!');
+            // Clear the form fields
+            setOldPassword('');
+            setNewPassword('');
+            setConfirmNewPassword('');
         }
-    };
+    } catch (error: any) {
+        console.error(error);
+        toast.error(error.response?.data?.message || 'Failed to change password.');
+    } finally {
+        setLoading(false);
+    }
+};
+
 
     return (
         <div className='flex flex-col md:flex-row justify-between gap-8 md:gap-4 p-4'>
@@ -149,21 +162,7 @@ const Security = () => {
             {/* Vertical Line */}
             <div className='hidden md:block w-[1px] bg-gray-200 self-stretch mx-4'></div>
 
-            {/* Right Section - Two-Factor Authentication */}
-            <div className='flex flex-col gap-4 flex-1'>
-                {/* <label htmlFor="twoFactorAuth" className='flex justify-between items-center cursor-pointer'>
-                    <span className='text-sm text-gray-700'>Two-Factor Authentication</span>
-                    <div className='relative'>
-                        <input
-                            type="checkbox"
-                            id="twoFactorAuth"
-                            className='sr-only peer' // Hidden checkbox
-                        />
-                        <div className='w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-secondary peer-focus:ring-secondary peer-focus:ring-2'></div>
-                        <div className='absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5'></div>
-                    </div>
-                </label> */}
-            </div>
+            
         </div>
     );
 };

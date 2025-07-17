@@ -7,7 +7,7 @@ import Loading from '../components/Loading';
 import CampaignTabs from '../components/organizationProfile/CampaignTabs';
 import ScrollToTop from '../utils/ScrollToTop';
 import { useAppConfig } from '../context/AppConfigContext';
-
+import DonationModal from '../components/organizationProfile/DonationModal';
 
 const getFullUrl = (filePath: string) =>
   filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
@@ -15,14 +15,14 @@ const getFullUrl = (filePath: string) =>
 const Organization = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const [organization, setOrganization] = useState(null);
-  const [btnConfig, seBtnConfig] = useState({
+  const [organization, setOrganization] = useState<any>(null);
+  const [btnConfig, setBtnConfig] = useState({
     text: "Donate Now",
     color: "#3b82f6",
     textColor: "#fff",
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { config } = useAppConfig();
-
 
   useEffect(() => {
     if (config?.name) {
@@ -33,19 +33,14 @@ const Organization = () => {
   const fetchDonationBtn = async () => {
     try {
       const res = await axios.get(`${BASE_URL}/donate/btn/${id}`);
-      if(res.data){
-        seBtnConfig(res.data);
+      if (res.data) {
+        setBtnConfig(res.data);
       }
-      
     } catch (error) {
       console.error(error);
       toast.error('Something went wrong while fetching donation button');
     }
   };
-
-  useEffect(() => {
-    
-  }, []);
 
   const fetchOrganization = async () => {
     try {
@@ -69,71 +64,52 @@ const Organization = () => {
   if (loading) return <Loading />;
   if (!organization) return <p className="text-center text-red-500 mt-10">Organization not found.</p>;
 
-  const { name, description, logo, email, phone, city, country, certificate, supportingDocument, userId } = organization;
+  const { name, description, logo, city, country, supportingDoc, status } = organization;
 
   return (
     <div className="pt-[100px] max-w-[1200px] mx-auto p-4 font-sans">
       <ScrollToTop />
+
       {/* Organization Info */}
       <div className="flex flex-col md:flex-row gap-6 items-start">
-        {/* Organization Logo */}
         <img
           src={getFullUrl(logo)}
           alt="Organization Logo"
-          className="w-[120px] h-[120px] object-cover rounded-lg shadow"
+          className="max-w-[200px] max-h-[200px] object-cover rounded-lg shadow"
         />
 
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-800">{name}</h1>
-          <p className="mt-2 text-gray-600">{description}</p>
+          <p><strong>Location:</strong> {city}, {country}</p>
 
-          <div className="mt-4 text-sm text-gray-600 space-y-1">
-            <p><strong>Email:</strong> {email}</p>
-            <p><strong>Phone:</strong> {phone}</p>
-            <p><strong>Location:</strong> {city}, {country}</p>
+          <div>
+            <p><strong>Status:</strong> {status === "active" ? "Verified" : "Unverified"}</p>
+            <p><strong>Section 18A:</strong> {supportingDoc ? "Verified" : "Not Registered"}</p>
           </div>
 
+          <p className="mt-2 text-gray-600">{description}</p>
+
           <button
-            className="mt-5 hover:scale-105 text-white py-2 px-4 rounded-lg transition duration-200"
-            style={{ backgroundColor: btnConfig.color, color: btnConfig.textColor }}
+            className="mt-5 hover:scale-105 text-white bg-secondary py-2 px-4 rounded-lg transition duration-200"
+            style={{ color: btnConfig.textColor, backgroundColor: btnConfig.color }}
+            onClick={() => setIsModalOpen(true)}
           >
             {btnConfig.text}
           </button>
-
         </div>
       </div>
 
-      {/* User (Organization Admin) */}
-      {userId && (
-        <div className="mt-10 flex items-center gap-4">
-          <img
-            src={userId.profilePicture}
-            alt="A"
-            className="w-[60px] h-[60px] rounded-full object-cover"
-          />
-          <div>
-            <p className="font-semibold text-gray-800">Created by: {userId.name}</p>
-            <p className="text-sm text-gray-600">{userId.email}</p>
-          </div>
-        </div>
+      {/* Donation Modal */}
+      {isModalOpen && (
+        <DonationModal
+          organizationId={organization._id}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
 
-      {/* Certificate & Supporting Documents
-      <div className="mt-10 space-y-3">
-        {certificate && (
-          <div>
-            <p className="font-medium text-gray-700">Certificate:</p>
-            <img src={certificate} alt="Certificate" className="w-[300px] mt-2 rounded shadow" />
-          </div>
-        )}
-
-
-      </div> */}
-
-      {/* Campaign Tabs Section */}
+      {/* Campaign Tabs */}
       <div className="mt-10">
-        
-        <CampaignTabs organizationId={organization._id}/>
+        <CampaignTabs organizationId={organization._id} />
       </div>
     </div>
   );

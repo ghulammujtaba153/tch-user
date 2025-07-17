@@ -36,6 +36,11 @@ const menuItems: MenuItem[] = [
     name: 'Profile',
     icon: UsersIcon,
     path: '/user/dashboard/profile',
+  },
+  {
+    name: 'Support',
+    icon: UsersIcon,
+    path: '/user/dashboard/support',
   }
 ];
 

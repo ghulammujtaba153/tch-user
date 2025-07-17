@@ -12,7 +12,6 @@ import { BASE_URL, SOCKET_URL } from "../../config/url";
 import { io, Socket } from "socket.io-client";
 import { FormControlLabel, Switch } from "@mui/material";
 import ReactGA from "react-ga4";
-import PaymentTypeModal from "./PaymentTypeModal";
 import EFTModal from "./EFTModal";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";

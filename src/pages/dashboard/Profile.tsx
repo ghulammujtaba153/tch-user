@@ -17,8 +17,6 @@ import Loading from "../../components/Loading";
 import AddMember from "../../components/dashboard/AddMember";
 import { useAppConfig } from "../../context/AppConfigContext";
 
-
-
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
   const { user } = useContext(AuthContext) || {};
@@ -28,10 +26,21 @@ const Profile = () => {
     gender: "",
     dateOfBirth: "",
     nationality: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+    consentChannels: {
+      email: false,
+      sms: false,
+      whatsapp: false,
+      telegram: false,
+    },
   });
   const [loading, setLoading] = useState<boolean>(true);
   const { config } = useAppConfig();
-
 
   useEffect(() => {
     if (config?.name) {
@@ -39,19 +48,20 @@ const Profile = () => {
     }
   }, [config]);
 
-
   let tabs = [
-  { name: "Personal Details", key: "profile", icon: UserCircleIcon },
-  { name: "Organization Setup", key: "organization", icon: PencilIcon },
-  { name: "Security Settings", key: "security", icon: LockClosedIcon },
-  { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
-];
+    { name: "Personal Details", key: "profile", icon: UserCircleIcon },
+    { name: "Organization Setup", key: "organization", icon: PencilIcon },
+    { name: "Security Settings", key: "security", icon: LockClosedIcon },
+    { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
+  ];
 
-// Only insert "Team Members" if user is owner
-if (user?.organization?.role == "owner") {
-  tabs.splice(2, 0, { name: "Team Members", key: "members", icon: PencilIcon });
-}
-
+  if (user?.organization?.role == "owner") {
+    tabs.splice(2, 0, {
+      name: "Team Members",
+      key: "members",
+      icon: PencilIcon,
+    });
+  }
 
   useEffect(() => {
     if (!user?.userId) return;
@@ -60,8 +70,17 @@ if (user?.organization?.role == "owner") {
         const res = await axios.get(
           `${BASE_URL}/auth/profile?id=${user?.userId}`
         );
-        console.log("fetching user ",res.data.user);
-        setData(res.data.user);
+        console.log("fetching user ", res.data.user);
+        setData({
+          ...data,
+          ...res.data.user,
+          consentChannels: res.data.user.consentChannels || {
+            email: false,
+            sms: false,
+            whatsapp: false,
+            telegram: false,
+          },
+        });
       } catch (error) {
         console.log(error);
       } finally {
@@ -96,16 +115,15 @@ if (user?.organization?.role == "owner") {
         ))}
       </div>
 
-      {/* Tab Content */}
       <div className="p-4 mt-4">
         {activeTab === "security" && <Security />}
         {activeTab === "withdraw" && <Withdrawal />}
         {activeTab === "organization" && <Organization />}
-        {/* {activeTab === "verification" && <VerificationOrganization />} */}
         {activeTab === "members" && <AddMember />}
 
         {activeTab === "profile" && (
-          <div className="p-4 flex flex-col gap-4">
+          <div className="p-4 flex flex-col gap-6">
+            {/* Header */}
             <div className="flex sm:flex-row flex-col items-center justify-between">
               <h1 className="text-2xl font-bold text-secondary">
                 Personal Details
@@ -120,9 +138,9 @@ if (user?.organization?.role == "owner") {
               )}
             </div>
 
-
-            <div className="grid lg:grid-cols-2 grid-cols-1  gap-4">
-
+            {/* Profile Info */}
+            <div className="grid lg:grid-cols-2 grid-cols-1 gap-6">
+              {/* Left: Profile Picture */}
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="max-w-[400px] h-full md:max-h-[250px]">
                   <img
@@ -135,41 +153,69 @@ if (user?.organization?.role == "owner") {
                   />
                 </div>
 
+                {/* Basic Details */}
                 <div className="flex flex-col gap-4">
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-sm font-bold">Name</h1>
-                    <p className="text-sm text-gray-500">{data?.name}</p>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-sm font-bold">Email</h1>
-                    <p className="text-sm text-gray-500">{data?.email}</p>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-sm font-bold">Gender</h1>
-                    <p className="text-sm text-gray-500">
-                      {data?.gender || "N/A"}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-sm font-bold">Date of Birth</h1>
-                    <p className="text-sm text-gray-500">
-                      {dayjs(data?.dateOfBirth).format("DD/MM/YYYY") || "N/A"}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-1">
-                    <h1 className="text-sm font-bold">Nationality</h1>
-                    <p className="text-sm text-gray-500">
-                      {data?.nationality || "N/A"}
-                    </p>
-                  </div>
+                  <DetailItem label="Name" value={data?.name} />
+                  <DetailItem label="Email" value={data?.email} />
+                  <DetailItem
+                    label="Gender"
+                    value={data?.gender || "N/A"}
+                  />
+                  <DetailItem
+                    label="Date of Birth"
+                    value={
+                      data?.dateOfBirth
+                        ? dayjs(data?.dateOfBirth).format("DD/MM/YYYY")
+                        : "N/A"
+                    }
+                  />
+                  <DetailItem
+                    label="Nationality"
+                    value={data?.nationality || "N/A"}
+                  />
                 </div>
               </div>
+            </div>
 
+            {/* Address Info */}
+            <div className="border-t pt-4">
+              <h2 className="text-lg font-semibold text-secondary mb-4">
+                Address Information
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <DetailItem label="Address Line 1" value={data?.addressLine1} />
+                <DetailItem label="Address Line 2" value={data?.addressLine2} />
+                <DetailItem label="City" value={data?.city} />
+                <DetailItem label="State" value={data?.state} />
+                <DetailItem label="Postal Code" value={data?.postalCode} />
+                <DetailItem label="Country" value={data?.country} />
+              </div>
+            </div>
 
+            {/* Consent Channels */}
+            <div className="border-t pt-4">
+              <h2 className="text-lg font-semibold text-secondary mb-4">
+                Communication Preferences
+              </h2>
+              <div className="flex flex-wrap gap-4">
+                {["email", "sms", "whatsapp", "telegram"].map((channel) => (
+                  <div
+                    key={channel}
+                    className="flex items-center gap-2 border rounded-lg px-4 py-2"
+                  >
+                    <span className="font-medium capitalize">{channel}</span>
+                    <span
+                      className={`text-sm px-2 py-1 rounded ${
+                        data.consentChannels[channel]
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
+                      {data.consentChannels[channel] ? "Enabled" : "Disabled"}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
@@ -177,5 +223,13 @@ if (user?.organization?.role == "owner") {
     </div>
   );
 };
+
+// ✅ Reusable Detail Item Component
+const DetailItem = ({ label, value }: { label: string; value: any }) => (
+  <div className="flex flex-col gap-1">
+    <h1 className="text-sm font-bold">{label}</h1>
+    <p className="text-sm text-gray-500">{value || "N/A"}</p>
+  </div>
+);
 
 export default Profile;

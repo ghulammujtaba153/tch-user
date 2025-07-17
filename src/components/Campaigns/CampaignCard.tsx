@@ -69,7 +69,7 @@ const CampaignCard: React.FC<{
   };
 
   return (
-<div className="font-sans flex flex-col border bg-primary p-4 gap-4 rounded-lg overflow-hidden w-full max-w-[370px] hover:shadow-lg hover:border-secondary transition-all duration-300">
+<div className="font-sans flex flex-col border border-primarylight bg-white p-4 gap-4 rounded-lg overflow-hidden w-full max-w-[370px] hover:shadow-lg hover:border-primarylight transition-all duration-300">
       {isDeleted && (
         <Notification
           isOpen={isDeleted}
@@ -90,17 +90,17 @@ const CampaignCard: React.FC<{
           loading="lazy"
         />
       </div>
+      <p className="text-sm font-bold">{campaign?.organization?.name}</p>
 
 
-      {campaign?.organizationId ? (
-        <p className="text-xs font-bold bg-green-600 w-[70px] text-center text-white p-1 rounded-md">
+      {campaign?.organization?.supportingDoc && (
+        <>
+        <p className="text-xs font-bold bg-primarylight w-[70px] text-center text-white p-1 rounded-full">
           verified
         </p>
-      ) : (
-        <p className="text-xs font-bold bg-red-600 w-[70px] text-center text-white p-1 rounded-md">
-          unverified
-        </p>
-      )}
+        
+        </>
+      ) }
 
       {/* Campaign Title */}
       <div className="flex flex-col gap-2 h-[100px] overflow-hidden">
@@ -138,6 +138,11 @@ const CampaignCard: React.FC<{
 
       {/* Progress Bar */}
       <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between text-sm font-bold">
+          <p>Goal: R{goal.toLocaleString()}</p>
+          <p>Raised: R{raised.toLocaleString()}</p>
+        </div>
+
         <div className="flex items-center justify-end">
           <p className="text-sm font-bold text-secondary">
             {Number(progress).toFixed(2)}% Funded

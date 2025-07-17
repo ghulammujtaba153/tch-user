@@ -17,9 +17,21 @@ const EditProfile = () => {
     gender: "",
     dateOfBirth: "",
     nationality: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    country: "",
+    consentChannels: {
+      email: false,
+      sms: false,
+      whatsapp: false,
+      telegram: false,
+    },
   });
-  const { config } = useAppConfig();
 
+  const { config } = useAppConfig();
 
   useEffect(() => {
     if (config?.name) {
@@ -30,19 +42,30 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (user?.userId) {
-        
         try {
           const res = await axios.get(
             `${BASE_URL}/auth/profile?id=${user.userId}`
           );
           console.log(res.data.user);
+          const u = res.data.user;
           setFormData({
-            profilePicture: res.data.user.profilePicture,
-            name: res.data.user.name,
-            gender: res.data.user.gender,
-            dateOfBirth: res.data.user.dateOfBirth,
-            nationality: res.data.user.nationality,
-            
+            profilePicture: u.profilePicture,
+            name: u.name,
+            gender: u.gender,
+            dateOfBirth: u.dateOfBirth,
+            nationality: u.nationality,
+            addressLine1: u.addressLine1 || "",
+            addressLine2: u.addressLine2 || "",
+            city: u.city || "",
+            state: u.state || "",
+            postalCode: u.postalCode || "",
+            country: u.country || "",
+            consentChannels: u.consentChannels || {
+              email: false,
+              sms: false,
+              whatsapp: false,
+              telegram: false,
+            },
           });
         } catch (error) {
           console.error("Error fetching profile data:", error);
@@ -73,28 +96,31 @@ const EditProfile = () => {
     const { id, value } = e.target;
     if (id in formData) {
       setFormData({ ...formData, [id]: value });
-    } else if (id.startsWith("organization")) {
-      const field = id.split(".")[1];
-      setFormData({
-        ...formData,
-        organization: {
-          ...formData.organization,
-          [field]: value,
-        },
-      });
     }
+  };
+
+  // Handle consent toggle
+  const handleConsentChange = (channel: string) => {
+    setFormData({
+      ...formData,
+      consentChannels: {
+        ...formData.consentChannels,
+        [channel]: !formData.consentChannels[channel],
+      },
+    });
   };
 
   // Handle form submission
   const handleUpdateProfile = async () => {
     try {
       setLoading(true);
-      const url =await upload(file);
+      const url = file ? await upload(file) : formData.profilePicture;
       formData.profilePicture = url;
 
       const res = await axios.post(
         `${BASE_URL}/auth/update-profile/${user?.userId}`,
-        formData, {
+        formData,
+        {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -106,7 +132,7 @@ const EditProfile = () => {
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile. Please try again.");
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -121,18 +147,16 @@ const EditProfile = () => {
         <div className="flex flex-col gap-4 w-full">
           <h1 className="text-lg font-semibold">Personal Information</h1>
 
-          {/* Flex Container for Upload and Form Fields */}
           <div className="flex flex-col md:flex-row gap-4 w-full">
-            {/* Custom File Upload Area */}
+            {/* Image Upload */}
             <div className="w-full md:w-1/3 h-full">
               <label
                 htmlFor="profilePicture"
                 className="flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer hover:border-secondary transition-colors h-full"
               >
-                {/* Image Preview or Upload Icon */}
                 {formData.profilePicture || imagePreview ? (
                   <img
-                    src={imagePreview || formData.profilePicture} // Use imagePreview if available, otherwise use formData.profilePicture
+                    src={imagePreview || formData.profilePicture}
                     alt="Profile Preview"
                     className="bg-transparent w-full h-full object-cover rounded-md"
                   />
@@ -147,8 +171,6 @@ const EditProfile = () => {
                     </span>
                   </>
                 )}
-
-                {/* Hidden File Input */}
                 <input
                   type="file"
                   id="profilePicture"
@@ -161,7 +183,6 @@ const EditProfile = () => {
 
             {/* Form Fields */}
             <div className="w-full md:w-2/3 flex flex-col gap-4">
-              {/* Name Field */}
               <div>
                 <label htmlFor="name" className="text-sm text-gray-500">
                   Name
@@ -175,9 +196,7 @@ const EditProfile = () => {
                 />
               </div>
 
-              {/* Gender, Date of Birth, and Nationality Fields */}
               <div className="flex flex-col md:flex-row gap-4">
-                {/* Gender Field */}
                 <div className="w-full md:w-1/3">
                   <label htmlFor="gender" className="text-sm text-gray-500">
                     Gender
@@ -194,12 +213,8 @@ const EditProfile = () => {
                   </select>
                 </div>
 
-                {/* Date of Birth Field */}
                 <div className="w-full md:w-1/3">
-                  <label
-                    htmlFor="dateOfBirth"
-                    className="text-sm text-gray-500"
-                  >
+                  <label htmlFor="dateOfBirth" className="text-sm text-gray-500">
                     Date of Birth
                   </label>
                   <input
@@ -211,12 +226,8 @@ const EditProfile = () => {
                   />
                 </div>
 
-                {/* Nationality Field */}
                 <div className="w-full md:w-1/3">
-                  <label
-                    htmlFor="nationality"
-                    className="text-sm text-gray-500"
-                  >
+                  <label htmlFor="nationality" className="text-sm text-gray-500">
                     Nationality
                   </label>
                   <input
@@ -232,115 +243,84 @@ const EditProfile = () => {
           </div>
         </div>
 
-        {/* Organization Information Section */}
-        {/* <div className="flex flex-col gap-4 w-full">
-          <h1 className="text-lg font-semibold">Organization Information</h1>
-          <div className="flex items-center flex-col md:flex-row gap-4 w-full">
-            <div className="w-full md:w-1/2">
-              <label
-                htmlFor="organization.name"
-                className="text-sm text-gray-500"
-              >
-                Organization Name
-              </label>
-              <input
-                type="text"
-                id="organization.name"
-                value={formData.organization.name}
-                onChange={handleChange}
-                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
-              />
-            </div>
-
-            <div className="w-full md:w-1/2">
-              <label
-                htmlFor="organization.phone"
-                className="text-sm text-gray-500"
-              >
-                Phone Number
-              </label>
-              <input
-                type="text"
-                id="organization.phone"
-                value={formData.organization.phone}
-                onChange={handleChange}
-                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
-              />
-            </div>
-          </div>
-
-          <div className="w-full">
-            <label
-              htmlFor="organization.email"
-              className="text-sm text-gray-500"
-            >
-              Email
-            </label>
+        {/* Address Section */}
+        <div className="flex flex-col gap-4 w-full">
+          <h1 className="text-lg font-semibold">Address Information</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
-              type="email"
-              id="organization.email"
-              value={formData.organization.email}
+              type="text"
+              id="addressLine1"
+              value={formData.addressLine1}
               onChange={handleChange}
-              className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+              placeholder="Address Line 1"
+              className="border border-gray-300 p-2 rounded-md"
+            />
+            <input
+              type="text"
+              id="addressLine2"
+              value={formData.addressLine2}
+              onChange={handleChange}
+              placeholder="Address Line 2"
+              className="border border-gray-300 p-2 rounded-md"
+            />
+            <input
+              type="text"
+              id="city"
+              value={formData.city}
+              onChange={handleChange}
+              placeholder="City"
+              className="border border-gray-300 p-2 rounded-md"
+            />
+            <input
+              type="text"
+              id="state"
+              value={formData.state}
+              onChange={handleChange}
+              placeholder="State"
+              className="border border-gray-300 p-2 rounded-md"
+            />
+            <input
+              type="text"
+              id="postalCode"
+              value={formData.postalCode}
+              onChange={handleChange}
+              placeholder="Postal Code"
+              className="border border-gray-300 p-2 rounded-md"
+            />
+            <input
+              type="text"
+              id="country"
+              value={formData.country}
+              onChange={handleChange}
+              placeholder="Country"
+              className="border border-gray-300 p-2 rounded-md"
             />
           </div>
+        </div>
 
-          <div className="flex flex-col md:flex-row gap-4 w-full">
-            <div className="w-full md:w-1/3">
-              <label
-                htmlFor="organization.address"
-                className="bg-transparent text-sm text-gray-500"
-              >
-                Organization Address
+        {/* Consent Notification Channels */}
+        <div className="flex flex-col gap-4 w-full">
+          <h1 className="text-lg font-semibold">Notification Preferences</h1>
+          <div className="flex flex-col md:flex-row gap-4">
+            {["email", "sms", "whatsapp", "telegram"].map((channel) => (
+              <label key={channel} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={formData.consentChannels[channel]}
+                  onChange={() => handleConsentChange(channel)}
+                  className="w-4 h-4"
+                />
+                {channel.toUpperCase()}
               </label>
-              <input
-                type="text"
-                id="organization.address"
-                value={formData.organization.address}
-                onChange={handleChange}
-                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
-              />
-            </div>
-
-            <div className="w-full md:w-1/3">
-              <label
-                htmlFor="organization.city"
-                className="bg-transparent text-sm text-gray-500"
-              >
-                City
-              </label>
-              <input
-                type="text"
-                id="organization.city"
-                value={formData.organization.city}
-                onChange={handleChange}
-                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
-              />
-            </div>
-
-            <div className="w-full md:w-1/3">
-              <label
-                htmlFor="organization.country"
-                className="text-sm text-gray-500"
-              >
-                Country
-              </label>
-              <input
-                type="text"
-                id="organization.country"
-                value={formData.organization.country}
-                onChange={handleChange}
-                className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
-              />
-            </div>
+            ))}
           </div>
-        </div> */}
+        </div>
 
-        {/* Save and Discard Buttons */}
-        <div className="flex items-center w-full gap-4">
+        {/* Save & Discard */}
+        <div className="flex items-center w-full gap-4 mt-4">
           <button
-          disabled={loading}
-          type="submit"
+            disabled={loading}
+            type="submit"
             className="bg-secondary hover:bg-secondary/80 transition-colors text-white px-4 py-2 rounded-full disabled:cursor-not-allowed disabled:opacity-50"
             onClick={handleUpdateProfile}
           >

@@ -85,7 +85,7 @@ const NewPassword = () => {
       )}
       <div className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="flex items-center justify-center">
-          <img src="/nav-logo.png" alt="logo" className="w-[200px] h-[50px]" />
+          <img src={config.logo} alt="logo" className="w-[200px] h-[70px]" />
         </div>
 
         <div className="flex flex-col items-center justify-center">

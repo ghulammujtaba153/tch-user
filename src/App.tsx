@@ -152,6 +152,7 @@ function App() {
             <Route path="donations" element={<Donations />} />
             <Route path="profile" element={<Profile />} />
             <Route path="profile/edit" element={<EditProfile />} />
+            <Route path="support" element={<Support />} />
             <Route path="campaigns/create" element={<CreateCampaign />} />
             <Route path="campaigns/:id" element={<CampaignDetails />} />
             <Route path='campaigns/:id/edit' element={<EditCampaign />} />
