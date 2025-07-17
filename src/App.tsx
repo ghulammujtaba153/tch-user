@@ -99,10 +99,10 @@ function App() {
 
       <Routes>
         <Route path='/unauthorized' element={<Unauthorized />} />
-        <Route path="/" element={<Launch />} />
+        {/* <Route path="/" element={<Launch />} /> */}
 
         <Route path="/" element={<NavLayout />}>
-          <Route path="/home-sec" element={<Home />} />
+          <Route index element={<Home />} />
           <Route path="/terms" element={<TermsCondition />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           
