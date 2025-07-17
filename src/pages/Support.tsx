@@ -12,7 +12,7 @@ interface FormData {
   email: string;
   confirmEmail: string;
   phone: string;
-  existingProject: string;
+  existingProject: boolean;
   department: string;
   enquiryType: string;
   subject: string;
@@ -28,7 +28,7 @@ const Support = () => {
     email: '',
     confirmEmail: '',
     phone: '',
-    existingProject: '',
+    existingProject: true,
     department: '',
     enquiryType: '',
     subject: '',
@@ -125,7 +125,7 @@ const Support = () => {
       email: '',
       confirmEmail: '',
       phone: '',
-      existingProject: 'no',
+      existingProject: true,
       department: '',
       enquiryType: '',
       subject: '',
@@ -237,12 +237,8 @@ const Support = () => {
                 className='border border-gray-300 rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500'
               />
             </div>
-          </div>
-
-          {/* Department and Enquiry Type */}
-          <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="department" className='font-medium'>Select the department*</label>
+              <label htmlFor="department" className='font-medium'>Enquiry Type*</label>
               <select
                 name="department"
                 id="department"
@@ -252,32 +248,19 @@ const Support = () => {
                 required
               >
                 <option value="">Select option</option>
-                <option value="technical">Technical Support</option>
-                <option value="billing">Billing</option>
-                <option value="general">General Inquiry</option>
+                <option value="donation">Donor / Donation</option>
+                <option value="campaign">Campaign</option>
+                <option value="general">General Enquiry</option>
+                <option value="media">Media</option>
+                <option value="report">Report Fraud</option>
+                <option value="support">Support</option>
               </select>
               {errors.department && <p className="text-red-500 text-sm">{errors.department}</p>}
             </div>
-            <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="enquiryType" className='font-medium'>Enquiry Type*</label>
-              <select
-                name="enquiryType"
-                id="enquiryType"
-                value={formData.enquiryType}
-                onChange={handleChange}
-                className={`border ${errors.enquiryType ? 'border-red-500' : 'border-gray-300'} bg-transparent rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                required
-              >
-                <option value="">Select enquiry type</option>
-                {enquiryTypes.map((type) => (
-                  <option key={type} value={type.toLowerCase().replace(' ', '_')}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-              {errors.enquiryType && <p className="text-red-500 text-sm">{errors.enquiryType}</p>}
-            </div>
+            
           </div>
+
+          
 
           {/* Subject */}
           <div className='flex flex-col gap-2'>

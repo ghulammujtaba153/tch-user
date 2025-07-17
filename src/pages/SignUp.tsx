@@ -1,21 +1,28 @@
 import { useState } from "react";
 import PersonalInfoStep from "../components/signup steps/PersonalInfoStep";
 import OrganizationStep from "../components/signup steps/OrganizationStep";
-// import VerificationStep from "../components/signup steps/VerificationStep";
-import Success from "../components/signup steps/Success";
 import VerificationStep from "../components/signup steps/VerificationStep";
+import Success from "../components/signup steps/Success";
 
 const steps = [
   { label: "Personal Info" },
-  { label: "Organization" },
   { label: "Verification" },
+  { label: "Organization" },
   { label: "Success" },
 ];
 
 const SignUp = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  // You can manage all signup data here and pass to steps as needed
-  const [signupData, setSignupData] = useState({});
+
+  // Central state to store all signup info
+  const [signupData, setSignupData] = useState<any>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    wantsOrganization: false,
+  });
 
   const goNext = () => setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
   const goBack = () => setCurrentStep((s) => Math.max(s - 1, 0));
@@ -26,7 +33,14 @@ const SignUp = () => {
       <div className="w-full max-w-md mb-8">
         <div className="flex justify-between mb-2">
           {steps.map((step, idx) => (
-            <span key={step.label} className={`text-xs font-semibold ${idx <= currentStep ? 'text-blue-600' : 'text-gray-400'}`}>{step.label}</span>
+            <span
+              key={step.label}
+              className={`text-xs font-semibold ${
+                idx <= currentStep ? "text-blue-600" : "text-gray-400"
+              }`}
+            >
+              {step.label}
+            </span>
           ))}
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -47,6 +61,14 @@ const SignUp = () => {
           />
         )}
         {currentStep === 1 && (
+          <VerificationStep
+            data={signupData}
+            setData={setSignupData} // ✅ This ensures we store backend response if needed
+            onNext={goNext}
+            onBack={goBack}
+          />
+        )}
+        {currentStep === 2 && (
           <OrganizationStep
             data={signupData}
             setData={setSignupData}
@@ -54,15 +76,7 @@ const SignUp = () => {
             onBack={goBack}
           />
         )}
-        {currentStep === 2 && (
-          <VerificationStep
-            data={signupData}
-            setData={setSignupData}
-            onNext={goNext}
-            onBack={goBack}
-          />
-        )}
-        {currentStep === 3 && <Success />}
+        {currentStep === 3 && <Success data={signupData} />}
       </div>
     </div>
   );

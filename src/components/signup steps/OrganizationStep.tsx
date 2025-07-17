@@ -10,6 +10,8 @@ interface OrganizationStepProps {
 const OrganizationStep: React.FC<OrganizationStepProps> = ({ data, setData, onNext, onBack }) => {
   const [wantsOrganization, setWantsOrganization] = useState(data.wantsOrganization ?? false);
 
+  console.log("data", data)
+
   const handleToggle = (value: boolean) => {
     setWantsOrganization(value);
     setData({ ...data, wantsOrganization: value });
@@ -17,6 +19,7 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({ data, setData, onNe
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+  
     onNext();
   };
 

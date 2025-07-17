@@ -11,8 +11,8 @@ const HeroSection: React.FC = () => {
       <ScrollToTop />
 
       {/* Hero Carousel */}
-      <div className="w-full h-[300px] md:h-[560px] relative overflow-hidden ">
-        {/* <Carousel
+      <div className="w-full h-[300px] md:h-[560px] relative overflow-hidden">
+        <Carousel
           showThumbs={false}
           autoPlay
           infiniteLoop
@@ -22,49 +22,35 @@ const HeroSection: React.FC = () => {
         >
           <div>
             <img
-              src="/hero-img.png"
+              src="/hero1.jpg"
               alt="Slide 1"
               className="w-full h-full object-cover"
             />
           </div>
           <div>
             <img
-              src="/hero-img.png"
+              src="/hero2.jpg"
               alt="Slide 2"
               className="w-full h-full object-cover"
             />
           </div>
-          <div>
-            <img
-              src="/hero-img.png"
-              alt="Slide 3"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </Carousel> */}
+        </Carousel>
 
-        <img src="/hero-img1.jpg" alt="/" className="w-full h-full object-cover" />
-
-
-        {/* Text overlay */}
-        {/* <div className="absolute bottom-6 md:bottom-10 left-6 md:left-10 w-[90%] flex flex-col justify-end">
-          <div className="flex flex-col gap-2 text-white mb-4 w-full">
-            <div className="flex text-white w-full">
-              <p className="text-2xl md:text-4xl font-bold">Make.</p>
-            </div>
-            <div className="flex flex-col md:flex-row justify-between text-white mb-4 w-full">
-              <div className="flex items-center">
-                <p className="text-4xl md:text-7xl font-bold text-primary tracking-wide leading-tight">
-                  Change
-                </p>
-                <div className="flex flex-col text-white text-normal md:text-2xl font-bold ml-2">
-                  <p>With</p>
-                  <p>Donations!</p>
-                </div>
+        {/* ✅ Text overlay (Responsive and Centered) */}
+        <div className="absolute inset-0 flex flex-col justify-center items-start px-4 sm:px-8 md:px-12 bg-black/30">
+          <div className="text-white max-w-[90%] sm:max-w-[70%]">
+            <p className="text-xl sm:text-3xl md:text-4xl font-bold mb-2">Make.</p>
+            <div className="flex flex-wrap items-baseline gap-2">
+              <p className="text-3xl sm:text-5xl md:text-7xl font-bold text-primary leading-tight">
+                Change
+              </p>
+              <div className="flex flex-col text-white text-lg sm:text-xl md:text-2xl font-bold">
+                <p>With</p>
+                <p>Donations!</p>
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
 
       {/* Buttons */}
@@ -73,14 +59,14 @@ const HeroSection: React.FC = () => {
           to={"/home/campaigns"}
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
-          Find Campaigns 
+          Find Campaigns
         </Link>
 
         <Link
           to={"/signup"}
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
-          Register 
+          Register
         </Link>
 
         <Link

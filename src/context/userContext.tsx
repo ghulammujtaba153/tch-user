@@ -1,6 +1,7 @@
 import { jwtDecode } from "jwt-decode";
 import React, { createContext, useState, useEffect } from "react";
 import { BASE_URL } from "../config/url";
+import { useNavigate } from "react-router-dom";
 
 interface DecodedToken {
   userId: string;
@@ -34,6 +35,7 @@ interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
+
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<any>(null);
@@ -81,11 +83,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = (user: any, token: string) => {
+  const login = (user: any, token: string, redirectToProfile= false) => {
     setUser(user);
     setToken(token);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
+
+    if(redirectToProfile){
+      navigate("/user/dashboad/profile")
+    }
   };
 
   const logout = () => {

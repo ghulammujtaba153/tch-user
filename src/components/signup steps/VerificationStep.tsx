@@ -75,27 +75,26 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ data, setData, onNe
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const enteredOtp = otp.join("");
-
+  
     if (enteredOtp !== sentOtp) {
       toast.error("Invalid OTP. Please try again.");
       setError("Invalid OTP.");
       return;
     }
-
+  
     setIsPending(true);
     try {
       const res = await axios.post(`${BASE_URL}/auth/register`, userData);
-      console.log(res.data);
-
-      ReactGA.event({
-        category: 'User',
-        action: 'Created Account',
-        label: 'Signup Form',
+  
+      // ✅ Store user info in signupData
+      setData({
+        ...userData,
+        registeredUser: res.data.user, // Save the new user details
+        token: res.data.token || null, // If backend sends token
       });
-
+  
       toast.success("Registration successful!");
-      setSuccess("Registration successful!");
-      onNext(); // Move to Success screen
+      onNext();
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Registration failed.");
       setError(error.response?.data?.message || "Registration failed.");
@@ -103,6 +102,7 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ data, setData, onNe
       setIsPending(false);
     }
   };
+  
 
   return (
     <div className="bg-white p-6 rounded-xxxl shadow-lg">

@@ -1,11 +1,75 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/userContext";
+import { BASE_URL } from "../../config/url";
+import axios from "axios";
+import { toast } from "react-toastify";
+// import ReactGA from "react-ga"; // Uncomment if using GA
 
-const Success = () => {
+const Success = ({ data }) => {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext) || { login: () => {} };
+  const [loading, setLoading] = useState(false);
+  console.log("data", data)
 
-  const handleDone = () => {
-    navigate("/user/dashboard");
+  const handleDone = async () => {
+    try {
+      setLoading(true);
+
+      // Auto login after success
+      const res = await axios.post(`${BASE_URL}/auth/login`, {
+        email: data.email,
+        password: data.password,
+      });
+
+      if (res.data.user.role === "admin") {
+        toast.error("Admin can't login from this page");
+        setLoading(false);
+        return;
+      }
+
+      const token = res.data.token;
+      const user = {
+        userId: res.data.user._id,
+        email: res.data.user.email,
+        name: res.data.user.name,
+        role: res.data.user.role,
+        profilePicture: res.data.user.profilePicture,
+        organization: res.data.user.organization,
+      };
+
+      // Save in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+
+
+
+      const redirectToProfile=data.wantsOrganization
+
+      // Update context
+      login(user, token);
+
+      // Track event if GA is enabled
+      // ReactGA.event({
+      //   category: "User",
+      //   action: "Login",
+      //   label: "Login Form Submission",
+      // });
+
+      toast.success("Login successful!");
+
+      // Redirect user
+      if (redirectToProfile) {
+        navigate("/user/dashboard/profile");
+      } else {
+        navigate("/user/dashboard");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Login failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -14,9 +78,12 @@ const Success = () => {
       <p className="text-gray-700 mb-6">Your account has been created successfully.</p>
       <button
         onClick={handleDone}
-        className="bg-secondary text-white px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300"
+        disabled={loading}
+        className={`bg-secondary text-white px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300 ${
+          loading ? "opacity-70 cursor-not-allowed" : ""
+        }`}
       >
-        Done
+        {loading ? "Loading..." : "Done"}
       </button>
     </div>
   );
