@@ -1,10 +1,13 @@
 import axios from 'axios';
 import React, { useState, useRef, useEffect } from 'react';
 import { FiUploadCloud, FiX } from 'react-icons/fi';
-import { BASE_URL } from '../config/url';
+// import { BASE_URL } from '../config/url';
 import ReactGA from 'react-ga4';
-import ScrollToTop from '../utils/ScrollToTop';
-import { useAppConfig } from '../context/AppConfigContext';
+// import ScrollToTop from '../utils/ScrollToTop';
+import { useAppConfig } from '../../context/AppConfigContext';
+import ScrollToTop from '../../utils/ScrollToTop';
+import { BASE_URL } from '../../config/url';
+
 
 interface FormData {
   firstName: string;
