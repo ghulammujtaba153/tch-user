@@ -22,14 +22,14 @@ const HeroSection: React.FC = () => {
         >
           <div>
             <img
-              src="/hero1.jpg"
+              src="/hero1.png"
               alt="Slide 1"
               className="w-full h-full object-cover"
             />
           </div>
           <div>
             <img
-              src="/hero2.jpg"
+              src="/hero2.png"
               alt="Slide 2"
               className="w-full h-full object-cover"
             />
@@ -37,7 +37,7 @@ const HeroSection: React.FC = () => {
         </Carousel>
 
         {/* ✅ Text overlay (Responsive and Centered) */}
-        <div className="absolute inset-0 flex flex-col justify-center items-start px-4 sm:px-8 md:px-12 bg-black/30">
+        {/* <div className="absolute inset-0 flex flex-col justify-center items-start px-4 sm:px-8 md:px-12 bg-black/30">
           <div className="text-white max-w-[90%] sm:max-w-[70%]">
             <p className="text-xl sm:text-3xl md:text-4xl font-bold mb-2">Make.</p>
             <div className="flex flex-wrap items-baseline gap-2">
@@ -50,11 +50,11 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Buttons */}
-      <div className="absolute flex flex-col md:flex-row items-center px-6 py-4 gap-4 bottom-[-10px] bg-white right-[5%] md:right-[26%] shadow-lg rounded-md">
+      <div className="absolute flex flex-col md:flex-row items-center justify-center px-6 py-4 gap-4 bottom-[-55px] bg-white left-1/2 md:right-[26%] md:left-auto transform -translate-x-1/2 md:translate-x-0 shadow-lg rounded-md w-[90%] md:w-auto">
         <Link
           to={"/home/campaigns"}
           className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
