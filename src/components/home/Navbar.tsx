@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
             {user ? (
               <>
                 <Link
-                  to={user?.role === 'admin' ? '/dashboard' : '/user/dashboard/overview'}
+                  to={user?.role === 'admin' ? '/dashboard' : '/user/dashboard/profile'}
                   className="bg-primary w-[120px] text-black px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300"
                 >
                   Dashboard
@@ -174,6 +174,43 @@ const Navbar: React.FC = () => {
                 Contact Us
               </Link>
             </div>
+            <div className="relative">
+                <p
+                  className="cursor-pointer flex items-center gap-2 hover:text-secondary transition-colors duration-300"
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  Need Help? {isOpen ? <FaAngleUp /> : <FaAngleDown/>}
+                </p>
+
+                {isOpen && (
+                  <div
+                    className="absolute top-full left-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+                    onMouseLeave={() => setIsOpen(false)}
+                  >
+                    <Link
+                      to="/faqs"
+                      className={`block px-4 py-2 ${isActive('/faqs') ? 'text-secondary' : 'hover:bg-gray-100 text-gray-700'}`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      FAQ
+                    </Link>
+                    <Link
+                      to="/guides"
+                      className={`block px-4 py-2 ${isActive('/guides') ? 'text-secondary' : 'hover:bg-gray-100 text-gray-700'}`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Help Guides
+                    </Link>
+                    <Link
+                      to="/support"
+                      className={`block px-4 py-2 ${isActive('/support') ? 'text-secondary' : 'hover:bg-gray-100 text-gray-700'}`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Support
+                    </Link>
+                  </div>
+                )}
+              </div>
 
             <div className="flex flex-col gap-3 pt-2">
               {user && (
@@ -190,7 +227,7 @@ const Navbar: React.FC = () => {
               {user ? (
                 <>
                   <Link
-                    to={user?.role === 'admin' ? '/dashboard' : '/user/dashboard/overview'}
+                    to={user?.role === 'admin' ? '/dashboard' : '/user/dashboard/profile'}
                     onClick={() => setIsMenuOpen(false)}
                     className="bg-secondary text-sm text-white px-4 py-2 rounded-full hover:scale-105 transition-transform duration-300"
                   >

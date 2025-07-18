@@ -73,7 +73,11 @@ const AboutUsSection: React.FC = () => {
           {/* Title Section */}
           <h1 className="text-4xl font-bold font-onest">{aboutData?.title}</h1>
 
-          <p className="text-sm text-gray-500">{aboutData?.description}</p>
+          <div
+  className="text-sm text-gray-500"
+  dangerouslySetInnerHTML={{ __html: aboutData?.description }}
+></div>
+
 
           {/* List Section */}
 

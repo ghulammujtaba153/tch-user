@@ -12,7 +12,7 @@ import DonationModal from '../components/organizationProfile/DonationModal';
 const getFullUrl = (filePath: string) =>
   filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
 
-const Organization = () => {
+const OrganizationPage = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState<any>(null);
@@ -115,4 +115,4 @@ const Organization = () => {
   );
 };
 
-export default Organization;
+export default OrganizationPage;

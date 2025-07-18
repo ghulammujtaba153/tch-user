@@ -1,20 +1,54 @@
+import React, { useState, useEffect, useContext } from 'react';
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
+import axios from 'axios';
 import Loading from '../Loading';
+import { AuthContext } from '../../context/userContext';
+import { BASE_URL } from '../../config/url';
 
-interface DonationsProps {
-  loading: boolean;
-  error: any;
-  donations: any[];
-}
+const DonationReceived = () => {
+  const [receivedDonations, setReceivedDonations] = useState([]);
+  const [receivedLoading, setReceivedLoading] = useState(true);
+  const [receivedError, setReceivedError] = useState(null);
+  const { user } = useContext(AuthContext) || {};
 
-const Donations = ({ loading, error, donations }: DonationsProps) => {
-  if (loading) return <div className="flex justify-center items-center"><Loading /></div>;
-  if (error) return <div>Error: {error.message}</div>;
+  // Fetch received donations (for campaigners)
+  useEffect(() => {
+    if (user?.userId) {
+      const fetchReceivedDonations = async () => {
+        try {
+          if (user?.organization?.role === "owner") {
+            const res = await axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            });
+            setReceivedDonations(res.data);
+            setReceivedLoading(false);
+            return;
+          }
+          const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+          setReceivedDonations(res.data);
+        } catch (error: any) {
+          setReceivedError(error);
+        } finally {
+          setReceivedLoading(false);
+        }
+      };
+      fetchReceivedDonations();
+    }
+  }, [user]);
+    
+  if (receivedLoading) return <div className="flex justify-center items-center"><Loading /></div>;
+  if (receivedError) return <div>Error: {receivedError.message}</div>;
 
   const handleDownloadCSV = () => {
     const headers = ['Donor', 'Date', 'Campaign', 'Amount'];
-    const rows = donations.map((item) => [
+    const rows = receivedDonations.map((item) => [
       `"${item.anonymous ? 'Anonymous' : item.userName}"`,
       `"${dayjs(item.date).format('YYYY-MM-DD')}"`,
       `"${item.campaignName}"`,
@@ -49,7 +83,7 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
         </button>
       </div>
 
-      {donations.length === 0 ? (
+      {receivedDonations.length === 0 ? (
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">No donations found</h1>
         </div>
@@ -63,7 +97,7 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
             <div>Amount</div>
           </div>
 
-          {donations.map((item: any) => (
+          {receivedDonations.map((item: any) => (
             <div key={item.id} className="grid grid-cols-6 items-center gap-2 p-1 hover:bg-gray-50 rounded">
               {/* Donor Info */}
               <div className="col-span-2 flex items-center gap-2">
@@ -102,4 +136,4 @@ const Donations = ({ loading, error, donations }: DonationsProps) => {
   );
 };
 
-export default Donations;
+export default DonationReceived;

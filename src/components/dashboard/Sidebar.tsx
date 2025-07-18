@@ -4,7 +4,10 @@ import {
   HomeIcon, SpeakerWaveIcon, CurrencyDollarIcon, UsersIcon,
   ArrowRightStartOnRectangleIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/userContext';
 import { useAppConfig } from '../../context/AppConfigContext';
@@ -18,6 +21,26 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
+    name: 'Profile',
+    icon: UsersIcon,
+    path: '/user/dashboard/profile',
+  },
+  {
+    name: 'Organization',
+    icon: HomeIcon,
+    path: '/user/dashboard/organization',
+    subItems: [
+      {
+        name: 'Members',
+        path: '/user/dashboard/members',
+      },
+      {
+        name: 'Donations',
+        path: '/user/dashboard/received-donations',
+      },
+    ]
+  },
+  {
     name: 'Overview',
     icon: HomeIcon,
     path: '/user/dashboard/overview',
@@ -28,14 +51,9 @@ const menuItems: MenuItem[] = [
     path: '/user/dashboard/campaigns',
   },
   {
-    name: 'Donations',
+    name: 'My Donations',
     icon: CurrencyDollarIcon,
-    path: '/user/dashboard/donations',
-  },
-  {
-    name: 'Profile',
-    icon: UsersIcon,
-    path: '/user/dashboard/profile',
+    path: '/user/dashboard/sent-donations',
   },
   {
     name: 'Support',
@@ -47,17 +65,25 @@ const menuItems: MenuItem[] = [
 const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isOpen, toggleSidebar }) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
   const location = useLocation();
-  const { logout } = useContext(AuthContext) || {};
+  const { logout, user } = useContext(AuthContext) || {};
   const navigate = useNavigate();
   const {config} = useAppConfig();
+  
 
-  const toggleExpand = (itemName: string) => {
+
+
+  const toggleExpand = (itemName: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     setExpandedItem(expandedItem === itemName ? null : itemName);
   };
 
   const isActive = (path: string) => {
-    // Check if the current route starts with the path of the menu item
     return location.pathname.startsWith(path);
+  };
+
+  const isSubItemActive = (subItems: { name: string; path: string; }[]) => {
+    return subItems.some(subItem => isActive(subItem.path));
   };
 
   const handleLogout = () => {
@@ -66,7 +92,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   };
 
   return (
-    <div className={`relative hidden sm:block h-screen  bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
+    <div className={`relative hidden sm:block h-screen bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">
@@ -78,31 +104,56 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
           <ul className="py-4 w-full flex flex-col items-center">
             {menuItems.map((item) => (
               <li key={item.name} className="mb-1 w-full flex justify-center items-center">
-                <Link
-                  to={item.path}
-                  onClick={(e) => toggleExpand(item.name)}
-                  className={`w-full ${isOpen ? "px-6 py-4" : "px-5 py-5"} flex items-center hover:bg-secondary/20 transition-colors duration-200 ${isActive(item.path) ? 'bg-secondary/20 border-l-4 text-secondary border-secondary' : ''}`}
-                >
-                  <item.icon className={`${isOpen ? 'h-6 w-6' : 'h-8 w-8'}`} />
-                  {isOpen && (
-                    <span className={`ml-3`}>{item.name}</span>
-                  )}
-                </Link>
+                <div className="w-full">
+                  <div className="relative">
+                    <Link
+                      to={item.path}
+                      className={`w-full ${isOpen ? "px-6 py-4" : "px-5 py-5"} flex items-center hover:bg-secondary/20 transition-colors duration-200 ${
+                        isActive(item.path) || (item.subItems && isSubItemActive(item.subItems)) 
+                          ? 'bg-secondary/20 border-l-4 text-secondary border-secondary' 
+                          : ''
+                      }`}
+                    >
+                      <item.icon className={`${isOpen ? 'h-6 w-6' : 'h-8 w-8'}`} />
+                      {isOpen && (
+                        <>
+                          <span className="ml-3 flex-1">{item.name}</span>
+                          {item.subItems && (
+                            <button
+                              onClick={(e) => toggleExpand(item.name, e)}
+                              className="p-1 hover:bg-secondary/30 rounded"
+                            >
+                              {expandedItem === item.name ? (
+                                <ChevronUpIcon className="h-4 w-4" />
+                              ) : (
+                                <ChevronDownIcon className="h-4 w-4" />
+                              )}
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </Link>
+                  </div>
 
-                {expandedItem === item.name && item.subItems && isOpen && (
-                  <ul className="bg-gray-800 py-2">
-                    {item.subItems.map((subItem) => (
-                      <li key={subItem.name}>
+                  {/* Submenu */}
+                  {expandedItem === item.name && item.subItems && isOpen && (
+                    <div className="bg-gray-50 border-l-4 border-secondary/30">
+                      {item.subItems.map((subItem) => (
                         <Link
+                          key={subItem.name}
                           to={subItem.path}
-                          className={`block px-12 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200 ${isActive(subItem.path) ? 'bg-gray-700 text-white' : ''}`}
+                          className={`block px-12 py-3 text-sm hover:bg-secondary/10 transition-colors duration-200 ${
+                            isActive(subItem.path) 
+                              ? 'bg-secondary/20 text-secondary font-medium' 
+                              : 'text-gray-600'
+                          }`}
                         >
                           {subItem.name}
                         </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                      ))}
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
 
@@ -111,11 +162,11 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
               <div className="flex items-center">
                 <button
                   onClick={handleLogout}
-                  className={`text-sm font-medium flex items-center gap-2 px-4 py-2 rounded-full ${isOpen ? 'w-full' : 'w-20 justify-center'}`}
+                  className={`text-sm font-medium flex items-center gap-2 px-4 py-2 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors duration-200 ${isOpen ? 'w-full' : 'w-20 justify-center'}`}
                 >
                   <ArrowRightStartOnRectangleIcon className={`${isOpen ? 'h-5 w-5' : 'h-6 w-6'}`} />
                   {isOpen && (
-                    <span className={`pl-2`}>Logout</span>
+                    <span className="pl-2">Logout</span>
                   )}
                 </button>
               </div>
@@ -127,9 +178,9 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
       {/* Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="absolute top-4 -right-2 p-2 bg-secondary/80 text-white rounded-full"
+        className="absolute top-4 -right-2 p-2 bg-secondary/80 text-white rounded-full hover:bg-secondary transition-colors duration-200"
       >
-        {isOpen ? <ChevronLeftIcon className="h-5 w-5" />  : <ChevronRightIcon className="h-5 w-5" />}
+        {isOpen ? <ChevronLeftIcon className="h-5 w-5" /> : <ChevronRightIcon className="h-5 w-5" />}
       </button>
     </div>
   );

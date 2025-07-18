@@ -47,11 +47,13 @@ const initialFormData = {
   crowdfund: false,
   eventCrowdfund: false,
   suppoters: '',
+  vatNumber: '',
+  emisNumber: '',
   status: ""
 };
 
 const Organization = () => {
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState<any>(initialFormData);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [certificatePreview, setCertificatePreview] = useState<string | null>(null);
   const [documentPreview, setDocumentPreview] = useState<string | null>(null);
@@ -163,7 +165,33 @@ const Organization = () => {
     type: 'logo' | 'supportingDoc' | 'founderId' | 'founderDocument' | 'bankDocument'
   ) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    
+    // If no file is selected, clear the preview and file
+    if (!file) {
+      if (type === 'logo') {
+        setLogoFile(null);
+        setLogoPreview(null);
+        setFormData((prev) => ({ ...prev, logo: '' }));
+      } else if (type === 'supportingDoc') {
+        setSupportingDocFile(null);
+        setDocumentPreview(null);
+        setFormData((prev) => ({ ...prev, supportingDoc: '' }));
+      } else if (type === 'founderId') {
+        setFounderIdFile(null);
+        setFounderIdPreview(null);
+        setFormData((prev) => ({ ...prev, founderId: '' }));
+      } else if (type === 'founderDocument') {
+        setFounderDocFile(null);
+        setFounderDocumentPreview(null);
+        setFormData((prev) => ({ ...prev, founderDocument: '' }));
+      } else if (type === 'bankDocument') {
+        setBankDocFile(null);
+        setBankDocumentPreview(null);
+        setFormData((prev) => ({ ...prev, bankDocument: '' }));
+      }
+      return;
+    }
+    
     const previewURL = URL.createObjectURL(file);
     if (type === 'logo') {
       setLogoFile(file);
@@ -209,11 +237,21 @@ const Organization = () => {
           formDataToSend.append(key, value as any);
         }
       });
+      // Only add files if they are newly uploaded (not existing from API)
       if (logoFile) formDataToSend.set('logo', logoFile);
       if (supportingDocFile) formDataToSend.set('supportingDoc', supportingDocFile);
       if (founderIdFile) formDataToSend.set('founderId', founderIdFile);
       if (founderDocFile) formDataToSend.set('founderDocument', founderDocFile);
       if (bankDocFile) formDataToSend.set('bankDocument', bankDocFile);
+      
+      // For update mode, include existing file paths if no new files are uploaded
+      if (isUpdateMode) {
+        if (!logoFile && formData.logo) formDataToSend.set('existingLogo', formData.logo);
+        if (!supportingDocFile && formData.supportingDoc) formDataToSend.set('existingSupportingDoc', formData.supportingDoc);
+        if (!founderIdFile && formData.founderId) formDataToSend.set('existingFounderId', formData.founderId);
+        if (!founderDocFile && formData.founderDocument) formDataToSend.set('existingFounderDocument', formData.founderDocument);
+        if (!bankDocFile && formData.bankDocument) formDataToSend.set('existingBankDocument', formData.bankDocument);
+      }
       const config = { headers: { 'Content-Type': 'multipart/form-data' } };
       const url = isUpdateMode ? `${BASE_URL}/organization/${user.userId}` : `${BASE_URL}/organization`;
       
@@ -275,9 +313,14 @@ const Organization = () => {
                 required
               >
                 <option value="">Select the Organization Type</option>
-                <option value="educationInstitute">Education institution</option>
-                <option value="foundation">Foundation</option>
-                <option value="publicBenefitOrganization">Public Benefit Organization</option>
+                <option value="public">Public</option>
+                <option value="indepedent/private">Independent/Private</option>
+                <option value="specialised">Specialised</option>
+                <option value="university">University</option>
+                <option value="college">College</option>
+                <option value="school">School</option>
+                <option value="technical">Technical</option>
+                
               </select>
               <select
                 name="tags"
@@ -294,14 +337,17 @@ const Organization = () => {
                 <option value="others">Others</option>
               </select>
 
+             <Input label="VAT Number" name="vatNumber" value={formData.vatNumber} onChange={handleChange} />
+             <Input label="EMIS Number" name="emisNumber" value={formData.emisNumber} onChange={handleChange} />
+
               <Input label="Description" name="description" value={formData.description} onChange={handleChange} required />
             </div>
 
-            <FileUpload label="Organization Logo" onChange={(e) => handleFileChange(e, 'logo')} previewUrl={logoPreview} />
+            <FileUpload label="Organization Logo" onChange={(e) => handleFileChange(e, 'logo')} previewUrl={logoPreview} required={!isUpdateMode} />
 
             <p className='text-gray-600 text-sm mt-4'>An image speaks a thousand words! Try to upload your organisation's logo, or an image which give donors a sense of your organisation.</p>
 
-            <FileUpload label="S18A Document" onChange={(e) => handleFileChange(e, 'supportingDoc')} previewUrl={documentPreview} />
+            <FileUpload label="S18A Document" onChange={(e) => handleFileChange(e, 'supportingDoc')} previewUrl={documentPreview} required={false} />
             <p className='text-gray-600 text-sm'>Are you S18A registered? Upload your S18A certificate below. You can come back and do this at any time.</p>
           </div>
           {/* Section 2: Head Office Address */}
@@ -370,8 +416,8 @@ const Organization = () => {
             <h3 className="text-xl font-semibold mb-2">Banking Details</h3>
             <p className="text-gray-500 mb-4 text-sm">Bank account and verification information.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FileUpload label="Founder ID (file)" onChange={(e) => handleFileChange(e, 'founderId')} previewUrl={founderIdPreview} />
-              <FileUpload label="Founder Document" onChange={(e) => handleFileChange(e, 'founderDocument')} previewUrl={founderDocumentPreview} />
+              <FileUpload label="Founder ID (file)" onChange={(e) => handleFileChange(e, 'founderId')} previewUrl={founderIdPreview} required={!isUpdateMode} />
+              <FileUpload label="Founder Document" onChange={(e) => handleFileChange(e, 'founderDocument')} previewUrl={founderDocumentPreview} required={!isUpdateMode} />
               <Input label="Account Holder Name" name="accountHolderName" value={formData.accountHolderName} onChange={handleChange} required />
               <select
                 name="identificationType"
@@ -404,7 +450,7 @@ const Organization = () => {
           </div>
 
           <div>
-            <FileUpload label="Bank Document" onChange={(e) => handleFileChange(e, 'bankDocument')} previewUrl={bankDocumentPreview} />
+            <FileUpload label="Bank Document" onChange={(e) => handleFileChange(e, 'bankDocument')} previewUrl={bankDocumentPreview} required={!isUpdateMode} />
             <p>Upload the necessary documents to prove validity of the banking details provided above.</p>
           </div>
           {/* Section 6: Other Info */}
@@ -473,33 +519,105 @@ const FileUpload = ({
   label,
   onChange,
   previewUrl,
+  required = false,
+  onRemove,
+  isUpdateMode = false,
 }: {
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
+  required?: boolean;
+  onRemove?: () => void;
+  isUpdateMode?: boolean;
 }) => (
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-    <input
-      type="file"
-      accept="image/*,.pdf,.doc,.docx"
-      onChange={onChange}
-      className="w-full mb-2"
-    />
+  <div className="w-full">
+    <label className="block text-sm font-medium text-gray-700 mb-2">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    
+    <div className="relative">
+      <input
+        type="file"
+        accept="image/*,.pdf,.doc,.docx"
+        onChange={onChange}
+        required={required}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        id={`file-${label.replace(/\s+/g, '-').toLowerCase()}`}
+      />
+      
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-secondary transition-colors duration-200 bg-gray-50 hover:bg-gray-100">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          {previewUrl ? (
+            <>
+              {/\.(pdf|doc|docx)$/i.test(previewUrl) ? (
+                <div className="flex flex-col items-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
+                    <svg className="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-medium text-gray-700">Document Uploaded</p>
+                  <a
+                    href={previewUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 text-sm underline mt-1"
+                  >
+                    📄 View Document
+                  </a>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <img 
+                    src={previewUrl} 
+                    alt="Preview" 
+                    className="w-24 h-24 object-cover rounded-lg border shadow-sm mb-2" 
+                  />
+                  <p className="text-sm font-medium text-gray-700">Image Uploaded</p>
+                  <p className="text-xs text-gray-500">Click to change</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <>
+              <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  Click to upload or drag and drop
+                </p>
+                <p className="text-xs text-gray-500 mt-1">
+                  PNG, JPG, PDF, DOC up to 10MB
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+    
     {previewUrl && (
-      <div className="mt-2">
-        {/\.(pdf|doc|docx)$/i.test(previewUrl) ? (
-          <a
-            href={previewUrl}
-            target="_blank"
-            download
-            className="text-blue-600 underline"
-          >
-            📄 Download Document
-          </a>
-        ) : (
-          <img src={previewUrl} alt="Preview" className="h-24 object-contain border rounded-md shadow" />
-        )}
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-xs text-gray-500">
+          File uploaded successfully
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            // Clear the file input
+            const fileInput = document.getElementById(`file-${label.replace(/\s+/g, '-').toLowerCase()}`) as HTMLInputElement;
+            if (fileInput) fileInput.value = '';
+            // Trigger change event to clear preview
+            const event = new Event('change', { bubbles: true });
+            fileInput?.dispatchEvent(event);
+          }}
+          className="text-xs text-red-600 hover:text-red-800 underline"
+        >
+          Remove
+        </button>
       </div>
     )}
   </div>

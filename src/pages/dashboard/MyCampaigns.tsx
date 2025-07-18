@@ -60,7 +60,7 @@ const MyCampaigns = () => {
       console.log("campaigns", uniqueCampaigns);
       console.log("organizagtion", user);
 
-      if (user.organization.role === "editor") {
+      if (user?.organization?.role === "editor") {
         return setCampaigns(
           uniqueCampaigns.filter((campaign) => campaign.userId === user.userId)
         );
@@ -77,10 +77,10 @@ const MyCampaigns = () => {
   };
 
   useEffect(() => {
-    if (user?.userId && user?.organization._id !== null) {
+    if (user?.userId) {
       fetchAllCampaigns();
     }
-  }, [user, user?.organization?._id]);
+  }, [user]);
 
   if (loading) {
     return (
@@ -128,12 +128,11 @@ const MyCampaigns = () => {
       {campaigns.length === 0 && (
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">No campaigns found</h1>
-          {
-            !user?.organization?._id? 
+          {!user?.organization?._id ? (
             <p className="text-gray-500">Register an organization to get started</p>
-            :
+          ) : (
             <p className="text-gray-500">Create a campaign to get started</p>
-          }
+          )}
         </div>
       )}
 

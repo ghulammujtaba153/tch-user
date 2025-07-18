@@ -19,6 +19,7 @@ const EditProfile = () => {
     nationality: "",
     addressLine1: "",
     addressLine2: "",
+    phoneNumber: "",
     city: "",
     state: "",
     postalCode: "",
@@ -54,6 +55,7 @@ const EditProfile = () => {
             gender: u.gender,
             dateOfBirth: u.dateOfBirth,
             nationality: u.nationality,
+            phoneNumber: u.phoneNumber || "",
             addressLine1: u.addressLine1 || "",
             addressLine2: u.addressLine2 || "",
             city: u.city || "",
@@ -238,6 +240,20 @@ const EditProfile = () => {
                     className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label htmlFor="phoneNumber" className="text-sm text-gray-500">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  id="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                />
               </div>
             </div>
           </div>

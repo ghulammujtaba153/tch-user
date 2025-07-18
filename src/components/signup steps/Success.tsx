@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const Success = ({ data }) => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext) || { login: () => {} };
+  const { login, setUser } = useContext(AuthContext) || { login: () => {}, setUser: () => {} };
   const [loading, setLoading] = useState(false);
   console.log("data", data)
 
@@ -42,7 +42,7 @@ const Success = ({ data }) => {
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-
+      setUser(user);
 
       const redirectToProfile=data.wantsOrganization
 

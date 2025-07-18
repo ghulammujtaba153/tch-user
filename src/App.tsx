@@ -43,13 +43,17 @@ import Blog from './pages/blogs/Blog';
 import GuideCategories from './components/guides/GuideCategories';
 import Guide from './components/guides/Guide';
 import GuidesMain from './components/guides/GuidesMain';
-import Organization from './pages/Organization';
+import Organization from './pages/dashboard/Organization';
+import OrganizationPage from './pages/Organization';
+import AddMember from './components/dashboard/AddMember';
 import PageTracker from './hooks/usePageTracking';
 import Launch from './pages/launch/Launch';
 import TermsCondition from './pages/TermsCondition';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
+import DonationReceived from './components/donation/DonationReceived';
+import DonationSent from './components/donation/DonationSent';
 
 
 
@@ -122,7 +126,7 @@ function App() {
           <Route path="/home/campaigns/:id" element={<CampaignDetails />} />
           <Route path="/home/campaigns/create" element={<CreateCampaignForm />} />
 
-          <Route path="/home/organization/:id" element={<Organization />} />
+          <Route path="/home/organization/:id" element={<OrganizationPage />} />
 
           <Route path="/works" element={<HowWorks/>} />
           <Route path="/about" element={<About/>} />
@@ -151,6 +155,10 @@ function App() {
             <Route path="campaigns" element={<MyCampaigns />} />
             <Route path="donations" element={<Donations />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="organization" element={<Organization />} />
+            <Route path="members" element={<AddMember />} />
+            <Route path='received-donations' element={<DonationReceived />} />
+            <Route path='sent-donations' element={<DonationSent />} />
             <Route path="profile/edit" element={<EditProfile />} />
             <Route path="support" element={<Support />} />
             <Route path="campaigns/create" element={<CreateCampaign />} />
