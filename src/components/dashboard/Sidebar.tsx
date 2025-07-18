@@ -26,6 +26,11 @@ const menuItems: MenuItem[] = [
     path: '/user/dashboard/profile',
   },
   {
+    name: 'My Donations',
+    icon: CurrencyDollarIcon,
+    path: '/user/dashboard/sent-donations',
+  },
+  {
     name: 'Organization',
     icon: HomeIcon,
     path: '/user/dashboard/organization',
@@ -50,11 +55,7 @@ const menuItems: MenuItem[] = [
     icon: SpeakerWaveIcon,
     path: '/user/dashboard/campaigns',
   },
-  {
-    name: 'My Donations',
-    icon: CurrencyDollarIcon,
-    path: '/user/dashboard/sent-donations',
-  },
+  
   {
     name: 'Support',
     icon: UsersIcon,
@@ -92,7 +93,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   };
 
   return (
-    <div className={`relative hidden sm:block h-screen bg-white text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
+    <div className={`relative hidden sm:block h-screen bg-gray-50 text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">

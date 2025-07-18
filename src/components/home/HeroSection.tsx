@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
       <ScrollToTop />
 
       {/* Hero Carousel */}
-      <div className="w-full h-[300px] md:h-[560px] relative overflow-hidden">
+      <div className="w-full h-[50%] md:h-[560px] relative overflow-hidden">
         <Carousel
           showThumbs={false}
           autoPlay
@@ -22,14 +22,14 @@ const HeroSection: React.FC = () => {
         >
           <div>
             <img
-              src="/hero1.png"
+              src="/First Picture.png"
               alt="Slide 1"
               className="w-full h-full object-cover"
             />
           </div>
           <div>
             <img
-              src="/hero2.png"
+              src="/Second Picture.png"
               alt="Slide 2"
               className="w-full h-full object-cover"
             />

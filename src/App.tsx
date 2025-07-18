@@ -20,7 +20,6 @@ import EditCampaign from './components/EditCampaign';
 import MainDashboard from './pages/dashboard/main';
 import CampaignerDashboardLayout from './layouts/DashboardLayout';
 import MyCampaigns from './pages/dashboard/MyCampaigns';
-import Donations from './pages/dashboard/Donations';
 import Profile from './pages/dashboard/Profile';
 import EditProfile from './pages/dashboard/EditProfile';
 import CreateCampaign from './pages/dashboard/CreateCampaign';
@@ -153,7 +152,7 @@ function App() {
           <Route path="/user/dashboard" element={<CampaignerDashboardLayout/>}>
             <Route path='overview' element={<MainDashboard />} />
             <Route path="campaigns" element={<MyCampaigns />} />
-            <Route path="donations" element={<Donations />} />
+            
             <Route path="profile" element={<Profile />} />
             <Route path="organization" element={<Organization />} />
             <Route path="members" element={<AddMember />} />

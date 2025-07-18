@@ -255,7 +255,7 @@ const CampaignerDashboardLayout: React.FC = () => {
         className={`flex-1 overflow-x-hidden overflow-y-auto transition-all duration-300`}
       >
         {/* Search Bar */}
-        <div className="flex justify-end gap-4 py-4 px-6 items-center">
+        <div className="flex bg-gray-50 justify-end gap-4 py-4 px-6 items-center">
           {/* <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
             <input
               type="text"
