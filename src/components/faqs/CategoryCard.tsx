@@ -40,10 +40,10 @@ const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
           )}
         </div>
         
-        <div className="flex justify-between items-center">
+        <div className="flex justify-center items-center">
           
-          <span className="text-gray-600">
-            {category.questionCount || 0} questions
+          <span className="text-gray-600 text-center">
+            {category.questionCount || 0} Questions 
           </span>
         </div>
       </div>

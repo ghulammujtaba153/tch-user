@@ -25,28 +25,28 @@ const Navbar: React.FC = () => {
           {/* Logo + Links */}
           <div className="flex items-center gap-4">
             <Link to="/">
-              <img src={config?.logo} alt="logo" className="h-[60px] w-[190px]" />
+              <img src={config?.logo} alt="logo" className="h-[70px] w-[190px]" />
             </Link>
             <img src="/line.png" alt="separator" className="w-[1px] h-[30px] hidden md:block" />
 
             <div className="hidden lg:flex items-center text-sm gap-4 xl:gap-6">
               <Link
                 to="/"
-                className={`${linkBase} ${isActive('/') ? 'text-secondary' : 'hover:text-secondary'}`}
+                className={`${linkBase} ${isActive('/') ? 'text-secondary !font-semibold' : 'hover:text-secondary'}`}
               >
                 Home
               </Link>
 
               <Link
                 to="/home/campaigns"
-                className={`${linkBase} ${startsWith('/home/campaigns') ? ' text-secondary' : 'hover:text-secondary'}`}
+                className={`${linkBase} ${startsWith('/home/campaigns') ? 'text-secondary !font-semibold' : 'hover:text-secondary'}`}
               >
                 Find Campaigns
               </Link>
 
               <Link
                 to="/support"
-                className={`${linkBase} ${isActive('/support') ? 'text-secondary' : 'hover:text-secondary'}`}
+                className={`${linkBase} ${isActive('/support') ? 'text-secondary !font-semibold' : 'hover:text-secondary'}`}
               >
                 Contact Us
               </Link>

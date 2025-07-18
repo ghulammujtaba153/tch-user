@@ -48,12 +48,12 @@ const CampaignsSection: React.FC = () => {
   return (
     <section className="max-w-[1200px] mx-auto py-16 px-4 text-black flex flex-col items-center gap-4">
       {/* Header */}
-      <div className='flex flex-col items-center justify-center gap-4'>
+      <div className='flex flex-col items-center justify-center gap-4 mt-10'>
         <div className='flex items-center justify-center gap-2'>
           <img src="/home-header.png" alt="aboutus" className="w-[20px] h-[14px]" />
           <p className="text-sm font-normal leading-[15px] text-[#000000] tracking-[3.5px] font-onest">CAMPAIGNS</p>
         </div>
-        <h1 className='text-4xl font-bold font-onest'>Featured Campaigns</h1>
+        <h1 className='text-4xl font-bold font-onest text-[#0033A0]'>Featured Campaigns</h1>
         <p className='text-sm text-gray-500 font-sans'>Your donations will help grow a lasting legacy.</p>
       </div>
 

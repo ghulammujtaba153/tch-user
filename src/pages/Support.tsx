@@ -155,7 +155,7 @@ const Support = () => {
     <div className='pt-20 min-h-screen px-4'>
       <ScrollToTop />
       <div className='max-w-[800px] bg-white border border-gray-200 py-8 rounded-[20px] mx-auto px-6 shadow-md mb-10'>
-        <h1 className='text-2xl font-bold text-center text-gray-800'>We're here for you!</h1>
+        <h1 className='text-2xl font-bold text-center text-[#0033A0]'>We're here for you!</h1>
         <div className='w-full flex items-center justify-center mt-4'>
           <p className='max-w-[500px] text-center text-gray-500 mt-2'>
             Need help? Our team of Customer Support Specialists is here to guide you throughout your crowdfunding journey.
@@ -227,7 +227,7 @@ const Support = () => {
           {/* Phone field */}
           <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="phone" className='font-medium'>Phone Number</label>
+              <label htmlFor="phone" className='font-medium'>Contact Number</label>
               <input
                 type="tel"
                 name="phone"
@@ -279,7 +279,7 @@ const Support = () => {
 
           {/* Message */}
           <div className='flex flex-col gap-2'>
-            <label htmlFor="message" className='font-medium'>Query Description*</label>
+            <label htmlFor="message" className='font-medium'>Your Query*</label>
             <textarea
               name="message"
               id="message"

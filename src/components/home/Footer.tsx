@@ -76,7 +76,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col gap-6 w-full mt-[40px]">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm text-primarylight font-bold mb-2 font-onest">
+              <h2 className="text-sm text-secondary font-bold mb-2 font-onest">
                 GROW WITH US
               </h2>
 
@@ -117,7 +117,7 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm text-primarylight font-bold mb-2 font-onest uppercase">
+              <h2 className="text-sm text-secondary font-bold mb-2 font-onest uppercase">
                 Quick Links
               </h2>
 
@@ -164,12 +164,12 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 text-primarylight font-onest">POWERED BY</h2>
+              <h2 className="text-sm font-bold mb-2 text-secondary font-onest">POWERED BY</h2>
               <div className="flex">
                 <img
                   src="SBBluelogo.png"
                   alt="logo"
-                  className="w-[200px] h-[70px]"
+                  className="w-[200px] h-[60px]"
                 />
               </div>
               <div className="flex gap-2">
@@ -182,12 +182,12 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest text-primarylight">INFORMATION</h2>
+              <h2 className="text-sm font-bold mb-2 font-onest text-secondary">INFORMATION</h2>
 
               <p className="text-sm font-bold mb-2 font-onest">
                 General Contact
               </p>
-              <p className="text-sm mb-2 ">support@givetogrow.co.za</p>
+              <p className="text-sm mb-2 ">info@givetogrow.co.za</p>
 
               <p className="text-sm font-bold mb-2 font-onest">Support</p>
               <p className="text-sm">support@givetogrow.co.za</p>
@@ -203,7 +203,7 @@ const Footer: React.FC = () => {
           © GivetoGrow operates under the license of The Standard Bank of South Africa Limited, an authorised Financial Services Provider.
           
         </p>
-        <p className="mt-6 text-sm">version 1.2.0</p>
+       
       </div>
 
     </div>

@@ -38,7 +38,7 @@ const GuideCategories = () => {
   if(loading) return <div className='flex justify-center items-center min-h-screen'><Loading/></div>
 
   return (
-    <div className='max-w-[1200px] h-screen mx-auto mt-[100px] px-4'>
+    <div className='max-w-[1200px] mx-auto mt-[100px] px-4 pb-10'>
       <ScrollToTop />
       <div className="w-full flex items-center justify-center gap-2 mb-10">
         <img src="/home-header.png" alt="home-header" className="w-[20px] h-[15px]" />
@@ -50,13 +50,12 @@ const GuideCategories = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 '>
+        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
           {data.length > 0 ? data.map((item: any) => (
             <CategoryCard key={item._id} data={item} />
           ))
-
           : <div className="text-center py-10">No guides category found</div>
-        }
+          }
         </div>
       )}
     </div>

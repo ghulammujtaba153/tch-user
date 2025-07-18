@@ -90,7 +90,7 @@ const SignIn = () => {
       {error && <Notification isOpen={true} title="Error" message={error} type="error" onClose={() => setError('')} />}
       <div className="w-full max-w-md space-y-8 bg-white px-8 py-12 rounded-xl shadow-lg">
         <div className='flex items-center justify-center'>
-          <img src={config?.logo} alt="logo" className='h-[60px] w-[190px]'/>
+          <img src={config?.logo} alt="logo" className='h-[70px] w-[190px]'/>
         </div>
 
 
@@ -182,7 +182,7 @@ const SignIn = () => {
           <MicrosoftLoginButton/>
           </div>
 
-          
+          <p className="mt-6 text-sm text-center">Version 1.2.0</p>
         </form>
       </div>
     </div>

@@ -18,6 +18,11 @@ const AboutUsSection: React.FC = () => {
   const [aboutData, setAboutData] = React.useState<AboutUsData | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false)
 
+  // Helper function to render HTML content safely
+  const renderHTML = (htmlContent: string) => {
+    return { __html: htmlContent };
+  };
+
   useEffect(() => {
     const fetchAboutData = async () => {
       setLoading(true)
@@ -71,12 +76,14 @@ const AboutUsSection: React.FC = () => {
           </div>
 
           {/* Title Section */}
-          <h1 className="text-4xl font-bold font-onest">{aboutData?.title}</h1>
+          <h1 className="text-4xl font-bold font-onest text-[#0033A0]">{aboutData?.title}</h1>
 
-          <div
-  className="text-sm text-gray-500"
-  dangerouslySetInnerHTML={{ __html: aboutData?.description }}
-></div>
+
+
+          <div 
+            className="text-sm text-gray-500"
+            dangerouslySetInnerHTML={renderHTML(aboutData?.description || '')}
+          />
 
 
           {/* List Section */}

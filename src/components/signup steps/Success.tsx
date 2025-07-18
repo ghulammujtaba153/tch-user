@@ -73,18 +73,20 @@ const Success = ({ data }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[300px] px-4 text-center">
-      <h2 className="text-2xl font-bold text-green-600 mb-4">Success!</h2>
-      <p className="text-gray-700 mb-6">Your account has been created successfully.</p>
-      <button
-        onClick={handleDone}
-        disabled={loading}
-        className={`bg-secondary text-white px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300 ${
-          loading ? "opacity-70 cursor-not-allowed" : ""
-        }`}
-      >
-        {loading ? "Loading..." : "Done"}
-      </button>
+    <div className="bg-white p-6 rounded-xxxl shadow-lg">
+      <div className="flex flex-col items-center justify-center min-h-[300px] px-4 text-center">
+        <h2 className="text-2xl font-bold text-secondary mb-4">Success!</h2>
+        <p className="text-gray-700 mb-6">Your account has been created successfully.</p>
+        <button
+          onClick={handleDone}
+          disabled={loading}
+          className={`bg-secondary text-white px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300 ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
+        >
+          {loading ? "Loading..." : "Done"}
+        </button>
+      </div>
     </div>
   );
 };
