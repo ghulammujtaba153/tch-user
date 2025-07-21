@@ -16,7 +16,7 @@ const initialBankData = {
   type: '',
   branch: '',
   branchCode: '',
-  status: null || ""
+  status: "pending"
 };
 
 const BankDetails = () => {
@@ -46,7 +46,7 @@ const BankDetails = () => {
         type: res.data.type || '',
         branch: res.data.branch || '',
         branchCode: res.data.branchCode || '',
-        status: res.data.status || null
+        status: res.data.status || "pending"
       };
 
       setBankData(bankDataFromAPI);
