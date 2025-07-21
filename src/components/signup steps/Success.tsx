@@ -44,7 +44,8 @@ const Success = ({ data }) => {
 
       setUser(user);
 
-      const redirectToProfile=data.wantsOrganization
+      const redirectToOrganization = data.wantsOrganization
+      
 
       // Update context
       login(user, token);
@@ -58,12 +59,17 @@ const Success = ({ data }) => {
 
       toast.success("Login successful!");
 
-      // Redirect user
-      if (redirectToProfile) {
-        navigate("/user/dashboard/profile");
-      } else {
-        navigate("/user/dashboard");
-      }
+      // Use setTimeout to ensure context is updated before navigation
+      setTimeout(() => {
+        console.log("context user on login", user);
+        
+        // Redirect user
+        if (redirectToOrganization) {
+          navigate("/user/dashboard/organization");
+        } else {
+          navigate("/user/dashboard/profile");
+        }
+      }, 100);
     } catch (error) {
       console.error("Login error:", error);
       toast.error("Login failed. Please try again.");

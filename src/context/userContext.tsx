@@ -86,11 +86,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = (user: any, token: string) => {
     setUser(user);
+    console.log("context user on login", user)
     setToken(token);
     localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(user));
-
     
+    // Ensure loading is set to false after login
+    setLoading(false);
   };
 
   const logout = () => {

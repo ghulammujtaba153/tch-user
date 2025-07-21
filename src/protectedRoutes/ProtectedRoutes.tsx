@@ -12,19 +12,24 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
   const {user, loading} = useContext(AuthContext);
 
   useEffect(() => {
-  if (!loading) {
+    // Don't redirect while loading
+    if (loading) {
+      return;
+    }
+
+    // Check if user exists
     if (!user) {
       navigate('/signin');
       return;
     }
 
+    // Check if user has required role
     const userRole = user.role;
     if (!allowedRoles.includes(userRole)) {
       navigate('/unauthorized');
       return;
     }
-  }
-}, [user, loading, allowedRoles, navigate]);
+  }, [user, loading, allowedRoles, navigate]);
 
   if (loading) {
     return (
