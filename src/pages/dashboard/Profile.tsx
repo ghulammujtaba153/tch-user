@@ -17,6 +17,8 @@ import Loading from "../../components/Loading";
 import AddMember from "../../components/dashboard/AddMember";
 import { useAppConfig } from "../../context/AppConfigContext";
 
+
+
 const Profile = () => {
   const [activeTab, setActiveTab] = useState<string>("profile");
   const { user } = useContext(AuthContext) || {};
@@ -28,6 +30,7 @@ const Profile = () => {
     nationality: "",
     addressLine1: "",
     addressLine2: "",
+    phoneNumber: "",
     city: "",
     state: "",
     postalCode: "",
@@ -50,18 +53,18 @@ const Profile = () => {
 
   let tabs = [
     { name: "Personal Details", key: "profile", icon: UserCircleIcon },
-    { name: "Organization Setup", key: "organization", icon: PencilIcon },
+    // { name: "Organization Setup", key: "organization", icon: PencilIcon },
     { name: "Security Settings", key: "security", icon: LockClosedIcon },
     { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
   ];
 
-  if (user?.organization?.role == "owner") {
-    tabs.splice(2, 0, {
-      name: "Team Members",
-      key: "members",
-      icon: PencilIcon,
-    });
-  }
+  // if (user?.organization?.role == "owner") {
+  //   tabs.splice(2, 0, {
+  //     name: "Team Members",
+  //     key: "members",
+  //     icon: PencilIcon,
+  //   });
+  // }
 
   useEffect(() => {
     if (!user?.userId) return;
@@ -172,6 +175,10 @@ const Profile = () => {
                   <DetailItem
                     label="Nationality"
                     value={data?.nationality || "N/A"}
+                  />
+                  <DetailItem
+                    label="Phone Number"
+                    value={data?.phoneNumber || "N/A"}
                   />
                 </div>
               </div>

@@ -53,6 +53,8 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
 import DonationReceived from './components/donation/DonationReceived';
 import DonationSent from './components/donation/DonationSent';
+import BankDetails from './pages/dashboard/BankDetails';
+import S18ADocument from './pages/dashboard/S18ADocument';
 
 
 
@@ -155,6 +157,8 @@ function App() {
             
             <Route path="profile" element={<Profile />} />
             <Route path="organization" element={<Organization />} />
+            <Route path="bank-details" element={<BankDetails />} />
+            <Route path="s18a-document" element={<S18ADocument />} />
             <Route path="members" element={<AddMember />} />
             <Route path='received-donations' element={<DonationReceived />} />
             <Route path='sent-donations' element={<DonationSent />} />

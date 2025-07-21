@@ -36,6 +36,14 @@ const menuItems: MenuItem[] = [
     path: '/user/dashboard/organization',
     subItems: [
       {
+        name: 'Bank Details',
+        path: '/user/dashboard/bank-details',
+      },
+      {
+        name: 'S18A Document',
+        path: '/user/dashboard/s18a-document',
+      },
+      {
         name: 'Members',
         path: '/user/dashboard/members',
       },

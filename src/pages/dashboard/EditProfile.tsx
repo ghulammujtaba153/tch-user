@@ -5,6 +5,8 @@ import axios from "axios";
 import { AuthContext } from "../../context/userContext";
 import upload from "../../utils/upload";
 import { useAppConfig } from "../../context/AppConfigContext";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
 
 const EditProfile = () => {
   const { user } = useContext(AuthContext)!;
@@ -246,13 +248,11 @@ const EditProfile = () => {
                 <label htmlFor="phoneNumber" className="text-sm text-gray-500">
                   Phone Number
                 </label>
-                <input
-                  type="tel"
-                  id="phoneNumber"
+                  <PhoneInput
                   value={formData.phoneNumber}
-                  onChange={handleChange}
+                  onChange={(e: any) => handleChange({target: {id: "phoneNumber", value: e}})}
                   placeholder="Enter your phone number"
-                  className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                  // className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                 />
               </div>
             </div>

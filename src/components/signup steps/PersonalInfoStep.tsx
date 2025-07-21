@@ -3,6 +3,8 @@ import { useAppConfig } from "../../context/AppConfigContext";
 import Notification from "../notification/Notification";
 import GoogleLoginButton from "../home/GoogleButton";
 import MicrosoftLoginButton from "../home/MicrosoftButton";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
 
 interface Props {
   data: any;
@@ -28,12 +30,18 @@ const PersonalInfoStep: React.FC<Props> = ({ data, setData, onNext }) => {
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!data.firstName || !data.lastName || !data.email || !data.password || !data.confirmPassword) {
+    if (!data.firstName || !data.lastName || !data.email || !data.phoneNumber || !data.password || !data.confirmPassword) {
       setError("All fields are required");
       return;
     }
     if (data.password !== data.confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+    
+    // Validate phone number (should be at least 10 digits including country code)
+    if (data.phoneNumber && data.phoneNumber.length < 10) {
+      setError("Please enter a valid phone number");
       return;
     }
 
@@ -46,6 +54,40 @@ const PersonalInfoStep: React.FC<Props> = ({ data, setData, onNext }) => {
 
   return (
     <div className="space-y-8 bg-white p-8 rounded-xl shadow-lg">
+      <style>{`
+        .phone-input-container {
+          width: 100% !important;
+        }
+        .phone-input-container .form-control {
+          width: 100% !important;
+          height: 42px !important;
+          border-radius: 8px !important;
+          border: 1px solid #d1d5db !important;
+          background-color: #f9fafb !important;
+          padding-left: 50px !important;
+          font-size: 14px !important;
+        }
+        .phone-input-container .form-control:focus {
+          outline: none !important;
+          // border-color: #B42318 !important;
+          box-shadow: 0 0 0 2px rgba(180, 35, 24, 0.2) !important;
+        }
+        .phone-input-button {
+          background-color: #f9fafb !important;
+          border: 1px solid #d1d5db !important;
+          border-right: none !important;
+          border-radius: 8px 0 0 8px !important;
+        }
+        .phone-input-dropdown {
+          border-radius: 8px !important;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        }
+        .phone-input-search {
+          border-radius: 6px !important;
+          border: 1px solid #d1d5db !important;
+          padding: 8px !important;
+        }
+      `}</style>
       <div className="flex items-center justify-center">
         <img src={config?.logo} alt="logo" className="h-[70px] w-[190px]" />
       </div>
@@ -105,6 +147,24 @@ const PersonalInfoStep: React.FC<Props> = ({ data, setData, onNext }) => {
               placeholder="Enter your email"
             />
           </div>
+
+          {/* Phone Number */}
+          <div>
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number</label>
+            <PhoneInput
+              country={'za'}
+              value={data.phoneNumber || ""}
+              onChange={(phone) => setData({ ...data, phoneNumber: phone })}
+              enableSearch={true}
+              inputClass="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              containerClass="phone-input-container"
+              buttonClass="phone-input-button"
+              dropdownClass="phone-input-dropdown"
+              searchClass="phone-input-search"
+              placeholder="Enter your phone number"
+            />
+          </div>
+          
 
           {/* Password */}
           <div className="relative">

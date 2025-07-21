@@ -12,36 +12,36 @@ const DonationReceived = () => {
   const [receivedError, setReceivedError] = useState(null);
   const { user } = useContext(AuthContext) || {};
 
-  // Fetch received donations (for campaigners)
-  useEffect(() => {
-    if (user?.userId) {
-      const fetchReceivedDonations = async () => {
-        try {
+    // Fetch received donations (for campaigners)
+    useEffect(() => {
+        if (user?.userId) {
+            const fetchReceivedDonations = async () => {
+                try {
           if (user?.organization?.role === "owner") {
-            const res = await axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-              },
-            });
-            setReceivedDonations(res.data);
-            setReceivedLoading(false);
-            return;
-          }
-          const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          });
-          setReceivedDonations(res.data);
-        } catch (error: any) {
-          setReceivedError(error);
-        } finally {
-          setReceivedLoading(false);
+                        const res = await axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+                            headers: {
+                                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                            },
+                        });
+                        setReceivedDonations(res.data);
+                        setReceivedLoading(false);
+                        return;
+                    }
+                    const res = await axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem('token')}`,
+                        },
+                    });
+                    setReceivedDonations(res.data);
+                } catch (error: any) {
+                    setReceivedError(error);
+                } finally {
+                    setReceivedLoading(false);
+                }
+            };
+            fetchReceivedDonations();
         }
-      };
-      fetchReceivedDonations();
-    }
-  }, [user]);
+    }, [user]);
     
   if (receivedLoading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (receivedError) return <div>Error: {receivedError.message}</div>;
