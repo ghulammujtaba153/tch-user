@@ -590,99 +590,151 @@ const DonationForm: React.FC<Props> = ({
 
       {/* Donor Details */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            type="text"
-            name="donorName"
-            value={formData.donorName}
-            onChange={handleInputChange}
-            placeholder="Full Name *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <input
-            type="email"
-            name="donorEmail"
-            value={formData.donorEmail}
-            onChange={handleInputChange}
-            placeholder="Email Address *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <PhoneInput 
-            value={formData.mobile}
-            onChange={(value, data, event, formattedValue) => {
-              setFormData((prev) => ({ ...prev, mobile: formattedValue }));
-            }}
-            placeholder="Mobile Number"
-            country="za"
-            inputClass="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-            containerClass="w-full"
-            countryCodeEditable={false}
-            />
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            placeholder="Street Address *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <input
-            type="text"
-            name="city"
-            value={formData.city}
-            onChange={handleInputChange}
-            placeholder="City *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <input
-            type="text"
-            name="province"
-            value={formData.province}
-            onChange={handleInputChange}
-            placeholder="Province *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <input
-            type="text"
-            name="postalCode"
-            value={formData.postalCode}
-            onChange={handleInputChange}
-            placeholder="Postal Code *"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-          <input
-            type="text"
-            name="comment"
-            value={formData.comment}
-            onChange={handleInputChange}
-            placeholder="Comment (Optional)"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
-        </div>
-        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
-          <input
-            type="checkbox"
-            name="anonymous"
-            checked={formData.anonymous}
-            onChange={handleInputChange}
-            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
-          />
-          <span className="text-sm text-gray-700">I would like to donate anonymously</span>
-        </label>
+  <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
-          <input
-            type="checkbox"
-            name="terms"
-            checked={formData.terms}
-            onChange={handleInputChange}
-            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
-          />
-          <span className="text-sm text-gray-700">I agree to the <a href="/terms" className="text-secondary hover:underline">Terms and Conditions</a></span>
-        </label>
+    {/* Full Name */}
+    <div>
+      <label htmlFor="donorName" className="block text-sm mb-2 font-medium text-gray-700">Full Name *</label>
+      <input
+        type="text"
+        id="donorName"
+        name="donorName"
+        value={formData.donorName}
+        onChange={handleInputChange}
+        placeholder="Enter your full name"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
 
-      </div>
+    {/* Email Address */}
+    <div>
+      <label htmlFor="donorEmail" className="block text-sm mb-2 font-medium text-gray-700">Email Address *</label>
+      <input
+        type="email"
+        id="donorEmail"
+        name="donorEmail"
+        value={formData.donorEmail}
+        onChange={handleInputChange}
+        placeholder="Enter your email address"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+
+    {/* Phone Number */}
+    <div>
+      <label htmlFor="mobile" className="block text-sm mb-2 font-medium text-gray-700">Mobile Number *</label>
+      <PhoneInput
+        country={'za'}
+        value={formData.mobile || ""}
+        onChange={(phone) => setFormData({ ...formData, mobile: phone })}
+        enableSearch={true}
+        inputClass="!w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+        containerClass="!w-full"
+        buttonClass="!border-none"
+        dropdownClass="phone-input-dropdown"
+        searchClass="phone-input-search"
+        placeholder="Enter your phone number"
+      />
+    </div>
+
+    {/* Street Address */}
+    <div>
+      <label htmlFor="address" className="block text-sm mb-2 font-medium text-gray-700">Street Address *</label>
+      <input
+        type="text"
+        id="address"
+        name="address"
+        value={formData.address}
+        onChange={handleInputChange}
+        placeholder="Enter your street address"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+
+    {/* City */}
+    <div>
+      <label htmlFor="city" className="block text-sm mb-2 font-medium text-gray-700">City *</label>
+      <input
+        type="text"
+        id="city"
+        name="city"
+        value={formData.city}
+        onChange={handleInputChange}
+        placeholder="Enter your city"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+
+    {/* Province */}
+    <div>
+      <label htmlFor="province" className="block text-sm mb-2 font-medium text-gray-700">Province *</label>
+      <input
+        type="text"
+        id="province"
+        name="province"
+        value={formData.province}
+        onChange={handleInputChange}
+        placeholder="Enter your province"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+
+    {/* Postal Code */}
+    <div>
+      <label htmlFor="postalCode" className="block text-sm mb-2 font-medium text-gray-700">Postal Code *</label>
+      <input
+        type="text"
+        id="postalCode"
+        name="postalCode"
+        value={formData.postalCode}
+        onChange={handleInputChange}
+        placeholder="Enter your postal code"
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+
+    {/* Comment */}
+    <div className="md:col-span-2">
+      <label htmlFor="comment" className="block text-sm mb-2 font-medium text-gray-700">Comment </label>
+      <input
+        type="text"
+        id="comment"
+        name="comment"
+        value={formData.comment}
+        onChange={handleInputChange}
+        placeholder="Add a comment..."
+        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+      />
+    </div>
+  </div>
+
+  {/* Checkboxes */}
+  <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
+    <input
+      type="checkbox"
+      name="anonymous"
+      checked={formData.anonymous}
+      onChange={handleInputChange}
+      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+    />
+    <span className="text-sm text-gray-700">I would like to donate anonymously</span>
+  </label>
+
+  <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
+    <input
+      type="checkbox"
+      name="terms"
+      checked={formData.terms}
+      onChange={handleInputChange}
+      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+    />
+    <span className="text-sm text-gray-700">
+      I agree to the <a href="/terms" target="_blank" className="text-secondary hover:underline">Terms and Conditions</a>
+    </span>
+  </label>
+</div>
+
 
       {/* Enhanced Fee Breakdown */}
       {/* <div className="mb-6 bg-gray-50 rounded-xl p-4">
