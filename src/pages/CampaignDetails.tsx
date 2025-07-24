@@ -465,10 +465,11 @@ const CampaignDetails = () => {
 
           {!admin && !campaigner && (
             <DonationForm
-              id={id as string}
-              campaigner={campaign?.userDetails[0]?._id}
+              campaignId={id as string}
               organizationId={campaign?.organization[0]._id}
-              communication={campaign?.donorCommunication}
+              campaignTitle={campaign?.title}
+              campaignAmount={campaign?.amount}
+              currentAmount={raised}
             />
           )}
 
