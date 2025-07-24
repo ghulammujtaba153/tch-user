@@ -83,6 +83,7 @@ const DonationForm: React.FC<Props> = ({
     mobile: "",
     comment: "",
     anonymous: false,
+    terms: false,
   });
 
   const predefinedAmounts = ["150", "200", "300", "500"];
@@ -99,7 +100,7 @@ const DonationForm: React.FC<Props> = ({
       try {
         setSettingsLoading(true);
         console.log("🔍 Fetching payment settings for campaign donation...");
-        
+
         const [cardResponse, eftResponse] = await Promise.all([
           axios.get(`${BASE_URL}/payment-settings?type=card`),
           axios.get(`${BASE_URL}/payment-settings?type=eft`)
@@ -166,7 +167,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("🔧 Calculating platform fee with settings:", settings.platformFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (settings.platformFee.percent !== undefined) {
       const fee = (baseAmount * settings.platformFee.percent) / 100;
       console.log(`Platform fee (${settings.platformFee.percent}%): ${fee}`);
@@ -176,7 +177,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`Platform fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -188,7 +189,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("🔧 Calculating transaction fee with settings:", settings.transactionFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (settings.transactionFee.percent !== undefined) {
       const fee = (baseAmount * settings.transactionFee.percent) / 100;
       console.log(`Transaction fee (${settings.transactionFee.percent}%): ${fee}`);
@@ -198,7 +199,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`Transaction fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -322,7 +323,7 @@ const DonationForm: React.FC<Props> = ({
       const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
         amount: totalCents.toString(),
         reference: randomRef,
-          transactionType: "Payment",
+        transactionType: "Payment",
       });
 
       if (!window.hpp?.payment) {
@@ -335,8 +336,8 @@ const DonationForm: React.FC<Props> = ({
         async (successData: any) => {
           console.log("💳 Payment Success", successData);
           try {
-            const response = await axios.post(`${BASE_URL}/donations`, { 
-              ...donationData, 
+            const response = await axios.post(`${BASE_URL}/donations`, {
+              ...donationData,
               status: "completed",
               transactionId: successData.transactionId || randomRef
             });
@@ -361,7 +362,7 @@ const DonationForm: React.FC<Props> = ({
         (failData: any) => {
           console.error("❌ Payment Failed", failData);
           toast.error("Payment failed. Please try again.");
-          
+
           // Track failed donation
           ReactGA.event({
             category: "Donation",
@@ -384,7 +385,7 @@ const DonationForm: React.FC<Props> = ({
 
     try {
       setLoading(true);
-      
+
       const tipAmount = calculateTipAmount();
       const platformFee = calculatePlatformFee();
       const transactionFee = calculateTransactionFee();
@@ -426,7 +427,7 @@ const DonationForm: React.FC<Props> = ({
       };
 
       await axios.post(`${BASE_URL}/donations`, donationData);
-      
+
       // Send socket notification
       sendSocketNotification({ ...donationData, anonymous: formData.anonymous });
 
@@ -467,7 +468,7 @@ const DonationForm: React.FC<Props> = ({
   const getPlatformFeeDisplay = (): string => {
     const settings = getCurrentPaymentSettings();
     if (!settings) return "Loading...";
-    
+
     if (settings.platformFee.percent !== undefined) {
       return `${settings.platformFee.percent}%`;
     } else if (settings.platformFee.total !== undefined) {
@@ -479,7 +480,7 @@ const DonationForm: React.FC<Props> = ({
   const getTransactionFeeDisplay = (): string => {
     const settings = getCurrentPaymentSettings();
     if (!settings) return "Loading...";
-    
+
     if (settings.transactionFee.percent !== undefined) {
       return `${settings.transactionFee.percent}%`;
     } else if (settings.transactionFee.total !== undefined) {
@@ -495,7 +496,7 @@ const DonationForm: React.FC<Props> = ({
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary mr-3"></div>
           <span className="text-gray-600">Loading payment settings...</span>
         </div>
-          </div>
+      </div>
     );
   }
 
@@ -508,21 +509,20 @@ const DonationForm: React.FC<Props> = ({
         <label className="block text-sm font-medium text-gray-700 mb-3">Select Amount</label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {predefinedAmounts.map((amt) => (
-              <button
+            <button
               key={amt}
               onClick={() => {
                 setAmount(amt);
                 setCustomAmount("");
               }}
-              className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${
-                amount === amt 
-                  ? "bg-secondary text-white border-secondary shadow-lg" 
+              className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${amount === amt
+                  ? "bg-secondary text-white border-secondary shadow-lg"
                   : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
-              }`}
+                }`}
             >
               R{amt}
-              </button>
-            ))}
+            </button>
+          ))}
         </div>
         <input
           type="number"
@@ -544,11 +544,10 @@ const DonationForm: React.FC<Props> = ({
             <button
               key={tip.value}
               onClick={() => handleTipChange(tip.value)}
-              className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${
-                tipPercentage === tip.value && !customTip
-                  ? "bg-secondary text-white border-secondary" 
+              className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${tipPercentage === tip.value && !customTip
+                  ? "bg-secondary text-white border-secondary"
                   : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
-              }`}
+                }`}
             >
               {tip.label}
             </button>
@@ -561,7 +560,7 @@ const DonationForm: React.FC<Props> = ({
           onChange={(e) => handleCustomTipChange(e.target.value)}
           className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
         />
-        </div>
+      </div>
 
       {/* Payment Method */}
       <div className="mb-6">
@@ -591,81 +590,93 @@ const DonationForm: React.FC<Props> = ({
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              name="donorName"
-              value={formData.donorName}
-            onChange={handleInputChange} 
-            placeholder="Full Name *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
-            />
-            <input
-              type="email"
-              name="donorEmail"
-              value={formData.donorEmail}
-            onChange={handleInputChange} 
-            placeholder="Email Address *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          <input
+            type="text"
+            name="donorName"
+            value={formData.donorName}
+            onChange={handleInputChange}
+            placeholder="Full Name *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
-            <input
-              type="text"
-              name="mobile"
-              value={formData.mobile}
-            onChange={handleInputChange} 
-            placeholder="Mobile Number" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          <input
+            type="email"
+            name="donorEmail"
+            value={formData.donorEmail}
+            onChange={handleInputChange}
+            placeholder="Email Address *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+          />
+          <input
+            type="text"
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleInputChange}
+            placeholder="Mobile Number"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
           <input
             type="text"
             name="address"
             value={formData.address}
-            onChange={handleInputChange} 
-            placeholder="Street Address *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+            onChange={handleInputChange}
+            placeholder="Street Address *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-            onChange={handleInputChange} 
-            placeholder="City *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          <input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={handleInputChange}
+            placeholder="City *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
-            <input
-              type="text"
-              name="province"
-              value={formData.province}
-            onChange={handleInputChange} 
-            placeholder="Province *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          <input
+            type="text"
+            name="province"
+            value={formData.province}
+            onChange={handleInputChange}
+            placeholder="Province *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
           <input
             type="text"
             name="postalCode"
             value={formData.postalCode}
-            onChange={handleInputChange} 
-            placeholder="Postal Code *" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+            onChange={handleInputChange}
+            placeholder="Postal Code *"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
-          <input 
-            type="text" 
-            name="comment" 
-            value={formData.comment} 
-            onChange={handleInputChange} 
-            placeholder="Comment (Optional)" 
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          <input
+            type="text"
+            name="comment"
+            value={formData.comment}
+            onChange={handleInputChange}
+            placeholder="Comment (Optional)"
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
         </div>
         <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
-        <input
-          type="checkbox"
-            name="anonymous" 
-            checked={formData.anonymous} 
+          <input
+            type="checkbox"
+            name="anonymous"
+            checked={formData.anonymous}
             onChange={handleInputChange}
             className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
           />
           <span className="text-sm text-gray-700">I would like to donate anonymously</span>
         </label>
+
+        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
+          <input
+            type="checkbox"
+            name="terms"
+            checked={formData.terms}
+            onChange={handleInputChange}
+            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+          />
+          <span className="text-sm text-gray-700">I agree to the <a href="/terms" className="text-secondary hover:underline">Terms and Conditions</a></span>
+        </label>
+
       </div>
 
       {/* Enhanced Fee Breakdown */}
@@ -703,9 +714,9 @@ const DonationForm: React.FC<Props> = ({
       </div> */}
 
       {/* Donate Button */}
-      <button 
-        onClick={handleDonate} 
-        disabled={loading || isPending || settingsLoading} 
+      <button
+        onClick={handleDonate}
+        disabled={loading || isPending || settingsLoading}
         className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
       >
         {loading || isPending ? (
