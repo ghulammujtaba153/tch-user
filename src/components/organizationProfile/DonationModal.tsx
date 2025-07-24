@@ -60,9 +60,9 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
   const predefinedAmounts = ["150", "200", "300", "500"];
   const tipOptions = [
     { label: "No Tip", value: 0 },
+    { label: "5%", value: 5 },
     { label: "10%", value: 10 },
     { label: "15%", value: 15 },
-    { label: "20%", value: 20 },
   ];
 
   // Fetch payment settings on component mount
@@ -433,7 +433,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                   setAmount(amt);
                   setCustomAmount("");
                 }}
-                  className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                  className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${
                     amount === amt 
                       ? "bg-secondary text-white border-secondary shadow-lg" 
                       : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
@@ -463,10 +463,10 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                 <button
                   key={tip.value}
                   onClick={() => handleTipChange(tip.value)}
-                  className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
+                  className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${
                     tipPercentage === tip.value && !customTip
-                      ? "bg-green-500 text-white border-green-500" 
-                      : "bg-white text-gray-700 border-gray-300 hover:border-green-400"
+                      ? "bg-secondary text-white border-secondary" 
+                      : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
                   }`}
                 >
                   {tip.label}
