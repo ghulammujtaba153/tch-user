@@ -588,7 +588,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
           </div>
 
           {/* Enhanced Fee Breakdown */}
-          <div className="mb-6 bg-gray-50 rounded-xl p-4">
+          {/* <div className="mb-6 bg-gray-50 rounded-xl p-4">
             <h4 className="font-semibold text-gray-800 mb-3">Donation Summary</h4>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -619,7 +619,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                 <span className="text-green-600">R{calculateNetDonationAmount().toFixed(2)}</span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Donate Button */}
           <button 
