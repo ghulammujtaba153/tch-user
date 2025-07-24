@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from '../../context/userContext';
 import Loading from '../../components/Loading';
 import { useAppConfig } from '../../context/AppConfigContext';
-import { FaCheckCircle, FaTimesCircle, FaClock } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaClock, FaExclamationTriangle } from 'react-icons/fa';
 
 const initialS18AData = {
   userId: '',
@@ -27,6 +27,7 @@ const S18ADocument = () => {
   const [pageLoading, setPageLoading] = useState(true);
   const { user } = useContext<any>(AuthContext);
   const { config } = useAppConfig();
+  const [issues, setIssues] = useState<any>([]);
 
   useEffect(() => {
     if (config?.name) {
@@ -52,7 +53,7 @@ const S18ADocument = () => {
         pbo: res.data.pbo || '',
         npo: res.data.npo || '',
         signature: res.data.signature || '',
-        status: res.data.status || 'pending'
+        status: res.data.status || ""
       };
 
       setS18AData(s18ADataFromAPI);
@@ -61,16 +62,32 @@ const S18ADocument = () => {
       if (res.data.signature) setSignaturePreview(getFullUrl(res.data.signature));
     } catch (error) {
       console.log('No S18A data found for user');
-      setS18AData({ ...initialS18AData, userId: user.userId });
+      setS18AData({ ...initialS18AData, userId: user.userId, status: "" });
       setIsUpdateMode(false);
     } finally {
       setPageLoading(false);
     }
   };
 
+  const fetchIssues = async()=>{
+    setPageLoading(true)
+    try {
+      const res = await axios.get(`${BASE_URL}/issue-report/${user.userId}?type=s18aDocuments`)
+      console.log("fetch issues in s18a document", res.data)
+      if(res.data.type == "s18aDocuments"){
+        setIssues(res.data)
+      }
+    } catch (error) {
+      toast.error("error while fetching issue")
+    } finally {
+      setPageLoading(false)
+    }
+  }
+
   useEffect(() => {
     if (user?.userId) {
       fetchS18AData();
+      fetchIssues()
     }
   }, [user]);
 
@@ -78,9 +95,6 @@ const S18ADocument = () => {
     const { name, value } = e.target;
     setS18AData({ ...s18AData, [name]: value });
   };
-
-
-
 
   const handleToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
@@ -165,14 +179,14 @@ const S18ADocument = () => {
       const method = isUpdateMode ? 'put' : 'post';
 
       const response = await axios[method](url, dataToSend, config);
-      toast.success(`S18A Document ${isUpdateMode ? 'updated' : 'saved'} successfully!`);
+      toast.success(`S18A Document Submitted For Review!`);
       
       if (isUpdateMode) {
         fetchS18AData();
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error(error.response?.data?.message || 'Error saving S18A document');
+      toast.error(error.response?.data?.message || 'Error Submitting S18A Document');
     } finally {
       setLoading(false);
     }
@@ -181,138 +195,183 @@ const S18ADocument = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
-        return 'bg-green-300 text-green-800';
+        return 'bg-green-100 text-green-800 border-green-200';
       case 'rejected':
-        return 'bg-red-300 text-red-800';
+        return 'bg-red-100 text-red-800 border-red-200';
       case 'pending':
-        return 'bg-yellow-300 text-yellow-800';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       default:
-        return 'bg-gray-300 text-gray-800';
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'approved':
-        return <FaCheckCircle className='inline-block ml-1' />;
+        return <FaCheckCircle className='inline-block ml-1 text-sm' />;
       case 'rejected':
-        return <FaTimesCircle className='inline-block ml-1' />;
+        return <FaTimesCircle className='inline-block ml-1 text-sm' />;
       case 'pending':
-        return <FaClock className='inline-block ml-1' />;
+        return <FaClock className='inline-block ml-1 text-sm' />;
       default:
         return null;
     }
   };
 
   if (pageLoading) {
-    return <div className='flex justify-center items-center'><Loading /></div>
+    return <div className='flex justify-center items-center min-h-screen'><Loading /></div>
   }
 
-    return (
-    <div className="py-10 px-4 md:px-8">
-      <div className="relative max-w-4xl mx-auto bg-white shadow-md rounded-xl p-8">
-        {/* Status Badge */}
-        <p className={`absolute top-4 left-4 text-gray-500 cursor-pointer flex items-center px-2 py-1 rounded-full ${getStatusColor(s18AData.status)}`}>
-          {s18AData.status} {getStatusIcon(s18AData.status)}
-        </p>
-
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-          S18A Document Registration
-        </h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Registration Toggle */}
-          <div className="mb-6">
-            <label className="block font-medium mb-2">
-              Are you S18A registered?
-            </label>
-            <div className="flex items-center space-x-4">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="registered"
-                  checked={s18AData.registered === true}
-                  onChange={() => setS18AData({ ...s18AData, registered: true })}
-                  className="mr-2"
-                />
-                Yes
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="registered"
-                  checked={s18AData.registered === false}
-                  onChange={() => setS18AData({ ...s18AData, registered: false })}
-                  className="mr-2"
-                />
-                No
-              </label>
-            </div>
-            <p className="text-sm text-gray-600 mt-2">
-              S18A registration allows donors to claim tax deductions for their donations.
-            </p>
-          </div>
-
-          {/* S18A Fields - Only show if registered */}
-          {s18AData.registered && (
-            <div className="space-y-6">
-              <h3 className="text-xl font-semibold mb-4">S18A Registration Details</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Input 
-                  label="Reference" 
-                  name="reference" 
-                  value={s18AData.reference} 
-                  onChange={handleChange} 
-                />
-                <Input 
-                  label="Trust Number" 
-                  name="trustNumber" 
-                  value={s18AData.trustNumber} 
-                  onChange={handleChange} 
-                  required 
-                />
-                <Input 
-                  label="PBO" 
-                  name="pbo" 
-                  value={s18AData.pbo} 
-                  onChange={handleChange} 
-                />
-                <Input 
-                  label="NPO" 
-                  name="npo" 
-                  value={s18AData.npo} 
-                  onChange={handleChange} 
-                />
+  return (
+    <div className="min-h-screen  py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Header Section */}
+        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
+              S18A Document Registration
+            </h1>
+            
+            {/* Status Badge */}
+            {s18AData.status && (
+              <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(s18AData.status)}`}>
+                {s18AData.status.charAt(0).toUpperCase() + s18AData.status.slice(1)}
+                {getStatusIcon(s18AData.status)}
               </div>
+            )}
+          </div>
+          
+          <p className="text-gray-600 text-sm sm:text-base">
+            S18A registration allows donors to claim tax deductions for their donations to your organization.
+          </p>
+        </div>
 
-              {/* Signature Upload */}
-              <div className="mt-6">
-                <FileUpload 
-                  label="Signature Upload" 
-                  onChange={handleFileChange} 
-                  previewUrl={signaturePreview} 
-                  required={!isUpdateMode}
-                  isLoading={loading}
-                />
-                <p className="text-sm text-gray-600 mt-2">
-                  Upload your signature in PNG or JPG format. This will be used for official documents.
-                </p>
+        {/* Issues Alert - Show if rejected */}
+        {s18AData.status === "rejected" && issues?.issue && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div className="flex items-start">
+              <FaExclamationTriangle className="text-red-400 mt-0.5 mr-3 flex-shrink-0" />
+              <div className="flex-1">
+                <h3 className="text-sm font-medium text-red-800 mb-1">
+                  Issues Found with Your Submission
+                </h3>
+                <div className="text-sm text-red-700">
+                  <p className="mb-2">Please address the following issues:</p>
+                  <div className="bg-white border border-red-200 rounded-md p-3">
+                    <p className="font-medium">Issue:</p>
+                    <p className="mt-1">{issues.issue}</p>
+                  </div>
+                  <p className="mt-2 text-xs">
+                    Please make the necessary corrections and resubmit your document.
+                  </p>
+                </div>
               </div>
             </div>
-          )}
-
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button 
-              type="submit" 
-              disabled={loading} 
-              className="bg-secondary text-white px-6 py-2 rounded-md hover:scale-105 duration-300 transition-transform disabled:opacity-50"
-            >
-              {loading ? 'Saving...' : 'Save S18A Details'}
-            </button>
           </div>
-        </form>
+        )}
+
+        {/* Main Form */}
+        <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+            {/* Registration Toggle */}
+            <div className="space-y-3">
+              <label className="block text-sm font-medium text-gray-900">
+                Are you S18A registered?
+              </label>
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="registered"
+                    checked={s18AData.registered === true}
+                    onChange={() => setS18AData({ ...s18AData, registered: true })}
+                    className="mr-2 h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                  />
+                  <span className="text-sm text-gray-700">Yes</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    name="registered"
+                    checked={s18AData.registered === false}
+                    onChange={() => setS18AData({ ...s18AData, registered: false })}
+                    className="mr-2 h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                  />
+                  <span className="text-sm text-gray-700">No</span>
+                </label>
+              </div>
+            </div>
+
+            {/* S18A Fields - Only show if registered */}
+            {s18AData.registered && (
+              <div className="space-y-6 border-t border-gray-200 pt-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
+                  S18A Registration Details
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <Input 
+                    label="Reference" 
+                    name="reference" 
+                    value={s18AData.reference} 
+                    onChange={handleChange} 
+                  />
+                  <Input 
+                    label="Trust Number" 
+                    name="trustNumber" 
+                    value={s18AData.trustNumber} 
+                    onChange={handleChange} 
+                    required 
+                  />
+                  <Input 
+                    label="PBO" 
+                    name="pbo" 
+                    value={s18AData.pbo} 
+                    onChange={handleChange} 
+                  />
+                  <Input 
+                    label="NPO" 
+                    name="npo" 
+                    value={s18AData.npo} 
+                    onChange={handleChange} 
+                  />
+                </div>
+
+                {/* Signature Upload */}
+                <div className="col-span-full">
+                  <FileUpload 
+                    label="Signature Upload" 
+                    onChange={handleFileChange} 
+                    previewUrl={signaturePreview} 
+                    required={!isUpdateMode}
+                    isLoading={loading}
+                  />
+                  <p className="text-xs sm:text-sm text-gray-500 mt-2">
+                    Upload your signature in PNG or JPG format. This will be used for official documents.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <div className="flex justify-end pt-6 border-t border-gray-200">
+              <button 
+                type="submit" 
+                disabled={loading} 
+                className="w-full sm:w-auto bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </div>
+                ) : (
+                  'Save S18A Details'
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -333,15 +392,19 @@ const Input = ({
   required?: boolean;
   type?: string;
 }) => (
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+  <div className="space-y-1">
+    <label className="block text-sm font-medium text-gray-700">
+      {label}
+      {required && <span className="text-red-500 ml-1">*</span>}
+    </label>
     <input
       type={type}
       name={name}
       value={value}
       onChange={onChange}
       required={required}
-      className="w-full border border-gray-300 rounded-md p-2"
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+      placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
 );
@@ -375,12 +438,16 @@ const FileUpload = ({
         id={`file-${label.replace(/\s+/g, '-').toLowerCase()}`}
       />
       
-      <div className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-colors duration-200 bg-gray-50 ${isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:border-secondary hover:bg-gray-100'}`}>
+      <div className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 ${
+        isLoading 
+          ? 'opacity-50 cursor-not-allowed bg-gray-50' 
+          : 'hover:border-secondary hover:bg-gray-50 cursor-pointer'
+      }`}>
         <div className="flex flex-col items-center justify-center space-y-2">
           {isLoading ? (
             <div className="flex flex-col items-center">
-              <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-secondary"></div>
               </div>
               <p className="text-sm font-medium text-gray-700">Uploading...</p>
             </div>
@@ -389,15 +456,15 @@ const FileUpload = ({
               <img 
                 src={previewUrl} 
                 alt="Signature Preview" 
-                className="w-24 h-24 object-cover rounded-lg border shadow-sm mb-2" 
+                className="w-16 h-16 sm:w-24 sm:h-24 object-cover rounded-lg border shadow-sm mb-2" 
               />
               <p className="text-sm font-medium text-gray-700">Signature Uploaded</p>
               <p className="text-xs text-gray-500">Click to change</p>
             </div>
           ) : (
             <>
-              <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
-                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center mb-2">
+                <svg className="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
               </div>
@@ -406,7 +473,7 @@ const FileUpload = ({
                   Click to upload or drag and drop
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  PNG, JPG, JPEG up to 10MB
+                  PNG, JPG, JPEG up to 5MB
                 </p>
               </div>
             </>
@@ -430,7 +497,7 @@ const FileUpload = ({
             const event = new Event('change', { bubbles: true });
             fileInput?.dispatchEvent(event);
           }}
-          className="text-xs text-red-600 hover:text-red-800 underline"
+          className="text-xs text-red-600 hover:text-red-800 underline transition-colors duration-200"
         >
           Remove
         </button>
@@ -438,7 +505,5 @@ const FileUpload = ({
     )}
   </div>
 );
-    
-
 
 export default S18ADocument;

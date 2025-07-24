@@ -1,203 +1,128 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
-import Notification from "../notification/Notification";
+import React, { useState, useEffect, useContext, useTransition } from "react";
 import { AuthContext } from "../../context/userContext";
-import axios from "axios";
 import { BASE_URL, SOCKET_URL } from "../../config/url";
-import { io, Socket } from "socket.io-client";
-import { FormControlLabel, Switch } from "@mui/material";
-import ReactGA from "react-ga4";
-import EFTModal from "./EFTModal";
-import { Link } from "react-router-dom";
+import axios from "axios";
 import { toast } from "react-toastify";
+import EFTModal from "./EFTModal";
+import ReactGA from "react-ga4";
+import io from "socket.io-client";
 
-type PaymentMethod = "Test Donation" | "Cardiant Donation" | "Office Donation" | "Visa/Debit Card" | "EFT";
+interface PaymentSettings {
+  _id: string;
+  paymentType: string;
+  platformFee: {
+    percent?: number;
+    total?: number;
+  };
+  transactionFee: {
+    percent?: number;
+    total?: number;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
 
-interface FormData {
-  donorId: string | undefined;
+interface Props {
   campaignId: string;
-  organizationId: any | undefined;
-  amount: string;
-  donorName: string;
-  donorEmail: string;
-  mobile: string;
-  comment: string;
-  province: string;
-  address: string;
-  companyName: string;
-  postalCode: string;
-  city: string;
-  anonymous: boolean;
-  referenceId: string | undefined
-}
-
-declare global {
-  interface Window {
-    hpp: any;
-  }
-}
-
-const DonationForm: React.FC<{
-  id: string;
-  campaigner: string;
   organizationId: string;
-  communication: string;
-}> = ({ id, campaigner, organizationId, communication }) => {
-  const [selectedMethod, setSelectedMethod] =
-    useState<PaymentMethod>("Test Donation");
-  const [customAmount, setCustomAmount] = useState("");
-  const [selectedAmount, setSelectedAmount] = useState<string>("150");
-  const [isDonate, setIsDonate] = useState(false);
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [errors, setErrors] = useState("");
+  campaignTitle: string;
+  campaignAmount: number;
+  currentAmount: number;
+}
+
+type PaymentMethod = "Card" | "EFT";
+
+const DonationForm: React.FC<Props> = ({
+  campaignId,
+  organizationId,
+  campaignTitle,
+  campaignAmount,
+  currentAmount,
+}) => {
   const { user } = useContext(AuthContext)!;
+  const [amount, setAmount] = useState<string>("150");
+  const [customAmount, setCustomAmount] = useState("");
+  const [selectedPaymentType, setSelectedPaymentType] = useState<PaymentMethod>("Card");
+  const [loading, setLoading] = useState(false);
+  const [showEFTModal, setShowEFTModal] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const socketRef = useRef<Socket | null>(null);
-  const [paymentModal, setPaymentModal] = useState(false);
-  const [type, setType] = useState<string | null>(null); // Only for modal control
-  const [selectedPaymentType, setSelectedPaymentType] = useState<PaymentMethod>(() => "Visa/Debit Card");
-  console.log("type", type);
 
-  const handlePaymentModal = () => {
-    setPaymentModal(!paymentModal);
-  };
+  // Payment settings state
+  const [cardSettings, setCardSettings] = useState<PaymentSettings | null>(null);
+  const [eftSettings, setEftSettings] = useState<PaymentSettings | null>(null);
+  const [settingsLoading, setSettingsLoading] = useState(true);
 
-  const tipOptions = [0, 5, 10, 15, 20]; // in percentages
-  const [selectedTip, setSelectedTip] = useState(0);
+  // Tip state
+  const [tipPercentage, setTipPercentage] = useState<number>(0);
+  const [customTip, setCustomTip] = useState<string>("");
 
-  const handleTipSelect = (tip: number) => {
-    setSelectedTip(tip);
-  };
-
-  // Calculate tip amount and total amount
-  const calculateTipAmount = () => {
-    const baseAmount = parseFloat(formData.amount) || 0;
-    return (baseAmount * selectedTip) / 100;
-  };
-
-  const calculateTotalAmount = () => {
-    const baseAmount = parseFloat(formData.amount) || 0;
-    const tipAmount = calculateTipAmount();
-    return baseAmount + tipAmount;
-  };
-
-  const [formData, setFormData] = useState<FormData>({
-    donorId: user?.userId,
-    campaignId: id,
-    organizationId: organizationId,
-    amount: "150",
+  const [formData, setFormData] = useState({
     donorName: user?.name || "",
     donorEmail: user?.email || "",
-    companyName: "",
+    referenceId: "",
+    address: "",
+    city: "",
+    province: "",
     postalCode: "",
     mobile: "",
     comment: "",
-    province: "",
-    address: "",
-    city: "",
-    referenceId: "",
-
     anonymous: false,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  useEffect(() => {
-    socketRef.current = io(`${SOCKET_URL}`); // Replace with your server URL
-
-    socketRef.current.emit("join-room", campaigner);
-
-    // Cleanup on unmount
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-    };
-  }, []);
-
-  const predefinedAmounts = [
-    { value: "150", label: "R150" },
-    { value: "170", label: "R170" },
-    { value: "190", label: "R190" },
-    { value: "250", label: "R250" },
+  const predefinedAmounts = ["150", "200", "300", "500"];
+  const tipOptions = [
+    { label: "No Tip", value: 0 },
+    { label: "10%", value: 10 },
+    { label: "15%", value: 15 },
+    { label: "20%", value: 20 },
   ];
 
-  ReactGA.event({
-    category: "Donation",
-    action: "Donate Button Clicked",
-    label: selectedMethod,
-    value: calculateTotalAmount(),
-  });
+  // Fetch payment settings on component mount
+  useEffect(() => {
+    const fetchPaymentSettings = async () => {
+      try {
+        setSettingsLoading(true);
+        console.log("🔍 Fetching payment settings for campaign donation...");
+        
+        const [cardResponse, eftResponse] = await Promise.all([
+          axios.get(`${BASE_URL}/payment-settings?type=card`),
+          axios.get(`${BASE_URL}/payment-settings?type=eft`)
+        ]);
 
-  const validateForm = () => {
-    if (!formData.donorName.trim()) {
-      setErrors("Name is required");
-      return false;
-    }
+        console.log("💳 Card settings:", cardResponse.data);
+        console.log("🏦 EFT settings:", eftResponse.data);
 
-    if (!formData.donorEmail.trim()) {
-      setErrors("Email is required");
-      return false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.donorEmail)) {
-      setErrors("Invalid email format");
-      return false;
-    }
+        setCardSettings(cardResponse.data);
+        setEftSettings(eftResponse.data);
+      } catch (error) {
+        console.error("❌ Error fetching payment settings:", error);
+        toast.error("Failed to load payment settings");
+        // Set default settings as fallback
+        const defaultCardSettings = {
+          _id: "default",
+          paymentType: "card",
+          platformFee: { total: 10 },
+          transactionFee: { percent: 7.5 },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        const defaultEftSettings = {
+          _id: "default",
+          paymentType: "eft",
+          platformFee: { total: 15 },
+          transactionFee: { percent: 5 },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        setCardSettings(defaultCardSettings);
+        setEftSettings(defaultEftSettings);
+      } finally {
+        setSettingsLoading(false);
+      }
+    };
 
-    if (!formData.companyName.trim()) {
-      setErrors("Company name is required");
-      return false;
-    }
-
-    if (!formData.postalCode.trim()) {
-      setErrors("Postcode is required");
-      return false;
-    }
-
-    if (!formData.city.trim()) {
-      setErrors("City is required");
-      return false;
-    }
-
-
-
-    if (!agreeToTerms) {
-      setErrors("Please agree to the Terms of Service");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleAmountSelect = (amount: string) => {
-    setSelectedAmount(amount);
-    setCustomAmount("");
-    setFormData((prev) => ({ ...prev, amount }));
-  };
-
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setCustomAmount(value);
-    setSelectedAmount("");
-    setFormData((prev) => ({ ...prev, amount: value }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    setErrors("");
-  };
+    fetchPaymentSettings();
+  }, []);
 
   useEffect(() => {
     const scriptExists = document.querySelector("script[src*='ecentric']");
@@ -206,487 +131,586 @@ const DonationForm: React.FC<{
       script.src = "https://secure1.ecentricpaymentgateway.co.za/HPP/API/js";
       script.async = true;
       script.onload = () => console.log("Ecentric Lightbox loaded");
-      script.onerror = () => console.error("Failed to load Ecentric script");
       document.body.appendChild(script);
     }
   }, []);
 
-  const handleEftDonate = async (reference: string) => {
-    console.log("Form Data:", formData);
-    const totalAmount = calculateTotalAmount();
-
-    const donationData = {
-      ...formData,
-      referenceId: reference,
-      tip: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
-      amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
-      paymentMethod: "EFT"
-    };
-
-    try {
-      await axios.post(`${BASE_URL}/donations`, donationData);
-      setType("ecentric")
-      toast.success("request send")
-    } catch (error) {
-      toast.error("error")
-    }
-
-
-
-
+  // Get current payment settings based on selected method
+  const getCurrentPaymentSettings = (): PaymentSettings | null => {
+    const settings = selectedPaymentType === "Card" ? cardSettings : eftSettings;
+    console.log(`📊 Current payment settings for ${selectedPaymentType}:`, settings);
+    return settings;
   };
 
+  // Calculate platform fee
+  const calculatePlatformFee = (): number => {
+    const settings = getCurrentPaymentSettings();
+    if (!settings) return 0;
 
-  const handleBothDonate = () => {
-    if (type == "Visa/Debit Card") {
-      handleDonate()
-    } else {
-      setType("eft")
+    console.log("🔧 Calculating platform fee with settings:", settings.platformFee);
+
+    const baseAmount = parseFloat(amount) || 0;
+    
+    if (settings.platformFee.percent !== undefined) {
+      const fee = (baseAmount * settings.platformFee.percent) / 100;
+      console.log(`Platform fee (${settings.platformFee.percent}%): ${fee}`);
+      return fee;
+    } else if (settings.platformFee.total !== undefined) {
+      const fee = settings.platformFee.total;
+      console.log(`Platform fee (fixed): ${fee}`);
+      return fee;
     }
-  }
+    
+    return 0;
+  };
+
+  // Calculate transaction fee
+  const calculateTransactionFee = (): number => {
+    const settings = getCurrentPaymentSettings();
+    if (!settings) return 0;
+
+    console.log("🔧 Calculating transaction fee with settings:", settings.transactionFee);
+
+    const baseAmount = parseFloat(amount) || 0;
+    
+    if (settings.transactionFee.percent !== undefined) {
+      const fee = (baseAmount * settings.transactionFee.percent) / 100;
+      console.log(`Transaction fee (${settings.transactionFee.percent}%): ${fee}`);
+      return fee;
+    } else if (settings.transactionFee.total !== undefined) {
+      const fee = settings.transactionFee.total;
+      console.log(`Transaction fee (fixed): ${fee}`);
+      return fee;
+    }
+    
+    return 0;
+  };
+
+  // Calculate tip amount
+  const calculateTipAmount = (): number => {
+    if (customTip) {
+      return parseFloat(customTip) || 0;
+    }
+    if (tipPercentage > 0) {
+      const baseAmount = parseFloat(amount) || 0;
+      return (baseAmount * tipPercentage) / 100;
+    }
+    return 0;
+  };
+
+  // Calculate total charge amount (what user pays)
+  const calculateTotalChargeAmount = (): number => {
+    const baseAmount = parseFloat(amount) || 0;
+    const tipAmount = calculateTipAmount();
+    return baseAmount + tipAmount;
+  };
+
+  // Calculate net donation amount (what campaign receives)
+  const calculateNetDonationAmount = (): number => {
+    const baseAmount = parseFloat(amount) || 0;
+    const platformFee = calculatePlatformFee();
+    const transactionFee = calculateTransactionFee();
+    return Math.max(0, baseAmount - platformFee - transactionFee);
+  };
+
+  const validateForm = () => {
+    if (!formData.donorName || !formData.donorEmail || !formData.address || !formData.city || !formData.postalCode) {
+      toast.error("Please fill all required fields");
+      return false;
+    }
+    return true;
+  };
+
+  // Send socket notification
+  const sendSocketNotification = (donationData: any) => {
+    try {
+      const socket = io(SOCKET_URL);
+      socket.emit("donation_received", {
+        campaignId,
+        organizationId,
+        donorName: donationData.donorName,
+        amount: donationData.totalAmount,
+        anonymous: donationData.anonymous,
+        campaignTitle,
+      });
+      socket.disconnect();
+    } catch (error) {
+      console.error("Socket notification error:", error);
+    }
+  };
 
   const handleDonate = async () => {
     if (!validateForm()) return;
-
-    if (!user) {
-      setErrors("Please log in to donate");
+    if (settingsLoading) {
+      toast.error("Please wait for payment settings to load");
       return;
     }
 
     try {
-      console.log("Form Data:", formData);
-      console.log("User:", user);
+      setLoading(true);
 
-      const randomPrefix = [...Array(3)]
-        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
-        .join("");
+      const tipAmount = calculateTipAmount();
+      const platformFee = calculatePlatformFee();
+      const transactionFee = calculateTransactionFee();
+      const netDonationAmount = calculateNetDonationAmount();
+      const totalChargeAmount = calculateTotalChargeAmount();
 
-      const timestamp = new Date().toISOString().slice(2, 10).replace(/-/g, "");
+      console.log("💰 Campaign donation fee breakdown:", {
+        baseAmount: parseFloat(amount),
+        tipAmount,
+        platformFee,
+        transactionFee,
+        netDonationAmount,
+        totalChargeAmount,
+        paymentSettings: getCurrentPaymentSettings()
+      });
 
-      const randomSuffix = [...Array(6)]
-        .map(() => Math.random().toString(36)[2].toUpperCase())
-        .join("");
+      // Track donation attempt
+      ReactGA.event({
+        category: "Donation",
+        action: "attempt",
+        label: campaignTitle,
+        value: Math.round(totalChargeAmount),
+      });
 
-      const reference = `${randomPrefix}${timestamp}${randomSuffix}`;
+      const donationData = {
+        donorId: user?.userId,
+        campaignId,
+        organizationId,
+        amount: netDonationAmount,
+        totalAmount: totalChargeAmount,
+        tipAmount: tipAmount,
+        platformFee: platformFee,
+        transactionFee: transactionFee,
+        donorName: formData.donorName,
+        donorEmail: formData.donorEmail,
+        address: formData.address,
+        city: formData.city,
+        province: formData.province,
+        postalCode: formData.postalCode,
+        mobile: formData.mobile,
+        comment: formData.comment,
+        anonymous: formData.anonymous,
+        paymentMethod: selectedPaymentType === "Card" ? "card" : "EFT",
+      };
 
-      // Use total amount (base amount + tip) for payment
-      const totalAmount = calculateTotalAmount();
-      const amountCents = totalAmount * 100;
-
-      // Add user info to form data
-      formData.donorId = user.userId;
-
-      // Request payment initiation with total amount
-      const { data: paymentData } = await axios.post(
-        `${BASE_URL}/ecentric/initiate-payment`,
-        {
-          amount: amountCents.toFixed(0),
-          reference,
-          userId: user.userId, // optional
-          transactionType: "Payment",
-        }
-      );
-
-      // Check Lightbox availability
-      if (!window.hpp?.payment) {
-        alert(
-          "Payment system not ready. Please refresh the page or try later."
-        );
+      if (selectedPaymentType === "EFT") {
+        setShowEFTModal(true);
         return;
       }
 
-      // Launch payment Lightbox
+      // Card payment flow
+      const randomRef = `CAM${Date.now()}`;
+      const totalCents = Math.round(totalChargeAmount * 100);
+
+      const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
+        amount: totalCents.toString(),
+        reference: randomRef,
+          transactionType: "Payment",
+      });
+
+      if (!window.hpp?.payment) {
+        toast.error("Payment system not ready");
+        return;
+      }
+
       window.hpp.payment(
         paymentData,
-        async (successData) => {
-          console.log("✅ Payment Success", successData);
-          // alert("Payment completed successfully!");
+        async (successData: any) => {
+          console.log("💳 Payment Success", successData);
+          try {
+            const response = await axios.post(`${BASE_URL}/donations`, { 
+              ...donationData, 
+              status: "completed",
+              transactionId: successData.transactionId || randomRef
+            });
 
-          // Save donation with total amount (including tip)
-          const donationData = {
-            ...formData,
-            referenceId: reference,
-            tipAmount: (calculateTipAmount() - parseFloat(formData.amount)).toFixed(2).toString(),
-            amount: (parseFloat(formData.amount) - 10 - (parseFloat(formData.amount) * 7.5 / 100)).toString(),
-            paymentMethod: "card",
-            status: "completed"
-          };
+            // Send socket notification
+            sendSocketNotification({ ...donationData, anonymous: formData.anonymous });
 
-          await axios.post(`${BASE_URL}/donations`, donationData);
+            // Track successful donation
+            ReactGA.event({
+              category: "Donation",
+              action: "success",
+              label: campaignTitle,
+              value: Math.round(totalChargeAmount),
+            });
 
-          // Send notification to campaigner with total amount
-          await axios.post(`${BASE_URL}/notifications/create`, {
-            userId: campaigner,
-            title: "New Donation",
-            message: `A new donation of R${totalAmount.toFixed(2)} has been made to your campaign.`,
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-
-          // Emit socket event
-          socketRef.current?.emit("send-notification", {
-            campaigner,
-            notification: `A new donation of R${totalAmount.toFixed(2)} has been made to your campaign.`
+            toast.success("Donation successful! Thank you for your contribution.");
+          } catch (error) {
+            console.error("❌ Error recording donation:", error);
+            toast.error("Payment succeeded but failed to record donation");
           }
-          );
-
-          // Reset form (optional)
-          setIsDonate(true);
-          setFormData({
-            donorId: user.userId,
-            campaignId: id,
-            organizationId: organizationId,
-            amount: "150",
-            donorName: "",
-            donorEmail: "",
-            companyName: "",
-            mobile: "",
-            comment: "",
-            province: "",
-            address: "",
-            postalCode: "",
-            referenceId: "",
-            city: "",
-
-            anonymous: false,
-          });
-          setSelectedAmount("150");
-          setCustomAmount("");
-          setAgreeToTerms(false);
-          setSelectedTip(0); // Reset tip selection
         },
-        (failData) => {
+        (failData: any) => {
           console.error("❌ Payment Failed", failData);
-          alert("Payment failed. Please try again.");
+          toast.error("Payment failed. Please try again.");
+          
+          // Track failed donation
+          ReactGA.event({
+            category: "Donation",
+            action: "failed",
+            label: campaignTitle,
+            value: Math.round(totalChargeAmount),
+          });
         }
       );
     } catch (error) {
-      console.error("Donation error:", error);
-      setErrors("Failed to process donation. Please try again.");
-      alert("Failed to process donation. Please try again.");
+      console.error("❌ Error processing donation:", error);
+      toast.error("Failed to process donation");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div className="w-full mx-auto p-1">
-      {isDonate && (
-        <Notification
-          isOpen={isDonate}
-          onClose={() => setIsDonate(false)}
-          title="Donation successful"
-          message={communication}
-          link="/home/campaigns"
-        />
-      )}
-      {errors && (
-        <Notification
-          isOpen={true}
-          onClose={() => {
-            setErrors("");
-          }}
-          title="Error"
-          message={errors}
-          type="error"
-        />
-      )}
+  const handleEftDonate = async (reference: string) => {
+    if (!validateForm()) return;
 
+    try {
+      setLoading(true);
+      
+      const tipAmount = calculateTipAmount();
+      const platformFee = calculatePlatformFee();
+      const transactionFee = calculateTransactionFee();
+      const netDonationAmount = calculateNetDonationAmount();
+      const totalChargeAmount = calculateTotalChargeAmount();
 
+      console.log("🏦 EFT campaign donation data:", {
+        baseAmount: parseFloat(amount),
+        tipAmount,
+        platformFee,
+        transactionFee,
+        netDonationAmount,
+        totalChargeAmount,
+        reference,
+        paymentSettings: getCurrentPaymentSettings()
+      });
 
-      {type === "eft" && (
+      const donationData = {
+        donorId: user?.userId,
+        campaignId,
+        organizationId,
+        amount: netDonationAmount,
+        totalAmount: totalChargeAmount,
+        tipAmount: tipAmount,
+        platformFee: platformFee,
+        transactionFee: transactionFee,
+        donorName: formData.donorName,
+        donorEmail: formData.donorEmail,
+        address: formData.address,
+        city: formData.city,
+        province: formData.province,
+        postalCode: formData.postalCode,
+        mobile: formData.mobile,
+        comment: formData.comment,
+        anonymous: formData.anonymous,
+        paymentMethod: "EFT",
+        status: "pending",
+        referenceId: reference,
+      };
 
-        <EFTModal onClose={handlePaymentModal} setType={() => setType("ecentric")} amount={parseFloat(formData.amount) + calculateTipAmount()} handleDonate={handleEftDonate} />
-      )}
+      await axios.post(`${BASE_URL}/donations`, donationData);
+      
+      // Send socket notification
+      sendSocketNotification({ ...donationData, anonymous: formData.anonymous });
 
-      {/* Payment Method Selection */}
-      <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex md:flex-row flex-col items-center justify-between">
-        <div className="flex flex-col items-center gap-2">
-          <h2 className="text-xl font-semibold mb-4">Select Payment Method </h2>
-          <div className="md:col-span-1">
-            <input
-              type="number"
-              name="amount"
-              placeholder="Enter Your Amount"
-              value={customAmount}
-              onChange={handleCustomAmountChange}
-              className="w-full px-4 bg-transparent py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-            />
-          </div>
+      // Track EFT donation
+      ReactGA.event({
+        category: "Donation",
+        action: "eft_initiated",
+        label: campaignTitle,
+        value: Math.round(totalChargeAmount),
+      });
+
+      toast.success("EFT donation recorded! Complete payment using the provided bank details.");
+      setShowEFTModal(false);
+    } catch (error) {
+      console.error("❌ Error recording EFT donation:", error);
+      toast.error("Failed to record EFT donation");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  };
+
+  const handleTipChange = (percentage: number) => {
+    setTipPercentage(percentage);
+    setCustomTip(""); // Clear custom tip when selecting predefined
+  };
+
+  const handleCustomTipChange = (value: string) => {
+    setCustomTip(value);
+    setTipPercentage(0); // Clear percentage when entering custom
+  };
+
+  // Get fee display text for UI
+  const getPlatformFeeDisplay = (): string => {
+    const settings = getCurrentPaymentSettings();
+    if (!settings) return "Loading...";
+    
+    if (settings.platformFee.percent !== undefined) {
+      return `${settings.platformFee.percent}%`;
+    } else if (settings.platformFee.total !== undefined) {
+      return `R${settings.platformFee.total}`;
+    }
+    return "Not set";
+  };
+
+  const getTransactionFeeDisplay = (): string => {
+    const settings = getCurrentPaymentSettings();
+    if (!settings) return "Loading...";
+    
+    if (settings.transactionFee.percent !== undefined) {
+      return `${settings.transactionFee.percent}%`;
+    } else if (settings.transactionFee.total !== undefined) {
+      return `R${settings.transactionFee.total}`;
+    }
+    return "Not set";
+  };
+
+  if (settingsLoading) {
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary mr-3"></div>
+          <span className="text-gray-600">Loading payment settings...</span>
         </div>
-
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex md:flex-row flex-col gap-4 mb-6">
-            {( ["Visa/Debit Card", "EFT"] as PaymentMethod[] ).map((method: PaymentMethod) => (
-              <label key={method} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value={method}
-                  checked={selectedPaymentType === method}
-                  onChange={(e) => setSelectedPaymentType(e.target.value as PaymentMethod)}
-                  className="form-radio bg-transparent h-4 w-4 accent-secondary border-gray-300"
-                />
-                <span className="ml-2 text-gray-700">{method}</span>
-              </label>
-            ))}
           </div>
+    );
+  }
 
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">Make a Donation</h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {predefinedAmounts.map((amount) => (
+      {/* Amount Selection */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-3">Select Amount</label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+          {predefinedAmounts.map((amt) => (
               <button
-                key={amount.value}
-                onClick={() => handleAmountSelect(amount.value)}
-                className={`px-4 text-sm w-[80px] py-2 rounded-full transition-colors duration-200 ${selectedAmount === amount.value
-                    ? "bg-secondary text-white"
-                    : "bg-transparent border border-secondary text-black hover:bg-secondary/10"
-                  }`}
-              >
-                {amount.label}
+              key={amt}
+              onClick={() => {
+                setAmount(amt);
+                setCustomAmount("");
+              }}
+              className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                amount === amt 
+                  ? "bg-secondary text-white border-secondary shadow-lg" 
+                  : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
+              }`}
+            >
+              R{amt}
               </button>
             ))}
-          </div>
         </div>
+        <input
+          type="number"
+          placeholder="Enter custom amount"
+          value={customAmount}
+          onChange={(e) => {
+            setCustomAmount(e.target.value);
+            setAmount(e.target.value);
+          }}
+          className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+        />
       </div>
 
-      <div className="font-onest w-full rounded-lg border border-gray-300 p-4 shadow-sm mb-8 flex flex-col items-center justify-between">
-        <h2 className="text-xl font-semibold mb-4">Contribute to our Fees</h2>
-
-        <div className="flex gap-3 mb-4">
+      {/* Tip Section */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-3">Add a Tip (Optional)</label>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {tipOptions.map((tip) => (
             <button
-              key={tip}
-              onClick={() => handleTipSelect(tip)}
-              className={`px-4 py-2 rounded-full border ${selectedTip === tip
-                  ? "bg-secondary text-white"
-                  : "bg-white text-black"
-                }`}
+              key={tip.value}
+              onClick={() => handleTipChange(tip.value)}
+              className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
+                tipPercentage === tip.value && !customTip
+                  ? "bg-green-500 text-white border-green-500" 
+                  : "bg-white text-gray-700 border-gray-300 hover:border-green-400"
+              }`}
             >
-              {tip}%
+              {tip.label}
             </button>
           ))}
         </div>
-
-        <div className="w-full bg-gray-200 rounded-full h-4">
-          <div
-            className="bg-secondary h-4 rounded-full transition-all duration-300"
-            style={{ width: `${selectedTip}%` }}
-          ></div>
+        <input
+          type="number"
+          placeholder="Custom tip amount (R)"
+          value={customTip}
+          onChange={(e) => handleCustomTipChange(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        />
         </div>
 
-        <div className="text-center mt-4 space-y-1">
-          <p className="text-sm text-gray-600">
-            You selected a {selectedTip}% tip (R{calculateTipAmount().toFixed(2)})
-          </p>
-          <p className="text-lg font-semibold text-gray-800">
-            Donation Amount: R{formData.amount} + Tip: R{calculateTipAmount().toFixed(2)} = Total: R{calculateTotalAmount().toFixed(2)}
-          </p>
+      {/* Payment Method */}
+      <div className="mb-6">
+        <label className="block text-sm font-medium text-gray-700 mb-3">Payment Method</label>
+        <div className="grid grid-cols-2 gap-4">
+          {["Card", "EFT"].map((method) => (
+            <label key={method} className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+              <input
+                type="radio"
+                value={method}
+                checked={selectedPaymentType === method}
+                onChange={() => setSelectedPaymentType(method as PaymentMethod)}
+                className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 mr-3"
+              />
+              <div className="flex-1">
+                <span className="font-medium">{method} Payment</span>
+                <div className="text-xs text-gray-500 mt-1">
+                  Platform: {getPlatformFeeDisplay()} | Transaction: {getTransactionFeeDisplay()}
+                </div>
+              </div>
+            </label>
+          ))}
         </div>
       </div>
 
-      {/* Details Form */}
-      <h2 className="text-xl font-semibold mb-4">Donor Information</h2>
-
-      <div className=" rounded-lg p-4 border border-gray-300 shadow-sm">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Name
-            </label>
+      {/* Donor Details */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input
               type="text"
               name="donorName"
-              placeholder="Alex Jordan*"
               value={formData.donorName}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border border-gray-300} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            onChange={handleInputChange} 
+            placeholder="Full Name *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
             />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
             <input
               type="email"
               name="donorEmail"
-              placeholder="Name@Example.Com*"
               value={formData.donorEmail}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mobile
-            </label>
+            onChange={handleInputChange} 
+            placeholder="Email Address *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          />
             <input
               type="text"
               name="mobile"
-              placeholder="mobile*"
               value={formData.mobile}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border border-gray-300} rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Company Name
-            </label>
-            <input
-              type="text"
-              name="companyName"
-              placeholder="Company Name*"
-              value={formData.companyName}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
-            />
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Donor Comment
-          </label>
-          <input
-            type="text"
-            name="comment"
-            placeholder="comment*"
-            value={formData.comment}
-            onChange={handleChange}
-            className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            onChange={handleInputChange} 
+            placeholder="Mobile Number" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
           />
-        </div>
-
-        <FormControlLabel
-          label="Anonymously: "
-          labelPlacement="start"
-          control={
-            <Switch
-              checked={formData.anonymous}
-              onChange={(e) =>
-                setFormData({ ...formData, anonymous: e.target.checked })
-              }
-              name="anonymous"
-              color="primary"
-            />
-          }
-          sx={{
-            color: "gray", // label text color
-            ".MuiFormControlLabel-label": {
-              color: "gray", // ensures the label text is gray
-            },
-          }}
-        />
-      </div>
-
-      {/* Address Form */}
-      <div className="flex flex-col mb-4 leading-[.99]">
-        <h2 className="text-xl font-semibold mt-8">Donors Address</h2>
-        <p className="text-sm text-black/50">
-          We use these details for record purposes and will not be made public.
-        </p>
-      </div>
-
-      <div className="rounded-lg p-4 border border-gray-300 shadow-sm">
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Address
-          </label>
           <input
             type="text"
             name="address"
-            placeholder="Address*"
             value={formData.address}
-            onChange={handleChange}
-            className={`w-full px-4 bg-transparent py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            onChange={handleInputChange} 
+            placeholder="Street Address *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
           />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              City/Town
-            </label>
             <input
               type="text"
               name="city"
-              placeholder="City*"
               value={formData.city}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Province
-            </label>
+            onChange={handleInputChange} 
+            placeholder="City *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          />
             <input
               type="text"
               name="province"
-              placeholder="province*"
               value={formData.province}
-              onChange={handleChange}
-              className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Postal Code
-          </label>
+            onChange={handleInputChange} 
+            placeholder="Province *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          />
           <input
             type="text"
             name="postalCode"
-            placeholder="Postcode*"
             value={formData.postalCode}
-            onChange={handleChange}
-            className={`w-full bg-transparent px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent`}
+            onChange={handleInputChange} 
+            placeholder="Postal Code *" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
+          />
+          <input 
+            type="text" 
+            name="comment" 
+            value={formData.comment} 
+            onChange={handleInputChange} 
+            placeholder="Comment (Optional)" 
+            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent" 
           />
         </div>
-      </div>
-
-      <div className="flex items-center gap-2 mt-8 mb-4">
+        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
         <input
           type="checkbox"
-          id="terms"
-          checked={agreeToTerms}
-          onChange={(e) => setAgreeToTerms(e.target.checked)}
-          className="w-4 h-4 accent-secondary text-white cursor-pointer"
-        />
-        <label htmlFor="terms" className="text-xs text-gray-600 cursor-pointer">
-          I agree to the{" "}
-          <Link to="/terms" className="underline">
-            Terms
-          </Link>{" "}
-          of Service
+            name="anonymous" 
+            checked={formData.anonymous} 
+            onChange={handleInputChange}
+            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+          />
+          <span className="text-sm text-gray-700">I would like to donate anonymously</span>
         </label>
       </div>
 
-      <div className="flex items-center gap-4">
-        <button
-          disabled={isPending}
-          onClick={() => {
-            if (!validateForm()) return;
-            if (selectedPaymentType === "Visa/Debit Card") {
-              handleDonate(); // Show Ecentric payment lightbox
-            } else if (selectedPaymentType === "EFT") {
-              setType("eft"); // Show EFT modal
-            }
-          }}
-          className="bg-secondary text-white py-3 px-6 mt-4 rounded-full font-xs hover:scale-105 transition-transform duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isPending ? "Donating..." : "DONATE NOW"}
-        </button>
-
-        <div className="text-black py-3 px-6 mt-4 rounded-full font-medium border border-gray-300">
-          Total Amount: R{calculateTotalAmount().toFixed(2)}
+      {/* Enhanced Fee Breakdown */}
+      <div className="mb-6 bg-gray-50 rounded-xl p-4">
+        <h4 className="font-semibold text-gray-800 mb-3">Donation Summary</h4>
+        <div className="space-y-2 text-sm">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Donation Amount:</span>
+            <span className="font-medium">R{parseFloat(amount || "0").toFixed(2)}</span>
+          </div>
+          {calculateTipAmount() > 0 && (
+            <div className="flex justify-between">
+              <span className="text-gray-600">Tip:</span>
+              <span className="font-medium text-green-600">+R{calculateTipAmount().toFixed(2)}</span>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <span className="text-gray-600">Platform Fee ({getPlatformFeeDisplay()}):</span>
+            <span className="font-medium text-red-500">-R{calculatePlatformFee().toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-600">Transaction Fee ({getTransactionFeeDisplay()}):</span>
+            <span className="font-medium text-red-500">-R{calculateTransactionFee().toFixed(2)}</span>
+          </div>
+          <hr className="my-2" />
+          <div className="flex justify-between text-lg font-semibold">
+            <span>Total to Charge:</span>
+            <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-sm font-medium">
+            <span className="text-green-600">Net to Campaign:</span>
+            <span className="text-green-600">R{calculateNetDonationAmount().toFixed(2)}</span>
+          </div>
         </div>
       </div>
+
+      {/* Donate Button */}
+      <button 
+        onClick={handleDonate} 
+        disabled={loading || isPending || settingsLoading} 
+        className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      >
+        {loading || isPending ? (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            Processing...
+          </>
+        ) : (
+          `DONATE R${calculateTotalChargeAmount().toFixed(2)} NOW`
+        )}
+      </button>
+
+      {/* EFT Modal */}
+      {showEFTModal && (
+        <EFTModal
+          onClose={() => setShowEFTModal(false)}
+          setType={() => setShowEFTModal(false)}
+          amount={calculateTotalChargeAmount().toString()}
+          handleDonate={handleEftDonate}
+        />
+      )}
     </div>
   );
 };

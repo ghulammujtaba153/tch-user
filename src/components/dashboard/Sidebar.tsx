@@ -33,8 +33,12 @@ const menuItems: MenuItem[] = [
   {
     name: 'Organization',
     icon: HomeIcon,
-    path: '/user/dashboard/organization',
+    path: '#',
     subItems: [
+      {
+        name: 'Organization Details',
+        path: '/user/dashboard/organization',
+      },
       {
         name: 'Bank Details',
         path: '/user/dashboard/bank-details',
