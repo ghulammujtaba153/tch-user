@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import EFTModal from "./EFTModal";
 import ReactGA from "react-ga4";
 import io from "socket.io-client";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
 
 // Extend Window interface for Ecentric payment gateway
 declare global {
@@ -606,14 +608,17 @@ const DonationForm: React.FC<Props> = ({
             placeholder="Email Address *"
             className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
           />
-          <input
-            type="text"
-            name="mobile"
+          <PhoneInput 
             value={formData.mobile}
-            onChange={handleInputChange}
+            onChange={(value, data, event, formattedValue) => {
+              setFormData((prev) => ({ ...prev, mobile: formattedValue }));
+            }}
             placeholder="Mobile Number"
-            className="border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-          />
+            country="za"
+            inputClass="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            containerClass="w-full"
+            countryCodeEditable={false}
+            />
           <input
             type="text"
             name="address"
