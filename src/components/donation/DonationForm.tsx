@@ -7,6 +7,19 @@ import EFTModal from "./EFTModal";
 import ReactGA from "react-ga4";
 import io from "socket.io-client";
 
+// Extend Window interface for Ecentric payment gateway
+declare global {
+  interface Window {
+    hpp?: {
+      payment: (
+        paymentData: any,
+        successCallback: (data: any) => void,
+        failCallback: (data: any) => void
+      ) => void;
+    };
+  }
+}
+
 interface PaymentSettings {
   _id: string;
   paymentType: string;
@@ -21,6 +34,9 @@ interface PaymentSettings {
   createdAt: string;
   updatedAt: string;
 }
+
+
+
 
 interface Props {
   campaignId: string;
