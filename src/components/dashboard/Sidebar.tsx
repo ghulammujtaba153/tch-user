@@ -6,17 +6,28 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronDownIcon,
-  ChevronUpIcon,
-  PencilIcon
+  ChevronUpIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/userContext';
 import { useAppConfig } from '../../context/AppConfigContext';
+
+interface SubSubItem {
+  name: string;
+  path: string;
+}
+
+interface SubItem {
+  name: string;
+  path: string;
+  icon?: React.ElementType;
+  subItems?: SubSubItem[];
+}
 
 interface MenuItem {
   name: string;
   icon: React.ElementType;
   path: string;
-  subItems?: { name: string; path: string; }[];
+  subItems?: SubItem[];
 }
 
 const menuItems: MenuItem[] = [
@@ -36,16 +47,22 @@ const menuItems: MenuItem[] = [
     path: '#',
     subItems: [
       {
-        name: 'Organization Details',
-        path: '/user/dashboard/organization',
-      },
-      {
-        name: 'Bank Details',
-        path: '/user/dashboard/bank-details',
-      },
-      {
-        name: 'S18A Document',
-        path: '/user/dashboard/s18a-document',
+        name: 'Organization Setup',
+        path: '#',
+        subItems: [
+          {
+            name: 'Organization Details',
+            path: '/user/dashboard/organization',
+          },
+          {
+            name: 'Bank Details',
+            path: '/user/dashboard/bank-details',
+          },
+          {
+            name: 'S18A Document',
+            path: '/user/dashboard/s18a-document',
+          },
+        ]
       },
       {
         name: 'Members',
@@ -67,7 +84,6 @@ const menuItems: MenuItem[] = [
     icon: SpeakerWaveIcon,
     path: '/user/dashboard/campaigns',
   },
-  
   {
     name: 'Support',
     icon: UsersIcon,
@@ -77,26 +93,40 @@ const menuItems: MenuItem[] = [
 
 const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isOpen, toggleSidebar }) => {
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [expandedSubItem, setExpandedSubItem] = useState<string | null>(null);
   const location = useLocation();
   const { logout, user } = useContext(AuthContext) || {};
   const navigate = useNavigate();
-  const {config} = useAppConfig();
-  
-
-
+  const { config } = useAppConfig();
 
   const toggleExpand = (itemName: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setExpandedItem(expandedItem === itemName ? null : itemName);
+    // Reset sub-item expansion when main item changes
+    if (expandedItem !== itemName) {
+      setExpandedSubItem(null);
+    }
+  };
+
+  const toggleSubExpand = (subItemName: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExpandedSubItem(expandedSubItem === subItemName ? null : subItemName);
   };
 
   const isActive = (path: string) => {
-    return location.pathname.startsWith(path);
+    if (path === '#') return false;
+    return location.pathname === path || location.pathname.startsWith(path);
   };
 
-  const isSubItemActive = (subItems: { name: string; path: string; }[]) => {
-    return subItems.some(subItem => isActive(subItem.path));
+  const isSubItemActive = (subItems: SubItem[]): boolean => {
+    return subItems.some(subItem => {
+      if (subItem.subItems) {
+        return subItem.subItems.some(subSubItem => isActive(subSubItem.path));
+      }
+      return isActive(subItem.path);
+    });
   };
 
   const handleLogout = () => {
@@ -104,12 +134,22 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
     navigate('/signin');
   };
 
+  const handleLinkClick = (path: string, e: React.MouseEvent) => {
+    if (path === '#') {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className={`relative hidden sm:block h-screen bg-gray-50 text-gray-800 flex flex-col transition-all duration-300 ${isOpen ? 'md:w-64' : 'w-16'}`}>
       <div className="flex-1 flex flex-col">
         {/* Logo */}
         <Link to="/" className="flex justify-center items-center p-4">
-          <img src={config?.logo} alt="logo" className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} />
+          <img 
+            src={config?.logo} 
+            alt="logo" 
+            className={`w-30 h-10 ${isOpen ? 'block' : 'hidden'}`} 
+          />
         </Link>
 
         {/* Menu Items */}
@@ -121,6 +161,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
                   <div className="relative">
                     <Link
                       to={item.path}
+                      onClick={(e) => handleLinkClick(item.path, e)}
                       className={`w-full ${isOpen ? "px-6 py-4" : "px-5 py-5"} flex items-center hover:bg-secondary/20 transition-colors duration-200 ${
                         isActive(item.path) || (item.subItems && isSubItemActive(item.subItems)) 
                           ? 'bg-secondary/20 border-l-4 text-secondary border-secondary' 
@@ -152,17 +193,50 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
                   {expandedItem === item.name && item.subItems && isOpen && (
                     <div className="bg-gray-50 border-l-4 border-secondary/30">
                       {item.subItems.map((subItem) => (
-                        <Link
-                          key={subItem.name}
-                          to={subItem.path}
-                          className={`block px-12 py-3 text-sm hover:bg-secondary/10 transition-colors duration-200 ${
-                            isActive(subItem.path) 
-                              ? 'bg-secondary/20 text-secondary font-medium' 
-                              : 'text-gray-600'
-                          }`}
-                        >
-                          {subItem.name}
-                        </Link>
+                        <div key={subItem.name}>
+                          <Link
+                            to={subItem.path}
+                            onClick={(e) => handleLinkClick(subItem.path, e)}
+                            className={`flex items-center justify-between px-12 py-3 text-sm hover:bg-secondary/10 transition-colors duration-200 ${
+                              isActive(subItem.path) || (subItem.subItems && subItem.subItems.some(subSubItem => isActive(subSubItem.path)))
+                                ? 'bg-secondary/20 text-secondary font-medium' 
+                                : 'text-gray-600'
+                            }`}
+                          >
+                            <span>{subItem.name}</span>
+                            {subItem.subItems && (
+                              <button
+                                onClick={(e) => toggleSubExpand(subItem.name, e)}
+                                className="p-1 hover:bg-secondary/30 rounded"
+                              >
+                                {expandedSubItem === subItem.name ? (
+                                  <ChevronUpIcon className="h-3 w-3" />
+                                ) : (
+                                  <ChevronDownIcon className="h-3 w-3" />
+                                )}
+                              </button>
+                            )}
+                          </Link>
+
+                          {/* Sub-submenu */}
+                          {expandedSubItem === subItem.name && subItem.subItems && (
+                            <div className="bg-gray-100 border-l-4 border-secondary/20">
+                              {subItem.subItems.map((subSubItem) => (
+                                <Link
+                                  key={subSubItem.name}
+                                  to={subSubItem.path}
+                                  className={`block px-16 py-2 text-xs hover:bg-secondary/10 transition-colors duration-200 ${
+                                    isActive(subSubItem.path)
+                                      ? 'bg-secondary/20 text-secondary font-medium'
+                                      : 'text-gray-500'
+                                  }`}
+                                >
+                                  {subSubItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       ))}
                     </div>
                   )}
