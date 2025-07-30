@@ -39,6 +39,10 @@ const Organization = () => {
   const [isses, setIssues] = useState<any>("");
   const { config } = useAppConfig();
 
+  // Helper function to construct full URL for file paths
+  const getFullUrl = (filePath: string) =>
+    filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
+
   useEffect(() => {
     if (config?.name) {
       document.title = `Organization | ${config.name}`;
@@ -46,8 +50,6 @@ const Organization = () => {
   }, [config]);
 
   const fetchOrganization = async () => {
-    const getFullUrl = (filePath: string) =>
-      filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
     try {
       let res = await axios.get(`${BASE_URL}/organization/${user.userId}`);
       console.log("fetch organization", res.data);
@@ -184,8 +186,7 @@ const Organization = () => {
         setFormData((prev) => ({ ...prev, logo: uploadResult.filePath }));
         
         // Create preview URL from the uploaded file
-        const previewURL = `${SOCKET_URL}${uploadResult.filePath}`;
-      setLogoPreview(previewURL);
+        setLogoPreview(getFullUrl(uploadResult.filePath));
         
         // Clear the file object since we now have the path
         setLogoFile(null);

@@ -29,6 +29,10 @@ const S18ADocument = () => {
   const { config } = useAppConfig();
   const [issues, setIssues] = useState<any>([]);
 
+  // Helper function to construct full URL for file paths
+  const getFullUrl = (filePath: string) =>
+    filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
+
   useEffect(() => {
     if (config?.name) {
       document.title = `S18A Document | ${config.name}`;
@@ -36,9 +40,6 @@ const S18ADocument = () => {
   }, [config]);
 
   const fetchS18AData = async () => {
-    const getFullUrl = (filePath: string) =>
-      filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
-    
     try {
       let res = await axios.get(`${BASE_URL}/s18a/get/${user.userId}`);
       console.log("fetch S18A data", res.data);
@@ -141,8 +142,7 @@ const S18ADocument = () => {
         setS18AData((prev) => ({ ...prev, signature: uploadResult.data.filePath }));
         
         // Create preview URL from the uploaded file
-        const previewURL = `${SOCKET_URL}${uploadResult.data.filePath}`;
-        setSignaturePreview(previewURL);
+        setSignaturePreview(getFullUrl(uploadResult.data.filePath));
         
         // Clear the file object since we now have the path
         setSignatureFile(null);
