@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import upload from '../../utils/upload';
 import axios from 'axios';
 import { BASE_URL, SOCKET_URL } from '../../config/url';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { AuthContext } from '../../context/userContext';
 import AddMember from '../../components/dashboard/AddMember';
 import Loading from '../../components/Loading';
@@ -283,6 +283,10 @@ const Organization = () => {
 
   return (
     <div className="min-h-screen py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
+
+      <ToastContainer>
+        
+      </ToastContainer>
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6">
