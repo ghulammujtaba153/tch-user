@@ -128,48 +128,98 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
     return selectedPaymentType === "Card" ? cardSettings : eftSettings;
   };
 
-  // Calculate platform fee
-  const calculatePlatformFee = (): number => {
-    const settings = getCurrentPaymentSettings();
-    if (!settings) return 0;
+  // Calculate platform fee for Card payments
+  const calculateCardPlatformFee = (): number => {
+    if (!cardSettings) return 0;
 
-    console.log("🔧 Calculating platform fee with settings:", settings.platformFee);
+    console.log("💳 Calculating card platform fee with settings:", cardSettings.platformFee);
 
     const baseAmount = parseFloat(amount) || 0;
     
-    if (settings.platformFee.percent !== undefined) {
-      const fee = (baseAmount * settings.platformFee.percent) / 100;
-      console.log(`Platform fee (${settings.platformFee.percent}%): ${fee}`);
+    if (cardSettings.platformFee.percent !== undefined) {
+      const fee = (baseAmount * cardSettings.platformFee.percent) / 100;
+      console.log(`Card platform fee (${cardSettings.platformFee.percent}%): ${fee}`);
       return fee;
-    } else if (settings.platformFee.total !== undefined) {
-      const fee = settings.platformFee.total;
-      console.log(`Platform fee (fixed): ${fee}`);
+    } else if (cardSettings.platformFee.total !== undefined) {
+      const fee = cardSettings.platformFee.total;
+      console.log(`Card platform fee (fixed): ${fee}`);
       return fee;
     }
     
     return 0;
   };
 
-  // Calculate transaction fee
-  const calculateTransactionFee = (): number => {
-    const settings = getCurrentPaymentSettings();
-    if (!settings) return 0;
+  // Calculate transaction fee for Card payments
+  const calculateCardTransactionFee = (): number => {
+    if (!cardSettings) return 0;
 
-    console.log("🔧 Calculating transaction fee with settings:", settings.transactionFee);
+    console.log("💳 Calculating card transaction fee with settings:", cardSettings.transactionFee);
 
     const baseAmount = parseFloat(amount) || 0;
     
-    if (settings.transactionFee.percent !== undefined) {
-      const fee = (baseAmount * settings.transactionFee.percent) / 100;
-      console.log(`Transaction fee (${settings.transactionFee.percent}%): ${fee}`);
+    if (cardSettings.transactionFee.percent !== undefined) {
+      const fee = (baseAmount * cardSettings.transactionFee.percent) / 100;
+      console.log(`Card transaction fee (${cardSettings.transactionFee.percent}%): ${fee}`);
       return fee;
-    } else if (settings.transactionFee.total !== undefined) {
-      const fee = settings.transactionFee.total;
-      console.log(`Transaction fee (fixed): ${fee}`);
+    } else if (cardSettings.transactionFee.total !== undefined) {
+      const fee = cardSettings.transactionFee.total;
+      console.log(`Card transaction fee (fixed): ${fee}`);
       return fee;
     }
     
     return 0;
+  };
+
+  // Calculate platform fee for EFT payments
+  const calculateEFTPlatformFee = (): number => {
+    if (!eftSettings) return 0;
+
+    console.log("🏦 Calculating EFT platform fee with settings:", eftSettings.platformFee);
+
+    const baseAmount = parseFloat(amount) || 0;
+    
+    if (eftSettings.platformFee.percent !== undefined) {
+      const fee = (baseAmount * eftSettings.platformFee.percent) / 100;
+      console.log(`EFT platform fee (${eftSettings.platformFee.percent}%): ${fee}`);
+      return fee;
+    } else if (eftSettings.platformFee.total !== undefined) {
+      const fee = eftSettings.platformFee.total;
+      console.log(`EFT platform fee (fixed): ${fee}`);
+      return fee;
+    }
+    
+    return 0;
+  };
+
+  // Calculate transaction fee for EFT payments
+  const calculateEFTTransactionFee = (): number => {
+    if (!eftSettings) return 0;
+
+    console.log("🏦 Calculating EFT transaction fee with settings:", eftSettings.transactionFee);
+
+    const baseAmount = parseFloat(amount) || 0;
+    
+    if (eftSettings.transactionFee.percent !== undefined) {
+      const fee = (baseAmount * eftSettings.transactionFee.percent) / 100;
+      console.log(`EFT transaction fee (${eftSettings.transactionFee.percent}%): ${fee}`);
+      return fee;
+    } else if (eftSettings.transactionFee.total !== undefined) {
+      const fee = eftSettings.transactionFee.total;
+      console.log(`EFT transaction fee (fixed): ${fee}`);
+      return fee;
+    }
+    
+    return 0;
+  };
+
+  // Calculate platform fee based on selected payment method
+  const calculatePlatformFee = (): number => {
+    return selectedPaymentType === "Card" ? calculateCardPlatformFee() : calculateEFTPlatformFee();
+  };
+
+  // Calculate transaction fee based on selected payment method
+  const calculateTransactionFee = (): number => {
+    return selectedPaymentType === "Card" ? calculateCardTransactionFee() : calculateEFTTransactionFee();
   };
 
   // Calculate tip amount
@@ -214,23 +264,33 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
       return;
     }
 
+    if (selectedPaymentType === "Card") {
+      await handleCardPayment();
+    } else if (selectedPaymentType === "EFT") {
+      setShowEFTModal(true);
+    }
+  };
+
+  const handleCardPayment = async () => {
     try {
       setLoading(true);
 
+      // Use Card-specific fee calculations
       const tipAmount = calculateTipAmount();
-      const platformFee = calculatePlatformFee();
-      const transactionFee = calculateTransactionFee();
+      const platformFee = calculateCardPlatformFee();
+      const transactionFee = calculateCardTransactionFee();
       const netDonationAmount = calculateNetDonationAmount();
       const totalChargeAmount = calculateTotalChargeAmount();
 
-      console.log("💰 Organization donation fee breakdown:", {
+      console.log("💳 CARD payment fee breakdown:", {
+        paymentMethod: "CARD",
         baseAmount: parseFloat(amount),
         tipAmount,
         platformFee,
         transactionFee,
         netDonationAmount,
         totalChargeAmount,
-        paymentSettings: getCurrentPaymentSettings()
+        cardSettings: cardSettings
       });
 
       const donationData = {
@@ -250,17 +310,14 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
         mobile: formData.mobile,
         comment: formData.comment,
         anonymous: formData.anonymous,
-        paymentMethod: selectedPaymentType === "Card" ? "card" : "EFT",
+        paymentMethod: "card",
       };
 
-      if (selectedPaymentType === "EFT") {
-        setShowEFTModal(true);
-        return;
-      }
-
       // Card payment flow
-      const randomRef = `ORG${Date.now()}`;
+      const randomRef = `CARD_ORG_${Date.now()}`;
       const totalCents = Math.round(totalChargeAmount * 100);
+
+      console.log("💳 Initiating card payment:", { reference: randomRef, amount: totalCents });
 
       const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
         amount: totalCents.toString(),
@@ -269,35 +326,35 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
       });
 
       if (!window.hpp?.payment) {
-        toast.error("Payment system not ready");
+        toast.error("Card payment system not ready");
         return;
       }
 
       window.hpp.payment(
         paymentData,
         async (successData: any) => {
-          console.log("💳 Payment Success", successData);
+          console.log("💳 Card Payment Success", successData);
           try {
             await axios.post(`${BASE_URL}/donations`, { 
               ...donationData, 
               status: "completed",
               transactionId: successData.transactionId || randomRef
             });
-          toast.success("Donation successful!");
-          onClose();
+            toast.success("Card donation successful!");
+            onClose();
           } catch (error) {
-            console.error("❌ Error recording donation:", error);
+            console.error("❌ Error recording card donation:", error);
             toast.error("Payment succeeded but failed to record donation");
           }
         },
         (failData: any) => {
-          console.error("❌ Payment Failed", failData);
-          toast.error("Payment failed. Please try again.");
+          console.error("❌ Card Payment Failed", failData);
+          toast.error("Card payment failed. Please try again.");
         }
       );
     } catch (error) {
-      console.error("❌ Error processing donation:", error);
-      toast.error("Failed to process donation");
+      console.error("❌ Error processing card donation:", error);
+      toast.error("Failed to process card donation");
     } finally {
       setLoading(false);
     }
@@ -306,16 +363,18 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
   const handleEFTDonate = async (reference: string) => {
     if (!validateForm()) return;
 
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
       
+      // Use EFT-specific fee calculations
       const tipAmount = calculateTipAmount();
-      const platformFee = calculatePlatformFee();
-      const transactionFee = calculateTransactionFee();
+      const platformFee = calculateEFTPlatformFee();
+      const transactionFee = calculateEFTTransactionFee();
       const netDonationAmount = calculateNetDonationAmount();
       const totalChargeAmount = calculateTotalChargeAmount();
 
-      console.log("🏦 EFT organization donation data:", {
+      console.log("🏦 EFT payment fee breakdown:", {
+        paymentMethod: "EFT",
         baseAmount: parseFloat(amount),
         tipAmount,
         platformFee,
@@ -323,41 +382,41 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
         netDonationAmount,
         totalChargeAmount,
         reference,
-        paymentSettings: getCurrentPaymentSettings()
+        eftSettings: eftSettings
       });
 
-    await axios.post(`${BASE_URL}/donations`, {
-      donorId: user?.userId,
-      organizationId,
+      await axios.post(`${BASE_URL}/donations`, {
+        donorId: user?.userId,
+        organizationId,
         amount: netDonationAmount,
         totalAmount: totalChargeAmount,
         tipAmount: tipAmount,
         platformFee: platformFee,
         transactionFee: transactionFee,
-      donorName: formData.donorName,
-      donorEmail: formData.donorEmail,
-      address: formData.address,
-      city: formData.city,
-      province: formData.province,
-      postalCode: formData.postalCode,
-      mobile: formData.mobile,
-      comment: formData.comment,
-      anonymous: formData.anonymous,
-      paymentMethod: "EFT",
-      status: "pending",
+        donorName: formData.donorName,
+        donorEmail: formData.donorEmail,
+        address: formData.address,
+        city: formData.city,
+        province: formData.province,
+        postalCode: formData.postalCode,
+        mobile: formData.mobile,
+        comment: formData.comment,
+        anonymous: formData.anonymous,
+        paymentMethod: "EFT",
+        status: "pending",
         referenceId: reference,
-    });
+      });
       
       toast.success("EFT donation recorded! Complete payment using the provided bank details.");
-    setShowEFTModal(false);
-    onClose();
-  } catch (error) {
+      setShowEFTModal(false);
+      onClose();
+    } catch (error) {
       console.error("❌ Error recording EFT donation:", error);
-    toast.error("Failed to record EFT donation");
-  } finally {
-    setLoading(false);
-  }
-};
+      toast.error("Failed to record EFT donation");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -374,29 +433,37 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
     setTipPercentage(0); // Clear percentage when entering custom
   };
 
-  // Get fee display text for UI
-  const getPlatformFeeDisplay = (): string => {
-    const settings = getCurrentPaymentSettings();
-    if (!settings) return "Loading...";
+  // Get fee display text for UI - Card specific
+  const getCardFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
+    if (!cardSettings) return "Loading...";
     
-    if (settings.platformFee.percent !== undefined) {
-      return `${settings.platformFee.percent}%`;
-    } else if (settings.platformFee.total !== undefined) {
-      return `R${settings.platformFee.total}`;
+    const fee = feeType === 'platform' ? cardSettings.platformFee : cardSettings.transactionFee;
+    
+    if (fee.percent !== undefined) {
+      return `${fee.percent}%`;
+    } else if (fee.total !== undefined) {
+      return `R${fee.total}`;
     }
     return "Not set";
   };
 
-  const getTransactionFeeDisplay = (): string => {
-    const settings = getCurrentPaymentSettings();
-    if (!settings) return "Loading...";
+  // Get fee display text for UI - EFT specific
+  const getEFTFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
+    if (!eftSettings) return "Loading...";
     
-    if (settings.transactionFee.percent !== undefined) {
-      return `${settings.transactionFee.percent}%`;
-    } else if (settings.transactionFee.total !== undefined) {
-      return `R${settings.transactionFee.total}`;
+    const fee = feeType === 'platform' ? eftSettings.platformFee : eftSettings.transactionFee;
+    
+    if (fee.percent !== undefined) {
+      return `${fee.percent}%`;
+    } else if (fee.total !== undefined) {
+      return `R${fee.total}`;
     }
     return "Not set";
+  };
+
+  // Get fee display based on payment method
+  const getFeeDisplay = (method: PaymentMethod, feeType: 'platform' | 'transaction'): string => {
+    return method === 'Card' ? getCardFeeDisplay(feeType) : getEFTFeeDisplay(feeType);
   };
 
   if (settingsLoading) {
@@ -498,13 +565,51 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                   <div className="flex-1">
                     <span className="font-medium">{method} Payment</span>
                     <div className="text-xs text-gray-500 mt-1">
-                      Platform: {getPlatformFeeDisplay()} | Transaction: {getTransactionFeeDisplay()}
+                      Platform: {getFeeDisplay(method as PaymentMethod, 'platform')} | Transaction: {getFeeDisplay(method as PaymentMethod, 'transaction')}
                     </div>
                   </div>
               </label>
             ))}
           </div>
         </div>
+
+        {/* Fee Breakdown */}
+        {amount && parseFloat(amount) > 0 && (
+          <div className="mb-6 bg-gray-50 rounded-lg p-4">
+            <h3 className="text-sm font-semibold text-gray-800 mb-3">
+              {selectedPaymentType} Payment Breakdown
+            </h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Donation Amount:</span>
+                <span className="font-medium">R{parseFloat(amount).toFixed(2)}</span>
+              </div>
+              {calculateTipAmount() > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Tip:</span>
+                  <span className="font-medium">R{calculateTipAmount().toFixed(2)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-red-600">
+                <span>Platform Fee ({selectedPaymentType}):</span>
+                <span>-R{calculatePlatformFee().toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-red-600">
+                <span>Transaction Fee ({selectedPaymentType}):</span>
+                <span>-R{calculateTransactionFee().toFixed(2)}</span>
+              </div>
+              <div className="border-t border-gray-300 pt-2 mt-2"></div>
+              <div className="flex justify-between font-semibold">
+                <span>You Pay:</span>
+                <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-semibold text-green-600">
+                <span>Organization Receives:</span>
+                <span>R{calculateNetDonationAmount().toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Donor Details */}
           <div className="mb-6">
@@ -587,39 +692,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
             </label>
           </div>
 
-          {/* Enhanced Fee Breakdown */}
-          {/* <div className="mb-6 bg-gray-50 rounded-xl p-4">
-            <h4 className="font-semibold text-gray-800 mb-3">Donation Summary</h4>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Donation Amount:</span>
-                <span className="font-medium">R{parseFloat(amount || "0").toFixed(2)}</span>
-              </div>
-              {calculateTipAmount() > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tip:</span>
-                  <span className="font-medium text-green-600">+R{calculateTipAmount().toFixed(2)}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-gray-600">Platform Fee ({getPlatformFeeDisplay()}):</span>
-                <span className="font-medium text-red-500">-R{calculatePlatformFee().toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Transaction Fee ({getTransactionFeeDisplay()}):</span>
-                <span className="font-medium text-red-500">-R{calculateTransactionFee().toFixed(2)}</span>
-              </div>
-              <hr className="my-2" />
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total to Charge:</span>
-                <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between text-sm font-medium">
-                <span className="text-green-600">Net to Organization:</span>
-                <span className="text-green-600">R{calculateNetDonationAmount().toFixed(2)}</span>
-              </div>
-            </div>
-          </div> */}
+          
 
           {/* Donate Button */}
           <button 
@@ -630,10 +703,10 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                Processing...
+                Processing {selectedPaymentType} Payment...
               </>
             ) : (
-              `Donate R${calculateTotalChargeAmount().toFixed(2)} Now`
+              `Donate R${calculateTotalChargeAmount().toFixed(2)} via ${selectedPaymentType}`
             )}
           </button>
         </div>
