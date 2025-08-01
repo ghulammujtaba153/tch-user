@@ -6,6 +6,7 @@ import { AuthContext } from '../../context/userContext';
 import Loading from '../../components/Loading';
 import { useAppConfig } from '../../context/AppConfigContext';
 import { FaCheckCircle, FaTimesCircle, FaClock, FaExclamationTriangle } from 'react-icons/fa';
+import upload from '../../utils/upload';
 
 const initialS18AData = {
   userId: '',
@@ -60,7 +61,11 @@ const S18ADocument = () => {
       setS18AData(s18ADataFromAPI);
       setIsUpdateMode(true);
 
-      if (res.data.signature) setSignaturePreview(getFullUrl(res.data.signature));
+      // Set signature preview - handle both Cloudinary URLs and local file paths
+      if (res.data.signature) {
+        const signatureUrl = res.data.signature.startsWith('http') ? res.data.signature : getFullUrl(res.data.signature);
+        setSignaturePreview(signatureUrl);
+      }
     } catch (error) {
       console.log('No S18A data found for user');
       setS18AData({ ...initialS18AData, userId: user.userId, status: "" });
@@ -113,9 +118,9 @@ const S18ADocument = () => {
     }
 
     // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
-      toast.error('Please upload a valid image file (JPG or PNG)');
+      toast.error('Please upload a valid image file (JPG, PNG, or WebP)');
       return;
     }
 
@@ -130,29 +135,28 @@ const S18ADocument = () => {
       // Show loading state
       setLoading(true);
       
-      // Upload file using the upload function
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('folder', 's18a-documents');
+      // Upload file to Cloudinary using the upload utility
+      toast.loading("Uploading signature...");
+      const url = await upload(file);
+      toast.dismiss();
       
-      const uploadResult = await axios.post(`${BASE_URL}/upload/upload-single`, formData);
-      
-      if (uploadResult.data && uploadResult.data.filePath) {
-        // Set the file path from the upload response
-        setS18AData((prev) => ({ ...prev, signature: uploadResult.data.filePath }));
+      if (url) {
+        // Set the Cloudinary URL (which is already a full URL)
+        setS18AData((prev) => ({ ...prev, signature: url }));
         
-        // Create preview URL from the uploaded file
-        setSignaturePreview(getFullUrl(uploadResult.data.filePath));
+        // Set preview URL directly (Cloudinary URLs are already full URLs)
+        setSignaturePreview(url);
         
-        // Clear the file object since we now have the path
+        // Clear the file object since we now have the URL
         setSignatureFile(null);
         
         toast.success('Signature uploaded successfully!');
+        console.log('Cloudinary signature uploaded:', url);
       } else {
-        throw new Error('Upload failed - no file path returned');
+        throw new Error('Upload failed - no URL returned from Cloudinary');
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading signature to Cloudinary:', error);
       toast.error('Error uploading signature file');
       
       // Reset state on error
@@ -347,7 +351,7 @@ const S18ADocument = () => {
                     isLoading={loading}
                   />
                   <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                    Upload your signature in PNG or JPG format. This will be used for official documents.
+                    Upload your signature in PNG, JPG, or WebP format. This will be used for official documents.
                   </p>
                 </div>
               </div>
@@ -430,7 +434,7 @@ const FileUpload = ({
     <div className="relative">
       <input
         type="file"
-        accept="image/png,image/jpg,image/jpeg"
+        accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={onChange}
         required={required}
         disabled={isLoading}
@@ -473,7 +477,7 @@ const FileUpload = ({
                   Click to upload or drag and drop
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  PNG, JPG, JPEG up to 5MB
+                  PNG, JPG, WebP up to 5MB
                 </p>
               </div>
             </>

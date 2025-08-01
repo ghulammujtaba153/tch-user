@@ -82,7 +82,11 @@ const Organization = () => {
       setFormData(mergedData);
       setIsUpdateMode(true);
 
-      if (res.data.logo) setLogoPreview(getFullUrl(res.data.logo));
+      // Set logo preview - handle both Cloudinary URLs and local file paths
+      if (res.data.logo) {
+        const logoUrl = res.data.logo.startsWith('http') ? res.data.logo : getFullUrl(res.data.logo);
+        setLogoPreview(logoUrl);
+      }
 
     } catch (error) {
       console.log('No organization data found for user');
@@ -138,12 +142,24 @@ const Organization = () => {
     }
   };
 
-  const handleUpload = async (file: File, type: string) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', type);
-    const res = await axios.post(`${BASE_URL}/upload/upload-single`, formData);
-    return res.data;
+  const handleUpload = async (file: File) => {
+    try {
+      toast.loading("Uploading file...");
+      const url = await upload(file);
+      toast.dismiss();
+      if (url) {
+        toast.success("File uploaded successfully");
+        console.log("Cloudinary URL:", url);
+        return { url, filePath: url }; // Return both for compatibility
+      } else {
+        throw new Error('No URL returned from upload');
+      }
+    } catch (error) {
+      console.log("error while uploading file", error);
+      toast.dismiss();
+      toast.error("Error while uploading file");
+      return null;
+    }
   };
 
   const handleFileChange = async (
@@ -178,25 +194,25 @@ const Organization = () => {
       // Show loading state
       setLoading(true);
       
-      // Upload file using the upload function
-      const uploadResult = await handleUpload(file, 'logo');
+      // Upload file to Cloudinary using the upload utility
+      const uploadResult = await handleUpload(file);
       
-      if (uploadResult && uploadResult.filePath) {
-        // Set the file path from the upload response
-        setFormData((prev) => ({ ...prev, logo: uploadResult.filePath }));
+      if (uploadResult && uploadResult.url) {
+        // Set the Cloudinary URL (which is already a full URL)
+        setFormData((prev) => ({ ...prev, logo: uploadResult.url }));
         
-        // Create preview URL from the uploaded file
-        setLogoPreview(getFullUrl(uploadResult.filePath));
+        // Set preview URL directly (Cloudinary URLs are already full URLs)
+        setLogoPreview(uploadResult.url);
         
-        // Clear the file object since we now have the path
+        // Clear the file object since we now have the URL
         setLogoFile(null);
         
-        toast.success('Logo uploaded successfully!');
+        console.log('Cloudinary logo uploaded:', uploadResult.url);
       } else {
-        throw new Error('Upload failed - no file path returned');
+        throw new Error('Upload failed - no URL returned from Cloudinary');
       }
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error('Error uploading file to Cloudinary:', error);
       toast.error('Error uploading logo file');
       
       // Reset state on error
