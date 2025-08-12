@@ -15,6 +15,7 @@ const initialS18AData = {
   trustNumber: '',
   pbo: '',
   npo: '',
+  authorizedBy: '',
   signature: '',
   status: 'pending'
 };
@@ -55,7 +56,8 @@ const S18ADocument = () => {
         pbo: res.data.pbo || '',
         npo: res.data.npo || '',
         signature: res.data.signature || '',
-        status: res.data.status || ""
+        status: res.data.status || "",
+        authorizedBy: res.data.authorizedBy || ""
       };
 
       setS18AData(s18ADataFromAPI);
@@ -340,6 +342,13 @@ const S18ADocument = () => {
                     onChange={handleChange} 
                   />
                 </div>
+
+                <Input
+                label='Authorized By'
+                name='authorizedBy'
+                value={s18AData.authorizedBy}
+                onChange={handleChange}
+                />
 
                 {/* Signature Upload */}
                 <div className="col-span-full">
