@@ -39,6 +39,7 @@ const CampaignDetails = () => {
   const { config } = useAppConfig();
 
 
+
   useEffect(() => {
     if (config?.name) {
       document.title = `CampaignDetails | ${config.name}`;
@@ -90,6 +91,16 @@ const CampaignDetails = () => {
       }
     });
   };
+
+  const handleDonateClick = () => {
+    // Always scroll to donation form - S18A option will be shown in the form if campaign is verified
+    const donationForm = document.getElementById('donation-form');
+    if (donationForm) {
+      donationForm.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+
 
   useEffect(() => {
     const fetchCampaign = async () => {
@@ -160,6 +171,11 @@ const CampaignDetails = () => {
             </div>
           </div>
 
+
+          <p className="text-sm font-bold text-black py-2 font-onest">
+            {campaign?.verified ? "Verified" : "Unverified"}
+          </p>
+
           {/* basic details section */}
           <div className="flex md:flex-row flex-col md:items-center justify-between gap-2">
             {/* avatar and location section */}
@@ -226,11 +242,15 @@ const CampaignDetails = () => {
             )}
 
             {/* donate btn */}
-
-            <button className="bg-secondary flex items-center justify-center text-white px-4 py-1 md:py-2 rounded-full text-sm font-bold h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300">
-              Donate Now
-              <ArrowRightIcon className="w-[20px] h-[20px] ml-2" />
-            </button>
+            {!admin && !campaigner && (
+              <button 
+                onClick={handleDonateClick}
+                className="bg-secondary flex items-center justify-center text-white px-4 py-1 md:py-2 rounded-full text-sm font-bold h-[50px] shadow-md hover:bg-secondary/80 transition-all duration-300"
+              >
+                Donate Now
+                <ArrowRightIcon className="w-[20px] h-[20px] ml-2" />
+              </button>
+            )}
           </div>
 
           {/* links section */}
@@ -464,13 +484,16 @@ const CampaignDetails = () => {
           )}
 
           {!admin && !campaigner && (
-            <DonationForm
-              campaignId={id as string}
-              organizationId={campaign?.organization[0]._id}
-              campaignTitle={campaign?.title}
-              campaignAmount={campaign?.amount}
-              currentAmount={raised}
-            />
+            <div id="donation-form">
+              <DonationForm
+                campaignId={id as string}
+                organizationId={campaign?.organization[0]._id}
+                campaignTitle={campaign?.title}
+                campaignAmount={campaign?.amount}
+                currentAmount={raised}
+                isVerified={campaign?.verified || false}
+              />
+            </div>
           )}
 
           {campaigner && (
@@ -533,6 +556,8 @@ const CampaignDetails = () => {
 
       {/* comments section */}
       {/* <Comments campaignId={id} /> */}
+
+
 
     </div>
   );

@@ -184,10 +184,12 @@ const Footer: React.FC = () => {
             <div className="flex flex-col gap-2">
               <h2 className="text-sm font-bold mb-2 font-onest text-secondary">INFORMATION</h2>
 
+              
               <p className="text-sm font-bold mb-2 font-onest">
                 General Contact
               </p>
               <p className="text-sm mb-2 ">info@givetogrow.co.za</p>
+              <p className="text-sm mb-2 ">+27 87 474 2215</p>
 
               <p className="text-sm font-bold mb-2 font-onest">Support</p>
               <p className="text-sm">support@givetogrow.co.za</p>

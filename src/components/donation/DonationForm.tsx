@@ -46,6 +46,7 @@ interface Props {
   campaignTitle: string;
   campaignAmount: number;
   currentAmount: number;
+  isVerified?: boolean;
 }
 
 type PaymentMethod = "Card" | "EFT";
@@ -56,6 +57,7 @@ const DonationForm: React.FC<Props> = ({
   campaignTitle,
   campaignAmount,
   currentAmount,
+  isVerified = false,
 }) => {
   const { user } = useContext(AuthContext)!;
   const [amount, setAmount] = useState<string>("150");
@@ -73,6 +75,12 @@ const DonationForm: React.FC<Props> = ({
   // Tip state
   const [tipPercentage, setTipPercentage] = useState<number>(0);
   const [customTip, setCustomTip] = useState<string>("");
+
+  // S18A Certificate state
+  const [wantS18A, setWantS18A] = useState(false);
+  const [idNumber, setIdNumber] = useState("");
+  const [taxNumber, setTaxNumber] = useState("");
+  const [s18aErrors, setS18aErrors] = useState<{ idNumber?: string; taxNumber?: string }>({});
 
   const [formData, setFormData] = useState({
     donorName: user?.name || "",
@@ -282,11 +290,36 @@ const DonationForm: React.FC<Props> = ({
     return Math.max(0, baseAmount - platformFee - transactionFee);
   };
 
+  const validateS18A = () => {
+    const newErrors: { idNumber?: string; taxNumber?: string } = {};
+    
+    if (wantS18A) {
+      if (!idNumber.trim()) {
+        newErrors.idNumber = 'ID Number is required for S18A certificate';
+      } else if (!/^\d{13}$/.test(idNumber.replace(/\s/g, ''))) {
+        newErrors.idNumber = 'Please enter a valid 13-digit ID number';
+      }
+      
+      if (!taxNumber.trim()) {
+        newErrors.taxNumber = 'Tax Number is required for S18A certificate';
+      }
+    }
+    
+    setS18aErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const validateForm = () => {
     if (!formData.donorName || !formData.donorEmail || !formData.address || !formData.city || !formData.postalCode) {
       toast.error("Please fill all required fields");
       return false;
     }
+    
+    if (isVerified && !validateS18A()) {
+      toast.error("Please complete S18A certificate fields correctly");
+      return false;
+    }
+    
     return true;
   };
 
@@ -371,6 +404,10 @@ const DonationForm: React.FC<Props> = ({
         comment: formData.comment,
         anonymous: formData.anonymous,
         paymentMethod: "card",
+        ...(wantS18A && {
+          IDNumber: idNumber.replace(/\s/g, ''),
+          taxNumber: taxNumber.trim(),
+        }),
       };
 
       // Card payment flow
@@ -485,6 +522,10 @@ const DonationForm: React.FC<Props> = ({
         paymentMethod: "EFT",
         status: "pending",
         referenceId: reference,
+        ...(wantS18A && {
+          IDNumber: idNumber.replace(/\s/g, ''),
+          taxNumber: taxNumber.trim(),
+        }),
       };
 
       await axios.post(`${BASE_URL}/donations`, donationData);
@@ -523,6 +564,29 @@ const DonationForm: React.FC<Props> = ({
   const handleCustomTipChange = (value: string) => {
     setCustomTip(value);
     setTipPercentage(0); // Clear percentage when entering custom
+  };
+
+  // S18A Certificate handlers
+  const formatIdNumber = (value: string) => {
+    // Remove all non-digits and limit to 13 characters
+    const digits = value.replace(/\D/g, '').slice(0, 13);
+    // Format as XXX XXX XXXX XXX
+    return digits.replace(/(\d{6})(\d{4})(\d{3})/, '$1 $2 $3').trim();
+  };
+
+  const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatIdNumber(e.target.value);
+    setIdNumber(formatted);
+    if (s18aErrors.idNumber) {
+      setS18aErrors(prev => ({ ...prev, idNumber: undefined }));
+    }
+  };
+
+  const handleTaxNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTaxNumber(e.target.value);
+    if (s18aErrors.taxNumber) {
+      setS18aErrors(prev => ({ ...prev, taxNumber: undefined }));
+    }
   };
 
   // Get fee display text for UI - Card specific
@@ -572,6 +636,8 @@ const DonationForm: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Make a Donation</h2>
+      
+
 
       {/* Amount Selection */}
       <div className="mb-6">
@@ -654,6 +720,107 @@ const DonationForm: React.FC<Props> = ({
           ))}
         </div>
       </div>
+
+      {/* S18A Certificate Section - Only for verified campaigns */}
+      {isVerified && (
+        <div className="mb-6">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <span className="font-medium text-green-800">Verified Campaign</span>
+            </div>
+            <p className="text-sm text-green-700">
+              This campaign is verified and eligible for S18A tax certificates.
+            </p>
+          </div>
+
+          <label className="block text-sm font-medium text-gray-700 mb-3">S18A Tax Certificate</label>
+          <p className="text-sm text-gray-600 mb-4">
+            Would you like to receive an S18A certificate for tax deduction purposes?
+          </p>
+
+          <div className="space-y-3 mb-4">
+            <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+              <input
+                type="radio"
+                name="s18a"
+                checked={!wantS18A}
+                onChange={() => setWantS18A(false)}
+                className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+              />
+              <div className="ml-3">
+                <span className="font-medium text-gray-900">No, thank you</span>
+                <p className="text-sm text-gray-600">Continue without S18A certificate</p>
+              </div>
+            </label>
+
+            <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+              <input
+                type="radio"
+                name="s18a"
+                checked={wantS18A}
+                onChange={() => setWantS18A(true)}
+                className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+              />
+              <div className="ml-3">
+                <span className="font-medium text-gray-900">Yes, I want S18A certificate</span>
+                <p className="text-sm text-gray-600">Required for tax deduction claims</p>
+              </div>
+            </label>
+          </div>
+
+          {/* S18A Details Form */}
+          {wantS18A && (
+            <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+              <h4 className="font-medium text-gray-900 mb-3">S18A Certificate Details</h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                    South African ID Number *
+                  </label>
+                  <input
+                    type="text"
+                    id="idNumber"
+                    value={idNumber}
+                    onChange={handleIdNumberChange}
+                    placeholder="000 000 0000 000"
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
+                      s18aErrors.idNumber ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                  />
+                  {s18aErrors.idNumber && (
+                    <p className="text-red-600 text-xs mt-1">{s18aErrors.idNumber}</p>
+                  )}
+                </div>
+
+                <div>
+                  <label htmlFor="taxNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                    Tax Number *
+                  </label>
+                  <input
+                    type="text"
+                    id="taxNumber"
+                    value={taxNumber}
+                    onChange={handleTaxNumberChange}
+                    placeholder="Enter your tax number"
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
+                      s18aErrors.taxNumber ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                  />
+                  {s18aErrors.taxNumber && (
+                    <p className="text-red-600 text-xs mt-1">{s18aErrors.taxNumber}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Fee Breakdown */}
       {amount && parseFloat(amount) > 0 && (
