@@ -41,3 +41,9 @@ body {
   font-weight: 900;
   font-style: normal;
 }
+
+
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.25rem !important;
+}

@@ -55,10 +55,18 @@ const TermsCondition = () => {
       
 
       {/* Render HTML content */}
-      <div
+      {/* <div
         className="prose prose-lg max-w-full"
         dangerouslySetInnerHTML={{ __html: data?.content || '' }}
-      />
+      /> */}
+
+      
+<article
+  className="prose prose-lg max-w-full"
+  dangerouslySetInnerHTML={{ __html: data?.content || '' }}
+/>
+
+
     </div>
   );
 };
