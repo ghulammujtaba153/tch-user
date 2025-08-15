@@ -90,7 +90,7 @@ const CampaignCard: React.FC<{
           loading="lazy"
         />
       </div>
-      <p className="text-sm font-bold">{campaign?.verified ? "Verified" : "Unverified"}</p>
+      <p className="text-sm font-bold bg-primarylight w-[70px] text-center text-white p-1 rounded-full">{campaign?.verified ? "S18A" : ""}</p>
       <p className="text-sm font-bold">{campaign?.organization?.name}</p>
 
 
