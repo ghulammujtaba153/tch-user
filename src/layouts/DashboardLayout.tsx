@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/dashboard/Sidebar";
 import {
   BellIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
   CurrencyDollarIcon,
   HomeIcon,
   MagnifyingGlassIcon,
@@ -42,6 +44,8 @@ const CampaignerDashboardLayout: React.FC = () => {
   const [newNotificationCount, setNewNotificationCount] = useState(0);
   const [unSeenIds, setUnSeenIds] = useState<string[]>([]);
   const socketRef = useRef<Socket | null>(null);
+  const [expandedMobileItem, setExpandedMobileItem] = useState<string | null>(null);
+  const [expandedMobileSubItem, setExpandedMobileSubItem] = useState<string | null>(null);
 
   // Connect to Socket.IO server
   useEffect(() => {
@@ -166,16 +170,103 @@ const CampaignerDashboardLayout: React.FC = () => {
   };
 
   const isActive = (path: string) => {
-    return location.pathname.startsWith(path);
+    if (path === '#') return false;
+    return location.pathname === path || location.pathname.startsWith(path);
   };
+
+  const toggleMobileExpand = (itemName: string) => {
+    setExpandedMobileItem(expandedMobileItem === itemName ? null : itemName);
+    // Reset sub-item expansion when main item changes
+    if (expandedMobileItem !== itemName) {
+      setExpandedMobileSubItem(null);
+    }
+  };
+
+  const toggleMobileSubExpand = (subItemName: string) => {
+    setExpandedMobileSubItem(expandedMobileSubItem === subItemName ? null : subItemName);
+  };
+
+  const isSubItemActive = (subItems: SubItem[]): boolean => {
+    return subItems.some(subItem => {
+      if (subItem.subItems) {
+        return subItem.subItems.some(subSubItem => isActive(subSubItem.path));
+      }
+      return isActive(subItem.path);
+    });
+  };
+
+  const handleMobileLinkClick = (path: string, itemName?: string) => {
+    if (path === '#') {
+      if (itemName) {
+        toggleMobileExpand(itemName);
+      }
+      return;
+    }
+    setIsSidebarOpen(true); // Close mobile sidebar when navigating
+  };
+
+  interface SubSubItem {
+    name: string;
+    path: string;
+  }
+
+  interface SubItem {
+    name: string;
+    path: string;
+    subItems?: SubSubItem[];
+  }
 
   interface MenuItem {
     name: string;
     icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
     path: string;
+    subItems?: SubItem[];
   }
 
   const menuItems: MenuItem[] = [
+    {
+      name: "Profile",
+      icon: UsersIcon,
+      path: "/user/dashboard/profile",
+    },
+    {
+      name: "My Donations",
+      icon: CurrencyDollarIcon,
+      path: "/user/dashboard/sent-donations",
+    },
+    {
+      name: "Organization",
+      icon: HomeIcon,
+      path: "#",
+      subItems: [
+        {
+          name: "Organization Setup",
+          path: "#",
+          subItems: [
+            {
+              name: "Organization Details",
+              path: "/user/dashboard/organization",
+            },
+            {
+              name: "Bank Details",
+              path: "/user/dashboard/bank-details",
+            },
+            {
+              name: "S18A Document",
+              path: "/user/dashboard/s18a-document",
+            },
+          ]
+        },
+        {
+          name: "Members",
+          path: "/user/dashboard/members",
+        },
+        {
+          name: "Donations",
+          path: "/user/dashboard/received-donations",
+        },
+      ]
+    },
     {
       name: "Overview",
       icon: HomeIcon,
@@ -187,14 +278,9 @@ const CampaignerDashboardLayout: React.FC = () => {
       path: "/user/dashboard/campaigns",
     },
     {
-      name: "Donations",
-      icon: CurrencyDollarIcon,
-      path: "/user/dashboard/donations",
-    },
-    {
-      name: "Profile",
+      name: "Support",
       icon: UsersIcon,
-      path: "/user/dashboard/profile",
+      path: "/user/dashboard/support",
     },
   ];
 
@@ -227,24 +313,96 @@ const CampaignerDashboardLayout: React.FC = () => {
               <img src={config?.logo} alt="logo" className={`w-30 h-10 block`} />
             </Link>
 
-          <ul className="w-full pt-2 py-4 flex flex-col items-center">
+          <ul className="w-full pt-2 py-4 flex flex-col">
             {menuItems.map((item) => (
-              <li
-                key={item.name}
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="mb-1 w-full flex justify-center items-center"
-              >
-                <Link
-                  to={item.path}
-                  className={`w-full px-4 py-2 flex text-sm items-center hover:bg-secondary/20 transition-colors duration-200 ${
-                    isActive(item.path)
-                      ? "bg-secondary/20 border-l-4 text-secondary border-secondary"
-                      : ""
-                  }`}
-                >
-                  <item.icon className={`h-6 w-6`} />
-                  <span className={`ml-3`}>{item.name}</span>
-                </Link>
+              <li key={item.name} className="mb-1 w-full">
+                <div>
+                  <Link
+                    to={item.path}
+                    onClick={() => handleMobileLinkClick(item.path, item.name)}
+                    className={`w-full px-4 py-2 flex text-sm items-center hover:bg-secondary/20 transition-colors duration-200 ${
+                      isActive(item.path) || (item.subItems && isSubItemActive(item.subItems))
+                        ? "bg-secondary/20 border-l-4 text-secondary border-secondary"
+                        : ""
+                    }`}
+                  >
+                    <item.icon className="h-6 w-6" />
+                    <span className="ml-3 flex-1">{item.name}</span>
+                    {item.subItems && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          toggleMobileExpand(item.name);
+                        }}
+                        className="p-1 hover:bg-secondary/30 rounded"
+                      >
+                        {expandedMobileItem === item.name ? (
+                          <ChevronUpIcon className="h-4 w-4" />
+                        ) : (
+                          <ChevronDownIcon className="h-4 w-4" />
+                        )}
+                      </button>
+                    )}
+                  </Link>
+
+                  {/* Submenu */}
+                  {expandedMobileItem === item.name && item.subItems && (
+                    <div className="bg-gray-50 border-l-4 border-secondary/30">
+                      {item.subItems.map((subItem) => (
+                        <div key={subItem.name}>
+                          <Link
+                            to={subItem.path}
+                            onClick={() => handleMobileLinkClick(subItem.path)}
+                            className={`flex items-center justify-between px-8 py-2 text-sm hover:bg-secondary/10 transition-colors duration-200 ${
+                              isActive(subItem.path) || (subItem.subItems && subItem.subItems.some(subSubItem => isActive(subSubItem.path)))
+                                ? 'bg-secondary/20 text-secondary font-medium' 
+                                : 'text-gray-600'
+                            }`}
+                          >
+                            <span>{subItem.name}</span>
+                            {subItem.subItems && (
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  toggleMobileSubExpand(subItem.name);
+                                }}
+                                className="p-1 hover:bg-secondary/30 rounded"
+                              >
+                                {expandedMobileSubItem === subItem.name ? (
+                                  <ChevronUpIcon className="h-3 w-3" />
+                                ) : (
+                                  <ChevronDownIcon className="h-3 w-3" />
+                                )}
+                              </button>
+                            )}
+                          </Link>
+
+                          {/* Sub-submenu */}
+                          {expandedMobileSubItem === subItem.name && subItem.subItems && (
+                            <div className="bg-gray-100 border-l-4 border-secondary/20">
+                              {subItem.subItems.map((subSubItem) => (
+                                <Link
+                                  key={subSubItem.name}
+                                  to={subSubItem.path}
+                                  onClick={() => handleMobileLinkClick(subSubItem.path)}
+                                  className={`block px-12 py-2 text-xs hover:bg-secondary/10 transition-colors duration-200 ${
+                                    isActive(subSubItem.path)
+                                      ? 'bg-secondary/20 text-secondary font-medium'
+                                      : 'text-gray-500'
+                                  }`}
+                                >
+                                  {subSubItem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
           </ul>

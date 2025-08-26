@@ -99,11 +99,50 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   const navigate = useNavigate();
   const { config } = useAppConfig();
 
+  // ✅ Check role condition
+  const canShowMembers =
+    !user?.organization?.role || user?.organization?.role === "owner";
+
+  // ✅ Clone & filter menuItems dynamically
+  const filteredMenuItems = menuItems.map(item => {
+    if (item.name === "Organization" && item.subItems) {
+      return {
+        ...item,
+        subItems: item.subItems
+          .map(subItem => {
+            // Filter sub-subItems inside "Organization Setup"
+            if (subItem.name === "Organization Setup" && subItem.subItems) {
+              return {
+                ...subItem,
+                subItems: subItem.subItems.filter(subSubItem => {
+                  if (
+                    subSubItem.name === "S18A Document" ||
+                    subSubItem.name === "Bank Details"
+                  ) {
+                    return canShowMembers;
+                  }
+                  return true;
+                }),
+              };
+            }
+
+            // Filter direct subItems like "Members"
+            if (subItem.name === "Members") {
+              return canShowMembers ? subItem : null;
+            }
+
+            return subItem;
+          })
+          .filter(Boolean) as SubItem[],
+      };
+    }
+    return item;
+  });
+
   const toggleExpand = (itemName: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setExpandedItem(expandedItem === itemName ? null : itemName);
-    // Reset sub-item expansion when main item changes
     if (expandedItem !== itemName) {
       setExpandedSubItem(null);
     }
@@ -155,7 +194,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
         {/* Menu Items */}
         <nav className="flex-1 flex flex-col items-center w-full overflow-y-auto">
           <ul className="py-4 w-full flex flex-col items-center">
-            {menuItems.map((item) => (
+            {filteredMenuItems.map((item) => (
               <li key={item.name} className="mb-1 w-full flex justify-center items-center">
                 <div className="w-full">
                   <div className="relative">
