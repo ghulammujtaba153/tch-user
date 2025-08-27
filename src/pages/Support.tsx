@@ -405,7 +405,7 @@ const Support = () => {
             <div className='flex justify-center'>
               <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'}
+                sitekey={import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY }
                 onChange={handleRecaptchaChange}
                 onExpired={() => setRecaptchaToken(null)}
                 onError={() => setRecaptchaToken(null)}
