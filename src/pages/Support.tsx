@@ -5,6 +5,8 @@ import { BASE_URL } from '../config/url';
 import ReactGA from 'react-ga4';
 import ScrollToTop from '../utils/ScrollToTop';
 import { useAppConfig } from '../context/AppConfigContext';
+import ReCAPTCHA from 'react-google-recaptcha';
+
 
 interface FormData {
   firstName: string;
@@ -42,6 +44,8 @@ const Support = () => {
   const [fileName, setFileName] = useState('');
   const imageInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const { config } = useAppConfig();
 
   // Enquiry type options
@@ -83,6 +87,13 @@ const Support = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate reCAPTCHA
+    if (!recaptchaToken) {
+      alert('Please complete the reCAPTCHA verification.');
+      return;
+    }
+    
     setLoading(true);
     
     try {
@@ -94,6 +105,9 @@ const Support = () => {
           formDataToSend.append(key, value);
         }
       });
+      
+      // Append reCAPTCHA token
+      formDataToSend.append('recaptchaToken', recaptchaToken);
   
       const res = await axios.post(`${BASE_URL}/support`, formDataToSend, {
         headers: {
@@ -135,8 +149,10 @@ const Support = () => {
     });
     setImageName('');
     setFileName('');
+    setRecaptchaToken(null);
     if (imageInputRef.current) imageInputRef.current.value = '';
     if (fileInputRef.current) fileInputRef.current.value = '';
+    if (recaptchaRef.current) recaptchaRef.current.reset();
   };
 
   const handleRemoveFile = (type: 'image' | 'file') => {
@@ -149,6 +165,10 @@ const Support = () => {
       setFileName('');
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
   };
 
   return (
@@ -379,13 +399,33 @@ const Support = () => {
             </div>
           </div>
 
+          {/* reCAPTCHA */}
+          <div className='flex flex-col gap-2'>
+            <label className='font-medium'>Verification*</label>
+            <div className='flex justify-center'>
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'}
+                onChange={handleRecaptchaChange}
+                onExpired={() => setRecaptchaToken(null)}
+                onError={() => setRecaptchaToken(null)}
+                theme="light"
+              />
+            </div>
+            {!recaptchaToken && (
+              <p className="text-sm text-gray-500 text-center mt-1">
+                Please complete the verification to submit your request
+              </p>
+            )}
+          </div>
+
           {/* Buttons */}
           <div className='flex flex-col sm:flex-row gap-4 mt-4'>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !recaptchaToken}
               className={`bg-secondary text-white rounded-full py-3 px-6 hover:scale-105 transition-transform duration-300 font-medium flex items-center justify-center ${
-                loading ? 'opacity-70 cursor-not-allowed' : ''
+                loading || !recaptchaToken ? 'opacity-70 cursor-not-allowed' : ''
               }`}
             >
               {loading ? 'Submitting...' : 'SUBMIT QUERY'}

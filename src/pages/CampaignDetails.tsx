@@ -19,6 +19,7 @@ import { BsFacebook, BsLinkedin, BsTwitter, BsWhatsapp } from "react-icons/bs";
 import ReactGA from "react-ga4";
 import ScrollToTop from "../utils/ScrollToTop";
 import { useAppConfig } from "../context/AppConfigContext";
+import { AiOutlineX } from "react-icons/ai";
 
 
 const getFullUrl = (filePath: string) =>
@@ -308,9 +309,9 @@ const CampaignDetails = () => {
               )}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 hover:text-blue-600"
+              className="text-black"
             >
-              <BsTwitter size={20} />
+              <AiOutlineX size={20} />
             </a>
           </div>
 
