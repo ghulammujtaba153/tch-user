@@ -105,12 +105,12 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full">
-      <h2 className="text-xl font-bold mb-4">Organization Registration</h2>
+      <h2 className="text-xl font-bold mb-4">Organisation Registration</h2>
 
       {/* Toggle Organization */}
       <div className="mb-6">
         <label className="block font-medium mb-2">
-          Do you want to register an organization?
+          Do you want to register an organisation?
         </label>
         <div className="flex items-center gap-6">
           <label className="flex items-center gap-2">
@@ -140,14 +140,14 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({
       {wantsOrganization && (
         <div className="mb-6">
           <label className="block font-medium mb-2">
-            Select Organization or Enter New Name
+            Select Organisation or Enter New Name
           </label>
           <Select
             value={selectedOption}
             onChange={handleChange}
             options={options}
             isLoading={loading}
-            placeholder="Select or add organization..."
+            placeholder="Select or add organisation..."
             className="mb-3"
           />
 
@@ -158,11 +158,11 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({
                 type="text"
                 value={customOrganization}
                 onChange={handleCustomOrganizationChange}
-                placeholder="Enter organization name"
+                placeholder="Enter organisation name"
                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Enter the name of your new organization
+                Enter the name of your new organisation
               </p>
             </div>
           )}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ArrowDownIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { ArrowDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import Loading from '../Loading';
@@ -10,6 +10,8 @@ const DonationReceived = () => {
   const [receivedDonations, setReceivedDonations] = useState([]);
   const [receivedLoading, setReceivedLoading] = useState(true);
   const [receivedError, setReceivedError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { user } = useContext(AuthContext) || {};
 
     // Fetch received donations (for campaigners)
@@ -42,6 +44,28 @@ const DonationReceived = () => {
             fetchReceivedDonations();
         }
     }, [user]);
+
+    // Pagination calculations
+    const totalPages = Math.ceil(receivedDonations.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    
+    const currentPageData = useMemo(() => {
+      return receivedDonations.slice(startIndex, endIndex);
+    }, [receivedDonations, startIndex, endIndex]);
+
+    // Reset to first page when items per page changes
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [itemsPerPage]);
+
+    const handlePageChange = (page: number) => {
+      setCurrentPage(page);
+    };
+
+    const handleItemsPerPageChange = (newItemsPerPage: number) => {
+      setItemsPerPage(newItemsPerPage);
+    };
     
   if (receivedLoading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (receivedError) return <div>Error: {receivedError.message}</div>;
@@ -73,14 +97,39 @@ const DonationReceived = () => {
   return (
     <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4">
       <div className='flex items-center sm:flex-row flex-col gap-2 justify-between'>
-        <h1 className="text-lg font-bold">Received Donations</h1>
-        <button
-          onClick={handleDownloadCSV}
-          className='bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'
-        >
-          Download Reports
-          <ArrowDownIcon className='w-4 h-4' />
-        </button>
+        <div className="flex items-center gap-4">
+          <h1 className="text-lg font-bold">Received Donations</h1>
+          {receivedDonations.length > 0 && (
+            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded-md">
+              {receivedDonations.length} total donations
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {receivedDonations.length > 0 && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="itemsPerPageReceived" className="text-sm text-gray-600">Show:</label>
+              <select
+                id="itemsPerPageReceived"
+                value={itemsPerPage}
+                onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+          )}
+          <button
+            onClick={handleDownloadCSV}
+            className='bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2'
+          >
+            Download Reports
+            <ArrowDownIcon className='w-4 h-4' />
+          </button>
+        </div>
       </div>
 
       {receivedDonations.length === 0 ? (
@@ -97,7 +146,7 @@ const DonationReceived = () => {
             <div>Amount</div>
           </div>
 
-          {receivedDonations.map((item: any) => (
+          {currentPageData.map((item: any) => (
             <div key={item.id} className="grid grid-cols-6 items-center gap-2 p-1 hover:bg-gray-50 rounded">
               {/* Donor Info */}
               <div className="col-span-2 flex items-center gap-2">
@@ -130,6 +179,81 @@ const DonationReceived = () => {
               </p>
             </div>
           ))}
+
+          {/* Pagination Controls */}
+          {receivedDonations.length > itemsPerPage && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-gray-200">
+              <div className="text-sm text-gray-700">
+                Showing {startIndex + 1} to {Math.min(endIndex, receivedDonations.length)} of {receivedDonations.length} donations
+              </div>
+              
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Show first page, last page, current page, and pages around current page
+                    const showPage = 
+                      page === 1 || 
+                      page === totalPages || 
+                      (page >= currentPage - 1 && page <= currentPage + 1);
+                    
+                    if (!showPage) {
+                      // Show ellipsis for gaps
+                      if (page === 2 && currentPage > 3) {
+                        return <span key={page} className="px-2 text-gray-400">...</span>;
+                      }
+                      if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                        return <span key={page} className="px-2 text-gray-400">...</span>;
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium ${
+                          currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                    currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Next
+                  <ChevronRightIcon className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

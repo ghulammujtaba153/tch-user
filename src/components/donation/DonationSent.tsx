@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ArrowUpIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
+import { ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import Loading from '../Loading';
 import { BASE_URL } from '../../config/url';
@@ -10,6 +10,8 @@ const DonationSent = () => {
   const [sentDonations, setSentDonations] = useState([]);
   const [sentLoading, setSentLoading] = useState(true);
   const [sentError, setSentError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { user } = useContext(AuthContext) || {};
 
   // Fetch sent donations (for donors)
@@ -32,6 +34,28 @@ const DonationSent = () => {
       fetchSentDonations();
     }
   }, [user]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(sentDonations.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  
+  const currentPageData = useMemo(() => {
+    return sentDonations.slice(startIndex, endIndex);
+  }, [sentDonations, startIndex, endIndex]);
+
+  // Reset to first page when items per page changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (newItemsPerPage: number) => {
+    setItemsPerPage(newItemsPerPage);
+  };
 
   const handleDownloadCSV = () => {
     const csvHeader = ['Campaign Title', 'Date', 'Amount'];
@@ -59,14 +83,39 @@ const DonationSent = () => {
   return (
     <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4">
       <div className="flex items-center sm:flex-row flex-col gap-2 justify-between">
-        <h1 className="text-lg font-bold">Sent Donations</h1>
-        <button
-          onClick={handleDownloadCSV}
-          className="bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2"
-        >
-          Download CSV
-          <ArrowUpIcon className="w-4 h-4" />
-        </button>
+        <div className="flex items-center gap-4">
+          <h1 className="text-lg font-bold">Sent Donations</h1>
+          {sentDonations.length > 0 && (
+            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded-md">
+              {sentDonations.length} total donations
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          {sentDonations.length > 0 && (
+            <div className="flex items-center gap-2">
+              <label htmlFor="itemsPerPage" className="text-sm text-gray-600">Show:</label>
+              <select
+                id="itemsPerPage"
+                value={itemsPerPage}
+                onChange={(e) => handleItemsPerPageChange(Number(e.target.value))}
+                className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+            </div>
+          )}
+          <button
+            onClick={handleDownloadCSV}
+            className="bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2"
+          >
+            Download CSV
+            <ArrowUpIcon className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {sentDonations.length === 0 ? (
@@ -86,14 +135,14 @@ const DonationSent = () => {
                 <thead className="bg-gray-50 sticky top-0">
                   <tr className="border-b border-gray-200">
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Reference ID</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Campaign/Organization</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Campaign/Organisation</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment Method</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {sentDonations.map((item: any) => (
+                  {currentPageData.map((item: any) => (
                     <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-150">
                       <td className="py-4 px-4">
                         <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded-md">
@@ -139,7 +188,7 @@ const DonationSent = () => {
 
           {/* Mobile Cards */}
           <div className="lg:hidden space-y-4">
-            {sentDonations.map((item: any) => (
+            {currentPageData.map((item: any) => (
               <div key={item.id} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center space-x-3">
@@ -179,6 +228,81 @@ const DonationSent = () => {
               </div>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          {sentDonations.length > itemsPerPage && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-gray-200">
+              <div className="text-sm text-gray-700">
+                Showing {startIndex + 1} to {Math.min(endIndex, sentDonations.length)} of {sentDonations.length} donations
+              </div>
+              
+              <div className="flex items-center gap-2">
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <ChevronLeftIcon className="w-4 h-4" />
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                    // Show first page, last page, current page, and pages around current page
+                    const showPage = 
+                      page === 1 || 
+                      page === totalPages || 
+                      (page >= currentPage - 1 && page <= currentPage + 1);
+                    
+                    if (!showPage) {
+                      // Show ellipsis for gaps
+                      if (page === 2 && currentPage > 3) {
+                        return <span key={page} className="px-2 text-gray-400">...</span>;
+                      }
+                      if (page === totalPages - 1 && currentPage < totalPages - 2) {
+                        return <span key={page} className="px-2 text-gray-400">...</span>;
+                      }
+                      return null;
+                    }
+
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => handlePageChange(page)}
+                        className={`px-3 py-2 rounded-md text-sm font-medium ${
+                          currentPage === page
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-2 rounded-md text-sm font-medium flex items-center gap-1 ${
+                    currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  Next
+                  <ChevronRightIcon className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

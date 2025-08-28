@@ -55,6 +55,9 @@ import DonationReceived from './components/donation/DonationReceived';
 import DonationSent from './components/donation/DonationSent';
 import BankDetails from './pages/dashboard/BankDetails';
 import S18ADocument from './pages/dashboard/S18ADocument';
+import Withdrawal from './pages/dashboard/Withdrawal';
+import FAQsSection from './components/home/FAQsSection';
+import VerificationDocuments from './pages/dashboard/VerificationDocument';
 
 
 
@@ -157,6 +160,10 @@ function App() {
             
             <Route path="profile" element={<Profile />} />
             <Route path="organization" element={<Organization />} />
+            <Route path="verification-document" element={<VerificationDocuments />} />
+            <Route path="withdrawal" element={<Withdrawal />} />
+            <Route path="faqs" element={<FAQsCategory />} />
+            <Route path="guides" element={<GuideCategories />} />
             <Route path="bank-details" element={<BankDetails />} />
             <Route path="s18a-document" element={<S18ADocument />} />
             <Route path="members" element={<AddMember />} />

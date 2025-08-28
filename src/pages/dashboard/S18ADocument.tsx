@@ -27,6 +27,7 @@ const S18ADocument = () => {
   const [loading, setLoading] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const { user } = useContext<any>(AuthContext);
   const { config } = useAppConfig();
   const [issues, setIssues] = useState<any>([]);
@@ -86,7 +87,7 @@ const S18ADocument = () => {
         setIssues(res.data)
       }
     } catch (error) {
-      toast.error("error while fetching issue")
+      // toast.error("error while fetching issue")
     } finally {
       setPageLoading(false)
     }
@@ -229,16 +230,15 @@ const S18ADocument = () => {
   }
 
   return (
-    <div className="min-h-screen  py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6">
+        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6 relative">
+          
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
               S18A Document Registration
             </h1>
-            
-            {/* Status Badge */}
             {s18AData.status && (
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(s18AData.status)}`}>
                 {s18AData.status.charAt(0).toUpperCase() + s18AData.status.slice(1)}
@@ -246,7 +246,6 @@ const S18ADocument = () => {
               </div>
             )}
           </div>
-          
           <p className="text-gray-600 text-sm sm:text-base">
             S18A registration allows donors to claim tax deductions for their donations to your organization.
           </p>
@@ -277,8 +276,17 @@ const S18ADocument = () => {
         )}
 
         {/* Main Form */}
-        <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+        <div className="relative bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+
+            {/* Edit Organisation Button */}
+          <button
+            className="absolute top-4 right-4 bg-secondary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-secondary/90 transition"
+            onClick={() => setIsEditable(true)}
+            disabled={isEditable}
+          >
+            Edit Organisation
+          </button>
             {/* Registration Toggle */}
             <div className="space-y-3">
               <label className="block text-sm font-medium text-gray-900">
@@ -290,8 +298,9 @@ const S18ADocument = () => {
                     type="radio"
                     name="registered"
                     checked={s18AData.registered === true}
-                    onChange={() => setS18AData({ ...s18AData, registered: true })}
+                    onChange={() => isEditable && setS18AData({ ...s18AData, registered: true })}
                     className="mr-2 h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                    disabled={!isEditable}
                   />
                   <span className="text-sm text-gray-700">Yes</span>
                 </label>
@@ -300,8 +309,9 @@ const S18ADocument = () => {
                     type="radio"
                     name="registered"
                     checked={s18AData.registered === false}
-                    onChange={() => setS18AData({ ...s18AData, registered: false })}
+                    onChange={() => isEditable && setS18AData({ ...s18AData, registered: false })}
                     className="mr-2 h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                    disabled={!isEditable}
                   />
                   <span className="text-sm text-gray-700">No</span>
                 </label>
@@ -314,13 +324,13 @@ const S18ADocument = () => {
                 <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
                   S18A Registration Details
                 </h3>
-                
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <Input 
                     label="Reference" 
                     name="reference" 
                     value={s18AData.reference} 
                     onChange={handleChange} 
+                    disabled={!isEditable}
                   />
                   <Input 
                     label="Trust Number" 
@@ -328,28 +338,30 @@ const S18ADocument = () => {
                     value={s18AData.trustNumber} 
                     onChange={handleChange} 
                     required 
+                    disabled={!isEditable}
                   />
                   <Input 
-                    label="PBO" 
+                    label="PBO Number" 
                     name="pbo" 
                     value={s18AData.pbo} 
                     onChange={handleChange} 
+                    disabled={!isEditable}
                   />
                   <Input 
-                    label="NPO" 
+                    label="NPO Number " 
                     name="npo" 
                     value={s18AData.npo} 
                     onChange={handleChange} 
+                    disabled={!isEditable}
                   />
                 </div>
-
                 <Input
-                label='Authorized By'
-                name='authorizedBy'
-                value={s18AData.authorizedBy}
-                onChange={handleChange}
+                  label='Authorized By'
+                  name='authorizedBy'
+                  value={s18AData.authorizedBy}
+                  onChange={handleChange}
+                  disabled={!isEditable}
                 />
-
                 {/* Signature Upload */}
                 <div className="col-span-full">
                   <FileUpload 
@@ -358,6 +370,7 @@ const S18ADocument = () => {
                     previewUrl={signaturePreview} 
                     required={!isUpdateMode}
                     isLoading={loading}
+                    disabled={!isEditable}
                   />
                   <p className="text-xs sm:text-sm text-gray-500 mt-2">
                     Upload your signature in PNG, JPG, or WebP format. This will be used for official documents.
@@ -370,7 +383,7 @@ const S18ADocument = () => {
             <div className="flex justify-end pt-6 border-t border-gray-200">
               <button 
                 type="submit" 
-                disabled={loading} 
+                disabled={loading || !isEditable} 
                 className="w-full sm:w-auto bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {loading ? (
@@ -397,6 +410,7 @@ const Input = ({
   onChange,
   required = false,
   type = 'text',
+  disabled = false,
 }: {
   label: string;
   name: string;
@@ -404,6 +418,7 @@ const Input = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   type?: string;
+  disabled?: boolean;
 }) => (
   <div className="space-y-1">
     <label className="block text-sm font-medium text-gray-700">
@@ -416,7 +431,8 @@ const Input = ({
       value={value}
       onChange={onChange}
       required={required}
-      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+      disabled={disabled}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 disabled:bg-gray-100"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
@@ -428,32 +444,32 @@ const FileUpload = ({
   previewUrl,
   required = false,
   isLoading = false,
+  disabled = false,
 }: {
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   previewUrl: string | null;
   required?: boolean;
   isLoading?: boolean;
+  disabled?: boolean;
 }) => (
   <div className="w-full">
     <label className="block text-sm font-medium text-gray-700 mb-2">
       {label} {required && <span className="text-red-500">*</span>}
     </label>
-    
     <div className="relative">
       <input
         type="file"
         accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={onChange}
         required={required}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
         id={`file-${label.replace(/\s+/g, '-').toLowerCase()}`}
       />
-      
       <div className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 ${
-        isLoading 
-          ? 'opacity-50 cursor-not-allowed bg-gray-50' 
+        isLoading || disabled
+          ? 'opacity-50 cursor-not-allowed bg-gray-50'
           : 'hover:border-secondary hover:bg-gray-50 cursor-pointer'
       }`}>
         <div className="flex flex-col items-center justify-center space-y-2">
@@ -494,7 +510,6 @@ const FileUpload = ({
         </div>
       </div>
     </div>
-    
     {previewUrl && (
       <div className="mt-2 flex items-center justify-between">
         <span className="text-xs text-gray-500">
@@ -511,6 +526,7 @@ const FileUpload = ({
             fileInput?.dispatchEvent(event);
           }}
           className="text-xs text-red-600 hover:text-red-800 underline transition-colors duration-200"
+          disabled={disabled}
         >
           Remove
         </button>

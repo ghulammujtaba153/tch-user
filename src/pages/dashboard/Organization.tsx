@@ -21,7 +21,7 @@ const initialFormData = {
   registrationNumber: '',
   vatNumber: '',
   emisNumber: '',
-  organizationType: '',
+  organizationType: 'education',
   socialMediaLinks: [''],
   status: ""
 };
@@ -38,6 +38,7 @@ const Organization = () => {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [isses, setIssues] = useState<any>("");
   const { config } = useAppConfig();
+  const [isEditable, setIsEditable] = useState(false);
 
   // Helper function to construct full URL for file paths
   const getFullUrl = (filePath: string) =>
@@ -300,18 +301,15 @@ const Organization = () => {
 
   return (
     <div className="min-h-screen py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
-
-      <ToastContainer>
-        
-      </ToastContainer>
+      <ToastContainer />
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6">
+        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6 relative">
+          
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
-              {isUpdateMode ? 'Update Organization' : 'Organization Registration'}
+              {isUpdateMode ? 'Update Organisation' : 'Organisation Registration'}
             </h1>
-            
             {/* Status Badge */}
             {formData?.status && (
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(formData.status)}`}>
@@ -320,11 +318,10 @@ const Organization = () => {
               </div>
             )}
           </div>
-          
           <p className="text-gray-600 text-sm sm:text-base">
             {isUpdateMode 
-              ? "Update your organization details to keep your profile current." 
-              : "Register your organization to start accepting donations and managing campaigns."
+              ? "Update your organisation details to keep your profile current." 
+              : "Register your organisation to start accepting donations and managing campaigns."
             }
           </p>
         </div>
@@ -336,7 +333,7 @@ const Organization = () => {
               <FaExclamationTriangle className="text-red-400 mt-0.5 mr-3 flex-shrink-0" />
               <div className="flex-1">
                 <h3 className="text-sm font-medium text-red-800 mb-1">
-                  Issues Found with Your Organization Details
+                  Issues Found with Your Organisation Details
                 </h3>
                 <div className="text-sm text-red-700">
                   <p className="mb-2">Please address the following issues to activate your organization:</p>
@@ -354,23 +351,34 @@ const Organization = () => {
         )}
 
         {/* Main Form */}
-        <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+        <div className="relative bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+
+          {/* Edit Organisation Button */}
+          <button
+            className="absolute top-4 right-4 bg-secondary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-secondary/90 transition"
+            onClick={() => setIsEditable(true)}
+            disabled={isEditable}
+          >
+            Edit Organisation
+          </button>
+
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Organization Details */}
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Organization Details</h3>
-                <p className="text-gray-500 text-sm sm:text-base mb-4">Basic information about your organization.</p>
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2">Organisation Details</h3>
+                <p className="text-gray-500 text-sm sm:text-base mb-4">Basic information about your organisation.</p>
               </div>
               
               {/* Organization Logo */}
               <div className="col-span-full">
                 <FileUpload 
-                  label="Organization Logo" 
+                  label="Organisation Logo" 
                   onChange={(e) => handleFileChange(e, 'logo')} 
                   previewUrl={logoPreview} 
                   required={!isUpdateMode}
                   isLoading={loading}
+                  disabled={!isEditable ? true : false}
                 />
                 <p className='text-gray-500 text-xs sm:text-sm mt-2'>
                   An image speaks a thousand words! Try to upload your organisation's logo, or an image which gives donors a sense of your organisation.
@@ -379,12 +387,12 @@ const Organization = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {/* Organization Name */}
-                <Input label="Organization Name" name="name" value={formData.name} onChange={handleChange} required />
+                <Input label="Organisation Name" name="name" value={formData.name} onChange={handleChange} required disabled={!isEditable} />
                 
                 {/* Organization Type */}
                 <div className="space-y-1">
                   <label className="block text-sm font-medium text-gray-700">
-                    Organization Type <span className="text-red-500 ml-1">*</span>
+                    Organisation Type <span className="text-red-500 ml-1">*</span>
                   </label>
                   <select
                     name="organizationType"
@@ -392,8 +400,9 @@ const Organization = () => {
                     onChange={handleSelectChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
                     required
+                    disabled={!isEditable}
                   >
-                    <option value="">Select Organization Type</option>
+                    <option value="">Select Organisation Type</option>
                     <option value="public">Public</option>
                     <option value="independent/private">Independent/Private</option>
                     <option value="specialised">Specialised</option>
@@ -402,37 +411,35 @@ const Organization = () => {
                     <option value="college">College</option>
                     <option value="school">School</option>
                     <option value="technical">Technical</option>
-                    <option value="ngo">NGO</option>
-                    <option value="charity">Charity</option>
-                    <option value="foundation">Foundation</option>
+                    
                   </select>
                 </div>
 
                 {/* Registration Number */}
-                <Input label="Registration Number" name="registrationNumber" value={formData.registrationNumber} onChange={handleChange} />
+                <Input label="Company / Trust Registration Number" name="registrationNumber" value={formData.registrationNumber} onChange={handleChange} disabled={!isEditable} />
                 
                 {/* VAT Number */}
-                <Input label="VAT Number" name="vatNumber" value={formData.vatNumber} onChange={handleChange} />
+                <Input label="VAT Number" name="vatNumber" value={formData.vatNumber} onChange={handleChange} disabled={!isEditable} />
                 
                 {/* EMIS Number */}
-                <Input label="EMIS Number" name="emisNumber" value={formData.emisNumber} onChange={handleChange} />
+                <Input label="NATEMIS / EMIS Number" name="emisNumber" value={formData.emisNumber} onChange={handleChange} disabled={!isEditable} />
 
                 {/* Email */}
-                <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+                <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required disabled={!isEditable} />
                 
                 {/* Contact Number */}
-                <Input label="Contact Number" name="phone" value={formData.phone} onChange={handleChange} required />
+                <Input label="Contact Number" name="phone" value={formData.phone} onChange={handleChange} required disabled={!isEditable} />
               </div>
 
               {/* Address */}
               <div className="col-span-full">
-                <Input label="Address" name="address" value={formData.address} onChange={handleChange} required />
+                <Input label="Address" name="address" value={formData.address} onChange={handleChange} required disabled={!isEditable} />
               </div>
 
               {/* Organization Description */}
               <div className="col-span-full space-y-1">
                 <label className="block text-sm font-medium text-gray-700">
-                  Organization Description <span className="text-red-500 ml-1">*</span>
+                  Organisation Description <span className="text-red-500 ml-1">*</span>
                 </label>
                 <textarea
                   name="description"
@@ -441,7 +448,8 @@ const Organization = () => {
                   required
                   rows={4}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 resize-none"
-                  placeholder="Describe your organization's mission, vision, and activities..."
+                  placeholder="Describe your organisation's mission, vision, and activities..."
+                  disabled={!isEditable}
                 />
               </div>
 
@@ -457,12 +465,14 @@ const Organization = () => {
                       onChange={(e) => handleChange(e, idx)}
                       placeholder={`Social media link #${idx + 1}`}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+                      disabled={!isEditable}
                     />
                   ))}
                   <button 
                     type="button" 
                     onClick={addSocialLink} 
                     className="text-secondary text-sm hover:text-secondary/80 transition-colors duration-200 font-medium"
+                    disabled={!isEditable}
                   >
                     + Add Another Link
                   </button>
@@ -474,7 +484,7 @@ const Organization = () => {
             <div className="flex justify-end pt-6 border-t border-gray-200">
               <button 
                 type="submit" 
-                disabled={loading} 
+                disabled={loading || !isEditable} 
                 className="w-full sm:w-auto bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {loading ? (
@@ -490,9 +500,6 @@ const Organization = () => {
           </form>
         </div>
       </div>
-
-      {/* {user?.organization?.role == "owner" && <AddMember />}
-      {user?.organization?.role == "owner" && <DonationBtn organizationId={organization?._id} />} */}
     </div>
   );
 };
@@ -504,6 +511,7 @@ const Input = ({
   onChange,
   required = false,
   type = 'text',
+  disabled = false,
 }: {
   label: string;
   name: string;
@@ -511,6 +519,7 @@ const Input = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   type?: string;
+  disabled?: boolean;
 }) => (
   <div className="space-y-1">
     <label className="block text-sm font-medium text-gray-700">
@@ -523,7 +532,8 @@ const Input = ({
       value={value}
       onChange={onChange}
       required={required}
-      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+      disabled={disabled}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 disabled:bg-gray-100"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>
@@ -537,6 +547,7 @@ const FileUpload = ({
   onRemove,
   isUpdateMode = false,
   isLoading = false,
+  disabled = false,
 }: {
   label: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -545,26 +556,25 @@ const FileUpload = ({
   onRemove?: () => void;
   isUpdateMode?: boolean;
   isLoading?: boolean;
+  disabled?: boolean;
 }) => (
   <div className="w-full">
     <label className="block text-sm font-medium text-gray-700 mb-2">
       {label} {required && <span className="text-red-500">*</span>}
     </label>
-    
     <div className="relative">
       <input
         type="file"
         accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={onChange}
         required={required}
-        disabled={isLoading}
+        disabled={isLoading || disabled}
         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
         id={`file-${label.replace(/\s+/g, '-').toLowerCase()}`}
       />
-      
       <div className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center transition-all duration-200 ${
-        isLoading 
-          ? 'opacity-50 cursor-not-allowed bg-gray-50' 
+        isLoading || disabled
+          ? 'opacity-50 cursor-not-allowed bg-gray-50'
           : 'hover:border-secondary hover:bg-gray-50 cursor-pointer'
       }`}>
         <div className="flex flex-col items-center justify-center space-y-2">
@@ -605,7 +615,6 @@ const FileUpload = ({
         </div>
       </div>
     </div>
-    
     {previewUrl && (
       <div className="mt-2 flex items-center justify-between">
         <span className="text-xs text-gray-500">
@@ -622,6 +631,7 @@ const FileUpload = ({
             fileInput?.dispatchEvent(event);
           }}
           className="text-xs text-red-600 hover:text-red-800 underline transition-colors duration-200"
+          disabled={disabled}
         >
           Remove
         </button>

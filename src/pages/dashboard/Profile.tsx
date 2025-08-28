@@ -24,14 +24,22 @@ const Profile = () => {
   const { user } = useContext(AuthContext) || {};
   const [data, setData] = useState<any>({
     profilePicture: "",
+    firstName: "",
+    lastName: "",
     name: "",
+    email: "",
+    phoneNumber: "",
     gender: "",
     dateOfBirth: "",
+    idNumber: "",
+    passportNumber: "",
     nationality: "",
+    profession: "",
     addressLine1: "",
     addressLine2: "",
-    phoneNumber: "",
+    suburb: "",
     city: "",
+    province: "",
     state: "",
     postalCode: "",
     country: "",
@@ -55,7 +63,7 @@ const Profile = () => {
     { name: "Personal Details", key: "profile", icon: UserCircleIcon },
     // { name: "Organization Setup", key: "organization", icon: PencilIcon },
     { name: "Security Settings", key: "security", icon: LockClosedIcon },
-    { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
+    // { name: "Withdrawal", key: "withdraw", icon: BanknotesIcon },
   ];
 
   // if (user?.organization?.role == "owner") {
@@ -146,24 +154,38 @@ const Profile = () => {
               {/* Left: Profile Picture */}
               <div className="flex flex-col md:flex-row md:items-center gap-4">
                 <div className="max-w-[400px] h-full md:max-h-[250px]">
-                  <img
-                    src={
-                      data?.profilePicture ||
-                      "https://i.ibb.co/5k0z6Zv/Profile-Picture.png"
-                    }
-                    alt="Profile"
-                    className="w-full h-full rounded-lg object-cover"
-                  />
+                  {data?.profilePicture ? (
+                    <img
+                      src={data.profilePicture}
+                      alt="Profile"
+                      className="w-full h-full rounded-lg object-cover border-2 border-gray-200"
+                    />
+                  ) : (
+                    <div className="w-full h-full rounded-lg border-2 border-gray-200 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center mb-4 mx-auto">
+                          <svg className="w-12 h-12 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-sm text-gray-500 font-medium">No Profile Picture</p>
+                        <p className="text-xs text-gray-400">Upload one in edit mode</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Basic Details */}
-                <div className="flex flex-col gap-4">
-                  <DetailItem label="Name" value={data?.name} />
-                  <DetailItem label="Email" value={data?.email} />
-                  <DetailItem
-                    label="Gender"
-                    value={data?.gender || "N/A"}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-x-[100px]">
+                  <DetailItem 
+                    label="Full Name" 
+                    value={data?.firstName && data?.lastName 
+                      ? `${data.firstName} ${data.lastName}` 
+                      : data?.name || "N/A"
+                    } 
                   />
+                  <DetailItem label="Email Address" value={data?.email} />
+                  <DetailItem label="Mobile Number" value={data?.phoneNumber || "N/A"} />
                   <DetailItem
                     label="Date of Birth"
                     value={
@@ -173,16 +195,29 @@ const Profile = () => {
                     }
                   />
                   <DetailItem
-                    label="Nationality"
-                    value={data?.nationality || "N/A"}
+                    label="Gender"
+                    value={data?.gender ? data.gender.charAt(0).toUpperCase() + data.gender.slice(1) : "N/A"}
                   />
-                  <DetailItem
-                    label="Phone Number"
-                    value={data?.phoneNumber || "N/A"}
-                  />
+                  <DetailItem label="ID Number" value={data?.idNumber} />
+                  <DetailItem label="Passport Number" value={data?.passportNumber} />
+                  <DetailItem label="Nationality" value={data?.nationality} />
+                  <DetailItem label="Profession" value={data?.profession} />
                 </div>
               </div>
             </div>
+
+            {/* Identity Information */}
+            {/* <div className="border-t pt-4">
+              <h2 className="text-lg font-semibold text-secondary mb-4">
+                Identity Information
+              </h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                <DetailItem label="ID Number" value={data?.idNumber} />
+                <DetailItem label="Passport Number" value={data?.passportNumber} />
+                <DetailItem label="Nationality" value={data?.nationality} />
+                <DetailItem label="Profession" value={data?.profession} />
+              </div>
+            </div> */}
 
             {/* Address Info */}
             <div className="border-t pt-4">
@@ -192,8 +227,9 @@ const Profile = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <DetailItem label="Address Line 1" value={data?.addressLine1} />
                 <DetailItem label="Address Line 2" value={data?.addressLine2} />
+                <DetailItem label="Suburb" value={data?.suburb} />
                 <DetailItem label="City" value={data?.city} />
-                <DetailItem label="State" value={data?.state} />
+                <DetailItem label="Province/State" value={data?.province || data?.state} />
                 <DetailItem label="Postal Code" value={data?.postalCode} />
                 <DetailItem label="Country" value={data?.country} />
               </div>
@@ -204,21 +240,31 @@ const Profile = () => {
               <h2 className="text-lg font-semibold text-secondary mb-4">
                 Communication Preferences
               </h2>
-              <div className="flex flex-wrap gap-4">
+              
+              {/* Disclaimer Text */}
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <p className="text-sm text-blue-800 leading-relaxed">
+                  <strong>📢 Communication Notice:</strong><br />
+                  By activating the communication preferences below, you are accepting communications by 
+                  GivetoGrow. We do not sell your information, nor do we intend to spam you!
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {["email", "sms", "whatsapp", "telegram"].map((channel) => (
                   <div
                     key={channel}
-                    className="flex items-center gap-2 border rounded-lg px-4 py-2"
+                    className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg"
                   >
                     <span className="font-medium capitalize">{channel}</span>
                     <span
-                      className={`text-sm px-2 py-1 rounded ${
+                      className={`text-sm px-2 py-1 rounded-full font-medium ${
                         data.consentChannels[channel]
                           ? "bg-green-100 text-green-600"
                           : "bg-red-100 text-red-600"
                       }`}
                     >
-                      {data.consentChannels[channel] ? "Enabled" : "Disabled"}
+                      {data.consentChannels[channel] ? "✓ Enabled" : "✗ Disabled"}
                     </span>
                   </div>
                 ))}

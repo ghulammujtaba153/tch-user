@@ -13,6 +13,7 @@ interface FormData {
   lastName: string;
   email: string;
   confirmEmail: string;
+  organizationName: string | null;
   phone: string;
   existingProject: boolean;
   department: string;
@@ -29,6 +30,7 @@ const Support = () => {
     lastName: '',
     email: '',
     confirmEmail: '',
+    organizationName: null,
     phone: '',
     existingProject: true,
     department: '',
@@ -138,6 +140,7 @@ const Support = () => {
       lastName: '',
       email: '',
       confirmEmail: '',
+      organizationName: null,
       phone: '',
       existingProject: true,
       department: '',
@@ -242,6 +245,22 @@ const Support = () => {
               />
               {errors.confirmEmail && <p className="text-red-500 text-sm">{errors.confirmEmail}</p>}
             </div>
+          </div>
+
+
+          {/* Organisation Name */}
+          <div className='flex flex-col gap-2'>
+            <label htmlFor="organizationName" className='font-medium'>Organisation Name (Optional)</label>
+            <input
+              type="text"
+              name="organizationName"
+              id="organizationName"
+              value={formData.organizationName}
+              onChange={handleChange}
+              className={`border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
+              required
+            />
+            {errors.organizationName && <p className="text-red-500 text-sm">{errors.organizationName}</p>}
           </div>
 
           {/* Phone field */}

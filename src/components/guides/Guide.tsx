@@ -86,13 +86,14 @@ const Guide = () => {
       />
 
       {/* Video */}
-      <video
+      {data.videoUrl && <video
         controls
         src={data.videoUrl}
         className="w-full rounded-md shadow-md"
-      >
-        Your browser does not support the video tag.
-      </video>
+        >
+          Your browser does not support the video tag.
+        </video>
+      }
     </div>
   );
 };

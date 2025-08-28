@@ -89,7 +89,7 @@ const Withdrawal = () => {
       <div className='flex flex-col gap-4 flex-1'>
         <div className='flex flex-col gap-4 py-6 px-6 border border-gray-300 rounded-md'>
           <p className='text-sm text-gray-500'>Total Available Balance</p>
-          <h1 className='text-2xl font-bold text-black'>{amount}</h1>
+          <h1 className='text-2xl font-bold text-black'>R {amount}</h1>
         </div>
 
         <h1 className='text-2xl font-semibold text-secondary'>Withdrawal</h1>

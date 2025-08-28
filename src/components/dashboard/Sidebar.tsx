@@ -6,7 +6,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  BuildingOfficeIcon
 } from '@heroicons/react/24/outline';
 import { AuthContext } from '../../context/userContext';
 import { useAppConfig } from '../../context/AppConfigContext';
@@ -32,26 +33,32 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
-    name: 'Profile',
+    name: 'My Profile',
     icon: UsersIcon,
     path: '/user/dashboard/profile',
   },
+  // {
+  //   name: 'Dashboard',
+  //   icon: HomeIcon,
+  //   path: '/user/dashboard/overview',
+  // },
   {
     name: 'My Donations',
     icon: CurrencyDollarIcon,
     path: '/user/dashboard/sent-donations',
   },
   {
-    name: 'Organization',
-    icon: HomeIcon,
-    path: '#',
+    name: 'Organisation',
+    icon: BuildingOfficeIcon,
+    path: '/user/dashboard/overview',
     subItems: [
+      
       {
-        name: 'Organization Setup',
+        name: 'Organisation Setup',
         path: '#',
         subItems: [
           {
-            name: 'Organization Details',
+            name: 'Organisation Details',
             path: '/user/dashboard/organization',
           },
           {
@@ -62,32 +69,55 @@ const menuItems: MenuItem[] = [
             name: 'S18A Document',
             path: '/user/dashboard/s18a-document',
           },
+          {
+            name: 'Verification Document',
+            path: '/user/dashboard/verification-document',
+          },
+          {
+            name: 'Members',
+            path: '/user/dashboard/members',
+          },
+          
         ]
       },
+
       {
-        name: 'Members',
-        path: '/user/dashboard/members',
+        name: 'Campaigns',
+        icon: SpeakerWaveIcon,
+        path: '/user/dashboard/campaigns',
       },
       {
         name: 'Donations',
         path: '/user/dashboard/received-donations',
       },
+      {
+            name: "Withdrawal",
+            path: "/user/dashboard/withdrawal",
+            icon: CurrencyDollarIcon,}
+      
+      
     ]
   },
+  
   {
-    name: 'Overview',
-    icon: HomeIcon,
-    path: '/user/dashboard/overview',
-  },
-  {
-    name: 'Campaigns',
-    icon: SpeakerWaveIcon,
-    path: '/user/dashboard/campaigns',
-  },
-  {
-    name: 'Support',
+    name: "Need Help",
     icon: UsersIcon,
     path: '/user/dashboard/support',
+    subItems: [
+      {
+        name: "FAQs",
+        path: "/user/dashboard/faqs",
+      },
+      {
+        name: "Guides",
+        path: "/user/dashboard/guides",
+      },
+      {
+        name: 'Support',
+        icon: UsersIcon,
+        path: '/user/dashboard/support',
+      }
+    ]
   }
 ];
 
@@ -192,7 +222,7 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
         </Link>
 
         {/* Menu Items */}
-        <nav className="flex-1 flex flex-col items-center w-full overflow-y-auto">
+        <nav className="flex-1 flex flex-col items-center w-full overflow-y-auto max-h-[calc(100vh-120px)]">
           <ul className="py-4 w-full flex flex-col items-center">
             {filteredMenuItems.map((item) => (
               <li key={item.name} className="mb-1 w-full flex justify-center items-center">

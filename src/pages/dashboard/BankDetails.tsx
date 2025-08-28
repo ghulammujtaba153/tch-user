@@ -24,6 +24,7 @@ const BankDetails = () => {
   const [loading, setLoading] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [isEditable, setIsEditable] = useState(false); // <-- Add this
   const { user } = useContext<any>(AuthContext);
   const { config } = useAppConfig();
   const [issues, setIssues] = useState<any>([]);
@@ -55,7 +56,6 @@ const BankDetails = () => {
         setIsUpdateMode(true);
       }
     } catch (error) {
-      console.log('No bank details found for user');
       setBankData({ ...initialBankData, userId: user.userId });
       setIsUpdateMode(false);
     } finally {
@@ -70,7 +70,8 @@ const BankDetails = () => {
         setIssues(res.data)
       }
     } catch (error) {
-      toast.error("error while fetching issue")
+      console.log("error while fetching issue", error)
+      // toast.error("error while fetching issue")
     }
   }
 
@@ -105,6 +106,7 @@ const BankDetails = () => {
       
       if (isUpdateMode) {
         fetchBankDetails();
+        setIsEditable(false); // <-- Disable editing after save
       }
     } catch (error) {
       console.error('Error:', error);
@@ -148,7 +150,8 @@ const BankDetails = () => {
     <div className="min-h-screen py-4 px-4 sm:py-8 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
-        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6">
+        <div className="bg-white shadow-sm rounded-lg mb-6 p-4 sm:p-6 relative">
+          
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-0">
               {isUpdateMode ? 'Update Bank Details' : 'Bank Details Registration'}
@@ -196,7 +199,16 @@ const BankDetails = () => {
         )}
 
         {/* Main Form */}
-        <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+        <div className="relative bg-white shadow-sm rounded-lg p-4 sm:p-6 lg:p-8">
+          {/* Edit Bank Details Button */}
+          <button
+            className="absolute top-4 right-4 bg-secondary text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-secondary/90 transition"
+            onClick={() => setIsEditable(true)}
+            disabled={isEditable}
+          >
+            Edit Bank Details
+          </button>
+
           <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
             {/* Banking Details Section */}
             <div className="space-y-6">
@@ -212,6 +224,7 @@ const BankDetails = () => {
                   value={bankData.bankName} 
                   onChange={handleChange} 
                   required 
+                  disabled={!isEditable}
                 />
                 <Input 
                   label="Account Name" 
@@ -219,6 +232,7 @@ const BankDetails = () => {
                   value={bankData.accountName} 
                   onChange={handleChange} 
                   required 
+                  disabled={!isEditable}
                 />
                 <Input 
                   label="Account Number" 
@@ -226,6 +240,7 @@ const BankDetails = () => {
                   value={bankData.accountNumber} 
                   onChange={handleChange} 
                   required 
+                  disabled={!isEditable}
                 />
                 <div className="space-y-1">
                   <label className="block text-sm font-medium text-gray-700">
@@ -237,6 +252,7 @@ const BankDetails = () => {
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
                     required
+                    disabled={!isEditable}
                   >
                     <option value="">Select Account Type</option>
                     <option value="savings">Savings</option>
@@ -251,6 +267,7 @@ const BankDetails = () => {
                   value={bankData.branch} 
                   onChange={handleChange} 
                   required 
+                  disabled={!isEditable}
                 />
                 <Input 
                   label="Branch Code" 
@@ -258,6 +275,7 @@ const BankDetails = () => {
                   value={bankData.branchCode} 
                   onChange={handleChange} 
                   required 
+                  disabled={!isEditable}
                 />
               </div>
             </div>
@@ -266,7 +284,7 @@ const BankDetails = () => {
             <div className="flex justify-end pt-6 border-t border-gray-200">
               <button 
                 type="submit" 
-                disabled={loading} 
+                disabled={loading || !isEditable} 
                 className="w-full sm:w-auto bg-secondary text-white px-6 py-3 rounded-lg font-medium hover:bg-secondary/90 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               >
                 {loading ? (
@@ -293,6 +311,7 @@ const Input = ({
   onChange,
   required = false,
   type = 'text',
+  disabled = false,
 }: {
   label: string;
   name: string;
@@ -300,6 +319,7 @@ const Input = ({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   type?: string;
+  disabled?: boolean;
 }) => (
   <div className="space-y-1">
     <label className="block text-sm font-medium text-gray-700">
@@ -312,7 +332,8 @@ const Input = ({
       value={value}
       onChange={onChange}
       required={required}
-      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+      disabled={disabled}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 disabled:bg-gray-100"
       placeholder={`Enter ${label.toLowerCase()}`}
     />
   </div>

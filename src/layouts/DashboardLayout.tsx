@@ -225,7 +225,7 @@ const CampaignerDashboardLayout: React.FC = () => {
 
   const menuItems: MenuItem[] = [
     {
-      name: "Profile",
+      name: "My Profile",
       icon: UsersIcon,
       path: "/user/dashboard/profile",
     },
@@ -235,16 +235,21 @@ const CampaignerDashboardLayout: React.FC = () => {
       path: "/user/dashboard/sent-donations",
     },
     {
-      name: "Organization",
+      name: "Organisation",
       icon: HomeIcon,
       path: "#",
       subItems: [
         {
-          name: "Organization Setup",
+          name: "Donations",
+          path: "/user/dashboard/received-donations",
+        },
+        {
+          name: "Organisation Setup",
           path: "#",
           subItems: [
+            
             {
-              name: "Organization Details",
+              name: "Organisation Details",
               path: "/user/dashboard/organization",
             },
             {
@@ -255,16 +260,18 @@ const CampaignerDashboardLayout: React.FC = () => {
               name: "S18A Document",
               path: "/user/dashboard/s18a-document",
             },
+            {
+              name: "Members",
+              path: "/user/dashboard/members",
+            },
+            {
+              name: "Withdrawal",
+              path: "/user/dashboard/withdrawal",
+            }
           ]
         },
-        {
-          name: "Members",
-          path: "/user/dashboard/members",
-        },
-        {
-          name: "Donations",
-          path: "/user/dashboard/received-donations",
-        },
+        
+        
       ]
     },
     {
@@ -414,14 +421,9 @@ const CampaignerDashboardLayout: React.FC = () => {
       >
         {/* Search Bar */}
         <div className="flex bg-gray-50 justify-end gap-4 py-4 px-6 items-center">
-          {/* <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
-            <input
-              type="text"
-              placeholder="Search"
-              className="w-full px-4 py-2 outline-none text-gray-700 placeholder-gray-400"
-            />
-            <MagnifyingGlassIcon className="w-6 h-6 text-gray-500 mx-3 cursor-pointer" />
-          </div> */}
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
+            <Link to="/" className="text-gray-700 px-4 py-2 bg-secondary text-white">Home</Link>
+          </div>
 
           <div className="w-[1px] h-10 bg-gray-400"></div>
 

@@ -70,7 +70,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
     const fetchPaymentSettings = async () => {
       try {
         setSettingsLoading(true);
-        console.log("🔍 Fetching payment settings for organization donation...");
+        console.log("🔍 Fetching payment settings for organisation donation...");
         
         const [cardResponse, eftResponse] = await Promise.all([
           axios.get(`${BASE_URL}/payment-settings?type=card`),
@@ -483,7 +483,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-t-xl">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold">Donate to Organization</h2>
+            <h2 className="text-2xl font-bold">Donate to Organisation</h2>
             <button onClick={onClose} className="text-white hover:text-gray-200 text-xl font-bold">✕</button>
           </div>
         </div>
@@ -604,7 +604,7 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                 <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
               </div>
               <div className="flex justify-between font-semibold text-green-600">
-                <span>Organization Receives:</span>
+                <span>Organisation Receives:</span>
                 <span>R{calculateNetDonationAmount().toFixed(2)}</span>
               </div>
             </div>
