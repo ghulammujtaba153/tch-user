@@ -72,26 +72,26 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Buttons */}
-      <div className="absolute flex flex-col md:flex-row items-center justify-center px-6 py-4 gap-4 bottom-[-95px] md:bottom-[200px] lg:bottom-[-30px] bg-white left-1/2 md:right-[26%] md:left-auto transform -translate-x-1/2 md:translate-x-0 shadow-lg rounded-md w-[90%] md:w-auto">
+      <div className="absolute flex flex-col md:flex-row items-center justify-center px-2 md:px-6 py-2 md:py-4 gap-4 bottom-[-95px] md:bottom-[200px] lg:bottom-[-30px] bg-white left-1/2 md:right-[26%] md:left-auto transform -translate-x-1/2 md:translate-x-0 shadow-lg rounded-md w-[90%] md:w-auto">
         <Link
           to={"/home/campaigns"}
-          className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
+          className="bg-secondary flex items-center justify-center text-white px-2 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[30px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
           Find Campaigns
         </Link>
 
         <Link
           to={"/signup"}
-          className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
+          className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[30px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
           Register
         </Link>
 
         <Link
           to={"/faqs"}
-          className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[40px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
+          className="bg-secondary flex items-center justify-center text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm sm:text-lg font-bold w-full sm:w-[210px] h-[30px] sm:h-[50px] shadow-md hover:scale-105 transition-all duration-300"
         >
-          FAQ's
+          FAQs
         </Link>
       </div>
     </div>

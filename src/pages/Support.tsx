@@ -178,10 +178,10 @@ const Support = () => {
     <div className='pt-20 min-h-screen px-4'>
       <ScrollToTop />
       <div className='max-w-[800px] bg-white border border-gray-200 py-8 rounded-[20px] mx-auto px-6 shadow-md mb-10'>
-        <h1 className='text-2xl font-bold text-center text-[#0033A0]'>We're here for you!</h1>
+        <h1 className='text-2xl font-bold text-center text-[#0033A0]'>We are here for you!</h1>
         <div className='w-full flex items-center justify-center mt-4'>
           <p className='max-w-[500px] text-center text-gray-500 mt-2'>
-            Need help? Our team of Customer Support Specialists is here to guide you throughout your crowdfunding journey.
+            Need help? Our team of Customer Support Specialists are here to guide you at every stage of your crowdfunding journey.
           </p>
         </div>
 
@@ -190,7 +190,7 @@ const Support = () => {
           {/* Name fields */}
           <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="firstName" className='font-medium'>First Name*</label>
+              <label htmlFor="firstName" className='font-medium'>First name*</label>
               <input
                 type="text"
                 name="firstName"
@@ -203,7 +203,7 @@ const Support = () => {
               {errors.firstName && <p className="text-red-500 text-sm">{errors.firstName}</p>}
             </div>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="lastName" className='font-medium'>Last Name*</label>
+              <label htmlFor="lastName" className='font-medium'>Last name*</label>
               <input
                 type="text"
                 name="lastName"
@@ -220,7 +220,7 @@ const Support = () => {
           {/* Email fields */}
           <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="email" className='font-medium'>Email*</label>
+              <label htmlFor="email" className='font-medium'>Email address*</label>
               <input
                 type="email"
                 name="email"
@@ -233,7 +233,7 @@ const Support = () => {
               {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="confirmEmail" className='font-medium'>Confirm Email*</label>
+              <label htmlFor="confirmEmail" className='font-medium'>Confirm email*</label>
               <input
                 type="email"
                 name="confirmEmail"
@@ -250,7 +250,7 @@ const Support = () => {
 
           {/* Organisation Name */}
           <div className='flex flex-col gap-2'>
-            <label htmlFor="organizationName" className='font-medium'>Organisation Name (Optional)</label>
+            <label htmlFor="organizationName" className='font-medium'>Organisation name (Optional)</label>
             <input
               type="text"
               name="organizationName"
@@ -266,7 +266,7 @@ const Support = () => {
           {/* Phone field */}
           <div className='flex flex-col md:flex-row w-full gap-4'>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="phone" className='font-medium'>Contact Number</label>
+              <label htmlFor="phone" className='font-medium'>Contact number</label>
               <input
                 type="tel"
                 name="phone"
@@ -277,7 +277,7 @@ const Support = () => {
               />
             </div>
             <div className='flex flex-col gap-2 flex-1'>
-              <label htmlFor="department" className='font-medium'>Enquiry Type*</label>
+              <label htmlFor="department" className='font-medium'>Enquiry type*</label>
               <select
                 name="department"
                 id="department"
@@ -286,13 +286,11 @@ const Support = () => {
                 className={`border ${errors.department ? 'border-red-500' : 'border-gray-300'} bg-transparent rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 required
               >
-                <option value="">Select option</option>
+                <option value="donation">Select option</option>
                 <option value="donation">Donor / Donation</option>
-                <option value="campaign">Campaign</option>
                 <option value="general">General Enquiry</option>
-                <option value="media">Media</option>
                 <option value="report">Report Fraud</option>
-                <option value="support">Support</option>
+                
               </select>
               {errors.department && <p className="text-red-500 text-sm">{errors.department}</p>}
             </div>
@@ -318,7 +316,7 @@ const Support = () => {
 
           {/* Message */}
           <div className='flex flex-col gap-2'>
-            <label htmlFor="message" className='font-medium'>Your Query*</label>
+            <label htmlFor="message" className='font-medium'>Comments*</label>
             <textarea
               name="message"
               id="message"
@@ -333,7 +331,7 @@ const Support = () => {
 
           {/* Image upload */}
           <div className='flex flex-col gap-2'>
-            <label className='font-medium'>Upload Screenshot or Any Image (Optional)</label>
+            <label className='font-medium'>Upload screenshot or any Image (optional)</label>
             <div 
               className={`border-2 border-dashed rounded-[10px] p-6 text-center cursor-pointer transition-colors 
                 ${imageName ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}
@@ -377,7 +375,7 @@ const Support = () => {
 
           {/* File upload */}
           <div className='flex flex-col gap-2'>
-            <label className='font-medium'>Upload Any Other File (Optional)</label>
+            <label className='font-medium'>Upload any other file (optional)</label>
             <div 
               className={`border-2 border-dashed rounded-[10px] p-6 text-center cursor-pointer transition-colors 
                 ${fileName ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400'}`}

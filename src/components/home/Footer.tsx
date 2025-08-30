@@ -91,28 +91,28 @@ const Footer: React.FC = () => {
                 to="/works"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                How it Works
+                How it works
               </Link>
 
               <Link
                 to="/guides"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                Help Guides
+                Help guides
               </Link>
 
               <Link
                 to="/terms"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                Fees & Payouts
+                Fees and payouts
               </Link>
 
               <Link
                 to="/faqs"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                FAQ’s
+                FAQs
               </Link>
             </div>
 
@@ -125,14 +125,14 @@ const Footer: React.FC = () => {
                 to="/about"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                About Us
+                About us
               </Link>
 
               <Link
                 to="/support"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                Contact Us
+                Contact us
               </Link>
 
               <Link
@@ -152,14 +152,14 @@ const Footer: React.FC = () => {
                 to="/privacy"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                Privacy Policy
+                Privacy policy
               </Link>
 
               <Link
                 to="/terms"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
-                Terms & Conditions
+                Terms and conditions
               </Link>
             </div>
 
@@ -169,32 +169,32 @@ const Footer: React.FC = () => {
                 <img
                   src="SBBluelogo.png"
                   alt="logo"
-                  className="w-[200px] h-[60px]"
+                  className="w-[230px] h-[60px]"
                 />
               </div>
               <div className="flex gap-2">
                 <img
                   src="/mastercard_visa_logo.png"
                   alt="/"
-                  className="w-[130px] h-[40px]"
+                  className="w-[140px] h-[40px]"
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest text-secondary">INFORMATION</h2>
+              <h2 className="text-sm font-bold mb-2 font-onest text-secondary">Contact</h2>
 
               
-              <p className="text-sm font-bold mb-2 font-onest">
+              {/* <p className="text-sm font-bold mb-2 font-onest">
                 General Contact
-              </p>
-              <p className="text-sm mb-2 ">info@givetogrow.co.za</p>
-              <p className="text-sm mb-2 ">+27 87 474 2215</p>
+              </p> */}
+              <p className="text-sm mb-2 ">Email us: info@givetogrow.co.za or</p>
+              {/* <p className="text-sm mb-2 ">+27 87 474 2215</p> */}
 
-              <p className="text-sm font-bold mb-2 font-onest">Support</p>
-              <p className="text-sm">support@givetogrow.co.za</p>
+              {/* <p className="text-sm font-bold mb-2 font-onest">Support</p> */}
+              <p className="text-sm">Support: support@givetogrow.co.za</p>
               <p className="text-sm">Mon – Fri 9am-4pm</p>
-              <p className="text-sm">Closed Weekends & Public Holidays</p>
+              <p className="text-sm">weekends and public holidays: Closed</p>
             </div>
           </div>
         </div>

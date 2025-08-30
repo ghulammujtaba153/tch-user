@@ -41,14 +41,14 @@ const Navbar: React.FC = () => {
                 to="/home/campaigns"
                 className={`${linkBase} ${startsWith('/home/campaigns') ? 'text-secondary !font-semibold' : 'hover:text-secondary'}`}
               >
-                Find Campaigns
+                Campaigns
               </Link>
 
               <Link
                 to="/support"
                 className={`${linkBase} ${isActive('/support') ? 'text-secondary !font-semibold' : 'hover:text-secondary'}`}
               >
-                Contact Us
+                Contact us
               </Link>
 
               <div className="relative">
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
                   className="cursor-pointer flex items-center gap-2 hover:text-secondary transition-colors duration-300"
                   onClick={() => setIsOpen((prev) => !prev)}
                 >
-                  Need Help? {isOpen ? <FaAngleUp /> : <FaAngleDown/>}
+                  Need help? {isOpen ? <FaAngleUp /> : <FaAngleDown/>}
                 </p>
 
                 {isOpen && (

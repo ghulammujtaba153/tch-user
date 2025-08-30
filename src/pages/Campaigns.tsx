@@ -137,7 +137,7 @@ const Campaigns = () => {
         </p>
       </div>
 
-      <h1 className='text-4xl font-bold font-onest text-[#0033A0]'>All Campaigns</h1>
+      <h1 className='text-4xl font-bold font-onest text-[#0033A0]'>Campaigns</h1>
       <p className='text-gray-700 text-sm font-sans'>Explore our campaigns and support the causes you care about.</p>
 
       {/* Search & Filters Section */}
