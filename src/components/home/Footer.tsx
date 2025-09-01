@@ -182,7 +182,7 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h2 className="text-sm font-bold mb-2 font-onest text-secondary">Contact</h2>
+              <h2 className="text-sm font-bold mb-2 font-onest text-secondary">CONTACT</h2>
 
               
               {/* <p className="text-sm font-bold mb-2 font-onest">
@@ -192,9 +192,10 @@ const Footer: React.FC = () => {
               {/* <p className="text-sm mb-2 ">+27 87 474 2215</p> */}
 
               {/* <p className="text-sm font-bold mb-2 font-onest">Support</p> */}
-              <p className="text-sm">Support: support@givetogrow.co.za</p>
-              <p className="text-sm">Mon – Fri 9am-4pm</p>
-              <p className="text-sm">weekends and public holidays: Closed</p>
+              <p className="text-sm">support@givetogrow.co.za</p>
+              <p className="text-sm">Monday to Friday</p>
+              <p className="text-sm">9:00 - 16:00</p>
+              <p className="text-sm">Weekends and Public Holidays: Closed</p>
             </div>
           </div>
         </div>

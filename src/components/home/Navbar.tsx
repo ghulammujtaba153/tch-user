@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                       className={`block px-4 py-2 ${isActive('/faqs') ? 'text-secondary' : 'hover:bg-gray-100 text-gray-700'}`}
                       onClick={() => setIsOpen(false)}
                     >
-                      FAQ
+                      FAQs
                     </Link>
                     <Link
                       to="/guides"
