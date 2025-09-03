@@ -5,6 +5,7 @@ import GoogleLoginButton from "../home/GoogleButton";
 import MicrosoftLoginButton from "../home/MicrosoftButton";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
+import ScrollToTop from "../../utils/ScrollToTop";
 
 interface Props {
   data: any;
@@ -54,6 +55,7 @@ const PersonalInfoStep: React.FC<Props> = ({ data, setData, onNext }) => {
 
   return (
     <div className="space-y-8 bg-white p-8 rounded-xl shadow-lg">
+      <ScrollToTop />
       <style>{`
         .phone-input-container {
           width: 100% !important;

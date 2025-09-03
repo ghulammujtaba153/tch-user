@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/userContext";
 import { BASE_URL } from "../../config/url";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ScrollToTop from "../../utils/ScrollToTop";
 // import ReactGA from "react-ga"; // Uncomment if using GA
 
 const Success = ({ data }) => {
@@ -80,6 +81,7 @@ const Success = ({ data }) => {
 
   return (
     <div className="bg-white p-6 rounded-xxxl shadow-lg">
+      <ScrollToTop />
       <div className="flex flex-col items-center justify-center min-h-[300px] px-4 text-center">
         <h2 className="text-2xl font-bold text-secondary mb-4">Success!</h2>
         <p className="text-gray-700 mb-6">Your account has been created successfully.</p>

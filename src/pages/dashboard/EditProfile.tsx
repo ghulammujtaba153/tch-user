@@ -84,7 +84,7 @@ const EditProfile = () => {
             addressLine2: u.addressLine2 || "",
             suburb: u.suburb || "",
             city: u.city || "",
-            state: u.state || u.state || "",
+            state: u.state || u.province || "",
             postalCode: u.postalCode || "",
             country: u.country || "",
             consentChannels: u.consentChannels || {
@@ -459,12 +459,12 @@ const EditProfile = () => {
               />
             </div>
             <div>
-              <label htmlFor="province" className="text-sm text-gray-500 block mb-1">
+              <label htmlFor="state" className="text-sm text-gray-500 block mb-1">
                 Province/State
               </label>
               <input
                 type="text"
-                id="province"
+                id="state"
                 value={formData.state}
                 onChange={handleChange}
                 placeholder="Enter province or state"

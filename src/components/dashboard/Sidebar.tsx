@@ -50,8 +50,12 @@ const menuItems: MenuItem[] = [
   {
     name: 'Organisation',
     icon: BuildingOfficeIcon,
-    path: '/user/dashboard/overview',
+    path: '#',
     subItems: [
+      {
+        name: 'Dashboard',
+        path: '/user/dashboard/overview',
+      },
       
       {
         name: 'Organisation Setup',
@@ -100,7 +104,7 @@ const menuItems: MenuItem[] = [
   },
   
   {
-    name: "Need Help",
+    name: "Need Help?",
     icon: UsersIcon,
     path: '/user/dashboard/support',
     subItems: [
@@ -109,7 +113,7 @@ const menuItems: MenuItem[] = [
         path: "/user/dashboard/faqs",
       },
       {
-        name: "Guides",
+        name: "Help Guides",
         path: "/user/dashboard/guides",
       },
       {

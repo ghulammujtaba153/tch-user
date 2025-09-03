@@ -9,6 +9,20 @@ import Loading from '../../components/Loading';
 import DonationBtn from '../../components/dashboard/DonationBtn';
 import { FaCheckCircle, FaClock, FaTimesCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { useAppConfig } from '../../context/AppConfigContext';
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from 'leaflet';
+
+// Fix for default markers in react-leaflet
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
+
 
 const initialFormData = {
   userId: '',
@@ -39,10 +53,56 @@ const Organization = () => {
   const [isses, setIssues] = useState<any>("");
   const { config } = useAppConfig();
   const [isEditable, setIsEditable] = useState(false);
+  const [mapCenter, setMapCenter] = useState<[number, number]>([-26.2041, 28.0473]); // Default to Johannesburg, SA
+  const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
+  const [geocodingTimeout, setGeocodingTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
+
+
+
 
   // Helper function to construct full URL for file paths
   const getFullUrl = (filePath: string) =>
     filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
+
+  // Geocoding function to convert address to coordinates
+  const geocodeAddress = async (address: string) => {
+    if (!address.trim()) return null;
+    
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`
+      );
+      const data = await response.json();
+      
+      if (data && data.length > 0) {
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        return [lat, lon] as [number, number];
+      }
+    } catch (error) {
+      console.error('Geocoding error:', error);
+    }
+    return null;
+  };
+
+  // Debounced geocoding function
+  const debouncedGeocode = (address: string) => {
+    if (geocodingTimeout) {
+      clearTimeout(geocodingTimeout);
+    }
+    
+    const timeout = setTimeout(async () => {
+      if (address.length > 10) {
+        const coordinates = await geocodeAddress(address);
+        if (coordinates) {
+          setMapCenter(coordinates);
+          setMarkerPosition(coordinates);
+        }
+      }
+    }, 1000); // Wait 1 second after user stops typing
+    
+    setGeocodingTimeout(timeout);
+  };
 
   useEffect(() => {
     if (config?.name) {
@@ -89,6 +149,16 @@ const Organization = () => {
         setLogoPreview(logoUrl);
       }
 
+      // Geocode address if available
+      if (res.data.address || res.data.address1) {
+        const address = res.data.address || res.data.address1;
+        const coordinates = await geocodeAddress(address);
+        if (coordinates) {
+          setMapCenter(coordinates);
+          setMarkerPosition(coordinates);
+        }
+      }
+
     } catch (error) {
       console.log('No organization data found for user');
       setFormData({ ...initialFormData, userId: user.userId });
@@ -127,6 +197,15 @@ const Organization = () => {
       }
     };
   }, [logoPreview]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (geocodingTimeout) {
+        clearTimeout(geocodingTimeout);
+      }
+    };
+  }, [geocodingTimeout]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -428,13 +507,80 @@ const Organization = () => {
                 <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required disabled={!isEditable} />
                 
                 {/* Contact Number */}
-                <Input label="Contact Number" name="phone" value={formData.phone} onChange={handleChange} required disabled={!isEditable} />
+                {/* <Input label="Contact Number" name="phone" value={formData.phone} onChange={handleChange} required disabled={!isEditable} /> */}
+
+                <PhoneInput
+                  country={'za'}
+                  value={formData.phone}
+                  onChange={(phone) => handleChange({target: {name: "phone", value: phone}} as any)}
+                  enableSearch={true}
+                  inputClass="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
+                />
+                
               </div>
 
               {/* Address */}
-              <div className="col-span-full">
-                <Input label="Address" name="address" value={formData.address} onChange={handleChange} required disabled={!isEditable} />
+              <div className="col-span-full space-y-1">
+                <label className="block text-sm font-medium text-gray-700">
+                  Organization Address <span className="text-red-500 ml-1">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={(e) => {
+                    handleChange(e);
+                    // Use debounced geocoding
+                    debouncedGeocode(e.target.value);
+                  }}
+                  required
+                  disabled={!isEditable}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200 disabled:bg-gray-100"
+                  placeholder="Enter your organization's full address"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter the complete address to show your organization's location on the map below
+                </p>
               </div>
+
+              {/* Map Component */}
+              <div className="col-span-full space-y-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Organization Location
+                </label>
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <MapContainer 
+                    center={mapCenter} 
+                    zoom={13} 
+                    style={{ height: "300px", width: "100%" }}
+                    key={`${mapCenter[0]}-${mapCenter[1]}`} // Force re-render when center changes
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+                    />
+                    {markerPosition && (
+                      <Marker position={markerPosition}>
+                        <Popup>
+                          <div className="text-center">
+                            <strong>{formData.name || 'Organization Location'}</strong>
+                            {formData.address && (
+                              <div className="text-sm text-gray-600 mt-1">
+                                {formData.address}
+                              </div>
+                            )}
+                          </div>
+                        </Popup>
+                      </Marker>
+                    )}
+                  </MapContainer>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  The map will automatically update when you enter a valid address above
+                </p>
+              </div>
+
+
 
               {/* Organization Description */}
               <div className="col-span-full space-y-1">

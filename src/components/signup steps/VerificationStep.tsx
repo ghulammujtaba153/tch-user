@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Notification from "../notification/Notification";
 import ReactGA from 'react-ga4';
 import { useAppConfig } from "../../context/AppConfigContext";
+import ScrollToTop from "../../utils/ScrollToTop";
 
 interface VerificationStepProps {
   data: any;
@@ -29,23 +30,25 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ data, setData, onNe
     }
   }, [config]);
 
+  const generateAndSendOtp = async () => {
+    const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
+    setSentOtp(generatedOtp);
+
+    try {
+      await axios.post(`${BASE_URL}/auth/send-otp`, {
+        email: userData.email,
+        otp: generatedOtp,
+      });
+      toast.success("OTP sent to your email");
+    } catch (error) {
+      toast.error("Failed to send OTP");
+      console.error("Send OTP Error:", error);
+    }
+  };
+
   // ✅ Send OTP once when component mounts
   useEffect(() => {
-    const generateAndSendOtp = async () => {
-      const generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-      setSentOtp(generatedOtp);
-
-      try {
-        await axios.post(`${BASE_URL}/auth/send-otp`, {
-          email: userData.email,
-          otp: generatedOtp,
-        });
-        toast.success("OTP sent to your email");
-      } catch (error) {
-        toast.error("Failed to send OTP");
-        console.error("Send OTP Error:", error);
-      }
-    };
+    
 
     if (userData?.email) {
       generateAndSendOtp();
@@ -106,6 +109,7 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ data, setData, onNe
 
   return (
     <div className="bg-white p-6 rounded-xxxl shadow-lg">
+      <ScrollToTop />
       {success && (
         <Notification
           isOpen={true}
@@ -145,6 +149,8 @@ const VerificationStep: React.FC<VerificationStepProps> = ({ data, setData, onNe
             className="w-full h-12 text-center text-lg font-semibold border rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
           />
         ))}
+
+        <p className="col-span-4 mt-6 text-secondary text-sm text-center cursor-pointer" onClick={generateAndSendOtp}>Resend OTP</p>
         <button
           type="submit"
           disabled={isPending}

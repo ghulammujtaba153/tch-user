@@ -85,6 +85,7 @@ const Profile = () => {
         setData({
           ...data,
           ...res.data.user,
+          province: res.data.user.province || res.data.user.state || "",
           consentChannels: res.data.user.consentChannels || {
             email: false,
             sms: false,
@@ -229,7 +230,7 @@ const Profile = () => {
                 <DetailItem label="Address Line 2" value={data?.addressLine2} />
                 <DetailItem label="Suburb" value={data?.suburb} />
                 <DetailItem label="City" value={data?.city} />
-                <DetailItem label="Province/State" value={data?.province || data?.state} />
+                <DetailItem label="Province/State" value={data?.province} />
                 <DetailItem label="Postal Code" value={data?.postalCode} />
                 <DetailItem label="Country" value={data?.country} />
               </div>

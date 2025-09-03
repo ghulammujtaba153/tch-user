@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../../config/url";
 import { toast } from "react-toastify";
 import Select from "react-select";
+import ScrollToTop from "../../utils/ScrollToTop";
 
 interface OrganizationStepProps {
   data: any;
@@ -105,6 +106,7 @@ const OrganizationStep: React.FC<OrganizationStepProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md w-full">
+      <ScrollToTop />
       <h2 className="text-xl font-bold mb-4">Organisation Registration</h2>
 
       {/* Toggle Organization */}

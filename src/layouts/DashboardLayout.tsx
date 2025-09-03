@@ -247,7 +247,7 @@ const CampaignerDashboardLayout: React.FC = () => {
           name: "Organisation Setup",
           path: "#",
           subItems: [
-            
+
             {
               name: "Organisation Details",
               path: "/user/dashboard/organization",
@@ -270,8 +270,8 @@ const CampaignerDashboardLayout: React.FC = () => {
             }
           ]
         },
-        
-        
+
+
       ]
     },
     {
@@ -291,7 +291,7 @@ const CampaignerDashboardLayout: React.FC = () => {
     },
   ];
 
-  const {config} = useAppConfig();
+  const { config } = useAppConfig();
 
   return (
     <div className="relative flex h-screen font-onest">
@@ -306,9 +306,8 @@ const CampaignerDashboardLayout: React.FC = () => {
 
       {!isSidebarOpen && (
         <div
-          className={`sm:hidden fixed top-0 left-0 h-full w-[250px] bg-white shadow-lg flex flex-col gap-2 transform transition-transform duration-300 z-50 ${
-            !isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`sm:hidden fixed top-0 left-0 h-full w-[250px] bg-white shadow-lg flex flex-col gap-2 transform transition-transform duration-300 z-50 ${!isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           {/* <div className="w-full h-full absolute top-0 left-0" onClick={() => setIsSidebarOpen(false)}></div> */}
           <XMarkIcon
@@ -316,9 +315,9 @@ const CampaignerDashboardLayout: React.FC = () => {
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           />
           {/* Logo */}
-            <Link to="/" className="flex pt-12 justify-center items-center p-4">
-              <img src={config?.logo} alt="logo" className={`w-30 h-10 block`} />
-            </Link>
+          <Link to="/" className="flex pt-12 justify-center items-center p-4">
+            <img src={config?.logo} alt="logo" className={`w-30 h-10 block`} />
+          </Link>
 
           <ul className="w-full pt-2 py-4 flex flex-col">
             {menuItems.map((item) => (
@@ -327,11 +326,10 @@ const CampaignerDashboardLayout: React.FC = () => {
                   <Link
                     to={item.path}
                     onClick={() => handleMobileLinkClick(item.path, item.name)}
-                    className={`w-full px-4 py-2 flex text-sm items-center hover:bg-secondary/20 transition-colors duration-200 ${
-                      isActive(item.path) || (item.subItems && isSubItemActive(item.subItems))
+                    className={`w-full px-4 py-2 flex text-sm items-center hover:bg-secondary/20 transition-colors duration-200 ${isActive(item.path) || (item.subItems && isSubItemActive(item.subItems))
                         ? "bg-secondary/20 border-l-4 text-secondary border-secondary"
                         : ""
-                    }`}
+                      }`}
                   >
                     <item.icon className="h-6 w-6" />
                     <span className="ml-3 flex-1">{item.name}</span>
@@ -361,11 +359,10 @@ const CampaignerDashboardLayout: React.FC = () => {
                           <Link
                             to={subItem.path}
                             onClick={() => handleMobileLinkClick(subItem.path)}
-                            className={`flex items-center justify-between px-8 py-2 text-sm hover:bg-secondary/10 transition-colors duration-200 ${
-                              isActive(subItem.path) || (subItem.subItems && subItem.subItems.some(subSubItem => isActive(subSubItem.path)))
-                                ? 'bg-secondary/20 text-secondary font-medium' 
+                            className={`flex items-center justify-between px-8 py-2 text-sm hover:bg-secondary/10 transition-colors duration-200 ${isActive(subItem.path) || (subItem.subItems && subItem.subItems.some(subSubItem => isActive(subSubItem.path)))
+                                ? 'bg-secondary/20 text-secondary font-medium'
                                 : 'text-gray-600'
-                            }`}
+                              }`}
                           >
                             <span>{subItem.name}</span>
                             {subItem.subItems && (
@@ -394,11 +391,10 @@ const CampaignerDashboardLayout: React.FC = () => {
                                   key={subSubItem.name}
                                   to={subSubItem.path}
                                   onClick={() => handleMobileLinkClick(subSubItem.path)}
-                                  className={`block px-12 py-2 text-xs hover:bg-secondary/10 transition-colors duration-200 ${
-                                    isActive(subSubItem.path)
+                                  className={`block px-12 py-2 text-xs hover:bg-secondary/10 transition-colors duration-200 ${isActive(subSubItem.path)
                                       ? 'bg-secondary/20 text-secondary font-medium'
                                       : 'text-gray-500'
-                                  }`}
+                                    }`}
                                 >
                                   {subSubItem.name}
                                 </Link>
@@ -419,87 +415,91 @@ const CampaignerDashboardLayout: React.FC = () => {
       <main
         className={`flex-1 overflow-x-hidden overflow-y-auto transition-all duration-300`}
       >
-        {/* Search Bar */}
-        <div className="flex bg-gray-50 justify-end gap-4 py-4 px-6 items-center">
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
-            <Link to="/" className="text-gray-700 px-4 py-2 bg-secondary text-white">Home</Link>
+
+        <div className="flex justify-between  bg-gray-50 items-center">
+          <div className="flex items-center border border-gray-300 ml-4 rounded-lg overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-[#BEE36E]">
+            <Link to="/" className="text-gray-700 px-4 py-2 bg-secondary text-white">Back to Home</Link>
           </div>
+          {/* Search Bar */}
+          <div className="flex bg-gray-50 justify-end gap-4 py-4 px-6 items-center">
 
-          <div className="w-[1px] h-10 bg-gray-400"></div>
 
-          {/* Notification Bell Icon */}
-          <div
-            onClick={() => setNotificationSection(!notificationSection)}
-            className={`relative flex items-center cursor-pointer p-2 rounded-lg ${
-              notificationSection ? "bg-gray-100" : ""
-            } hover:bg-gray-100`}
-          >
-            {newNotificationCount > 0 && (
-              <div className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
-                {newNotificationCount}
-              </div>
+
+
+            <div className="w-[1px] h-10 bg-gray-400"></div>
+
+            {/* Notification Bell Icon */}
+            <div
+              onClick={() => setNotificationSection(!notificationSection)}
+              className={`relative flex items-center cursor-pointer p-2 rounded-lg ${notificationSection ? "bg-gray-100" : ""
+                } hover:bg-gray-100`}
+            >
+              {newNotificationCount > 0 && (
+                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
+                  {newNotificationCount}
+                </div>
+              )}
+              <BellIcon className="w-6 h-6" />
+            </div>
+
+            {/* Notification Section */}
+            {notificationSection && (
+              <>
+                {/* Transparent Overlay */}
+                <div className="fixed inset-0 bg-black bg-opacity-30 z-20"></div>
+
+                {/* Notification Dropdown */}
+                <div
+                  ref={notificationRef}
+                  className="absolute top-16 right-4 bg-white shadow-lg rounded-lg p-4 z-30 w-80 max-h-96 overflow-y-auto"
+                >
+                  <p className="text-gray-600 font-semibold">Notifications</p>
+                  <div className="w-full h-[1px] bg-gray-200 my-2"></div>
+                  {notifications.length > 0 ? (
+                    notifications.map((notification) => (
+                      <div
+                        key={notification._id}
+                        className={`flex flex-col items-start my-2 p-2 rounded-md ${notification.seen ? "" : "bg-gray-200"
+                          }`}
+                      >
+                        <p className="text-sm text-gray-600">
+                          {notification.message}
+                        </p>
+                        <p className="text-xs text-gray-400">
+                          {dayjs(notification.createdAt).fromNow()}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-sm text-gray-600">No notifications</p>
+                  )}
+                </div>
+              </>
             )}
-            <BellIcon className="w-6 h-6" />
+
+            <div className="w-[1px] h-10 bg-gray-400"></div>
+
+            {/* Profile Link */}
+            <Link
+              to="/user/dashboard/profile"
+              className="flex items-center cursor-pointer p-2 rounded-lg hover:bg-gray-100"
+            >
+              {user?.profilePicture ? (
+                <img
+                  src={user?.profilePicture}
+                  alt="Profile"
+                  className="w-6 h-6 rounded-full"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.onerror = null;
+                    target.src = "/user.png";
+                  }}
+                />
+              ) : (
+                <UserCircleIcon className="w-6 h-6" />
+              )}
+            </Link>
           </div>
-
-          {/* Notification Section */}
-          {notificationSection && (
-            <>
-              {/* Transparent Overlay */}
-              <div className="fixed inset-0 bg-black bg-opacity-30 z-20"></div>
-
-              {/* Notification Dropdown */}
-              <div
-                ref={notificationRef}
-                className="absolute top-16 right-4 bg-white shadow-lg rounded-lg p-4 z-30 w-80 max-h-96 overflow-y-auto"
-              >
-                <p className="text-gray-600 font-semibold">Notifications</p>
-                <div className="w-full h-[1px] bg-gray-200 my-2"></div>
-                {notifications.length > 0 ? (
-                  notifications.map((notification) => (
-                    <div
-                      key={notification._id}
-                      className={`flex flex-col items-start my-2 p-2 rounded-md ${
-                        notification.seen ? "" : "bg-gray-200"
-                      }`}
-                    >
-                      <p className="text-sm text-gray-600">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        {dayjs(notification.createdAt).fromNow()}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-600">No notifications</p>
-                )}
-              </div>
-            </>
-          )}
-
-          <div className="w-[1px] h-10 bg-gray-400"></div>
-
-          {/* Profile Link */}
-          <Link
-            to="/user/dashboard/profile"
-            className="flex items-center cursor-pointer p-2 rounded-lg hover:bg-gray-100"
-          >
-            {user?.profilePicture ? (
-              <img
-                src={user?.profilePicture}
-                alt="Profile"
-                className="w-6 h-6 rounded-full"
-                onError={(e) => {
-                  const target = e.target as HTMLImageElement;
-                  target.onerror = null;
-                  target.src = "/user.png";
-                }}
-              />
-            ) : (
-              <UserCircleIcon className="w-6 h-6" />
-            )}
-          </Link>
         </div>
 
         {/* Main Content */}
