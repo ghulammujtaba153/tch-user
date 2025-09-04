@@ -50,7 +50,7 @@ const menuItems: MenuItem[] = [
   {
     name: 'Organisation',
     icon: BuildingOfficeIcon,
-    path: '#',
+    path: '/user/dashboard/overview',
     subItems: [
       {
         name: 'Dashboard',

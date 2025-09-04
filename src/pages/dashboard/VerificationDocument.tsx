@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import upload from "../../utils/upload";
+import uploadPDF from "../../utils/uploadPDF";
 import { BASE_URL, SOCKET_URL } from "../../config/url";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/userContext";
@@ -127,26 +127,27 @@ const VerificationDocuments = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error('Please upload a valid file (JPG, PNG, WebP, or PDF)');
-      return;
-    }
-
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      toast.error('File size should be less than 10MB');
-      return;
-    }
-
     setDocLoading((prev) => ({ ...prev, [key]: true }));
     try {
       toast.loading("Uploading...");
-      const url = await upload(file);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await axios.post(
+        `${BASE_URL}/upload/upload-single`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
       toast.dismiss();
-      setForm((prev: any) => ({ ...prev, [key]: url }));
+      setForm((prev) => ({
+        ...prev,
+        [key]: res.data.filePath ? `${SOCKET_URL}/${res.data.filePath}` : "",
+      }));
       toast.success("File uploaded!");
     } catch {
       toast.error("Upload failed");
@@ -250,7 +251,7 @@ const VerificationDocuments = () => {
             )}
           </div>
           <p className="text-gray-600 text-sm sm:text-base">
-            Upload and manage your organisation's verification documents here. These documents are required for compliance and verification purposes.
+            These documents are required for compliance and verification purposes.
           </p>
         </div>
 

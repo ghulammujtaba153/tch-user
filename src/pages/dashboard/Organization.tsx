@@ -23,13 +23,14 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-
 const initialFormData = {
   userId: '',
   name: '',
   description: '',
   logo: '',
   address: '',
+  longitude: null,
+  latitude: null,
   phone: '',
   email: '',
   registrationNumber: '',
@@ -43,7 +44,6 @@ const initialFormData = {
 const Organization = () => {
   const [formData, setFormData] = useState<any>(initialFormData);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const { user } = useContext<any>(AuthContext);
@@ -56,9 +56,6 @@ const Organization = () => {
   const [mapCenter, setMapCenter] = useState<[number, number]>([-26.2041, 28.0473]); // Default to Johannesburg, SA
   const [markerPosition, setMarkerPosition] = useState<[number, number] | null>(null);
   const [geocodingTimeout, setGeocodingTimeout] = useState<ReturnType<typeof setTimeout> | null>(null);
-
-
-
 
   // Helper function to construct full URL for file paths
   const getFullUrl = (filePath: string) =>
@@ -97,6 +94,12 @@ const Organization = () => {
         if (coordinates) {
           setMapCenter(coordinates);
           setMarkerPosition(coordinates);
+          // Update form data with coordinates
+          setFormData(prev => ({
+            ...prev,
+            latitude: coordinates[0],
+            longitude: coordinates[1]
+          }));
         }
       }
     }, 1000); // Wait 1 second after user stops typing
@@ -124,6 +127,11 @@ const Organization = () => {
 
         res = await axios.get(`${BASE_URL}/organization/orgId/${res.data.organization}`);
       }
+      
+      // Extract coordinates from response
+      const latitude = res.data.latitude || res.data.location?.coordinates?.[1] || null;
+      const longitude = res.data.longitude || res.data.location?.coordinates?.[0] || null;
+      
       const mergedData = {
         ...initialFormData,
         name: res.data.name || '',
@@ -139,7 +147,10 @@ const Organization = () => {
         socialMediaLinks: res.data.socialMediaLinks ?? [''],
         status: res.data.status || '',
         userId: user?.userId,
+        latitude: latitude,
+        longitude: longitude
       };
+      
       setFormData(mergedData);
       setIsUpdateMode(true);
 
@@ -149,8 +160,12 @@ const Organization = () => {
         setLogoPreview(logoUrl);
       }
 
-      // Geocode address if available
-      if (res.data.address || res.data.address1) {
+      // Set map position based on coordinates or address
+      if (latitude && longitude) {
+        const coordinates = [latitude, longitude] as [number, number];
+        setMapCenter(coordinates);
+        setMarkerPosition(coordinates);
+      } else if (res.data.address || res.data.address1) {
         const address = res.data.address || res.data.address1;
         const coordinates = await geocodeAddress(address);
         if (coordinates) {
@@ -220,6 +235,19 @@ const Organization = () => {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+  };
+
+  // Handle marker drag end to update coordinates
+  const handleMarkerDragEnd = (e: any) => {
+    const { lat, lng } = e.target.getLatLng();
+    const newPosition: [number, number] = [lat, lng];
+    
+    setMarkerPosition(newPosition);
+    setFormData(prev => ({
+      ...prev,
+      latitude: lat,
+      longitude: lng
+    }));
   };
 
   const handleUpload = async (file: File) => {
@@ -507,8 +535,6 @@ const Organization = () => {
                 <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} required disabled={!isEditable} />
                 
                 {/* Contact Number */}
-                {/* <Input label="Contact Number" name="phone" value={formData.phone} onChange={handleChange} required disabled={!isEditable} /> */}
-
                 <PhoneInput
                   country={'za'}
                   value={formData.phone}
@@ -560,7 +586,13 @@ const Organization = () => {
                       attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
                     />
                     {markerPosition && (
-                      <Marker position={markerPosition}>
+                      <Marker
+                        position={markerPosition}
+                        draggable={isEditable}
+                        eventHandlers={{
+                          dragend: handleMarkerDragEnd
+                        }}
+                      >
                         <Popup>
                           <div className="text-center">
                             <strong>{formData.name || 'Organization Location'}</strong>
@@ -569,6 +601,9 @@ const Organization = () => {
                                 {formData.address}
                               </div>
                             )}
+                            <div className="text-xs text-gray-500 mt-2">
+                              Drag marker to adjust location
+                            </div>
                           </div>
                         </Popup>
                       </Marker>
@@ -576,11 +611,18 @@ const Organization = () => {
                   </MapContainer>
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
-                  The map will automatically update when you enter a valid address above
+                  {isEditable 
+                    ? "The map will update when you enter an address. You can also drag the marker to adjust the location." 
+                    : "Organization location on map"}
                 </p>
+                
+                {/* Display coordinates if available */}
+                {(formData.latitude && formData.longitude) && (
+                  <div className="text-xs text-gray-500 mt-1">
+                    Coordinates: {formData.latitude.toFixed(6)}, {formData.longitude.toFixed(6)}
+                  </div>
+                )}
               </div>
-
-
 
               {/* Organization Description */}
               <div className="col-span-full space-y-1">

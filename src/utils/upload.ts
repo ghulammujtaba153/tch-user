@@ -15,7 +15,12 @@ const upload = async (file:any) => {
   }
 };
 
+
+
+
+
 export default upload;
+
 
 
 

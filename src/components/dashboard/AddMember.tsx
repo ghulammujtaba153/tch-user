@@ -4,6 +4,8 @@ import { BASE_URL } from "../../config/url";
 import { AuthContext } from "../../context/userContext";
 import { toast } from "react-toastify";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 interface TeamMember {
   name: string;
@@ -14,10 +16,7 @@ interface TeamMember {
   _id?: string;
 }
 
-interface MembersData {
-  owner: TeamMember;
-  teamMembers: TeamMember[];
-}
+
 
 interface Organization {
   _id: string;
@@ -120,7 +119,6 @@ const AddMember = () => {
       fetchOrganization();
     } catch (error) {
       toast.error(error.response.data.error);
-
     } finally {
       setLoading(false);
     }
@@ -176,16 +174,17 @@ const AddMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm mb-2 font-medium text-gray-700">
                 Phone
               </label>
-              <input
-                type="text"
-                name="phone"
+              <PhoneInput
+                country={"za"}
                 value={form.phone}
-                onChange={handleChange}
-                required
-                className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+                onChange={(phone) => setForm({ ...form, phone })}
+                inputStyle={{
+                  width: "100%",
+                }}
+                inputClass="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
                 placeholder="Enter member's phone"
               />
             </div>

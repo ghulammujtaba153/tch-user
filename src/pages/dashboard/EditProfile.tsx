@@ -9,6 +9,7 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import Select from 'react-select';
 import countries from 'world-countries';
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const { user } = useContext(AuthContext)!;
@@ -159,11 +160,12 @@ const EditProfile = () => {
         }
       );
       if (res.status === 200) {
-        alert("Profile updated successfully!");
+        toast.success("Profile updated successfully!");
+        // alert("Profile updated successfully!");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
+      toast.error("Failed to update profile. Please try again.");
     } finally {
       setLoading(false);
     }
