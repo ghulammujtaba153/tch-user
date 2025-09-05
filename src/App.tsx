@@ -58,6 +58,7 @@ import S18ADocument from './pages/dashboard/S18ADocument';
 import Withdrawal from './pages/dashboard/Withdrawal';
 import FAQsSection from './components/home/FAQsSection';
 import VerificationDocuments from './pages/dashboard/VerificationDocument';
+import UserDashboard from './pages/dashboard/UserDashboard';
 
 
 
@@ -155,6 +156,7 @@ function App() {
 
         <Route element={<ProtectedRoute allowedRoles={['user']} />}>
           <Route path="/user/dashboard" element={<CampaignerDashboardLayout/>}>
+            <Route path="stats" element={<UserDashboard/>} />
             <Route path='overview' element={<MainDashboard />} />
             <Route path="campaigns" element={<MyCampaigns />} />
             

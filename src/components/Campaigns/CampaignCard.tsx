@@ -90,18 +90,11 @@ const CampaignCard: React.FC<{
           loading="lazy"
         />
       </div>
-      <p className="text-sm font-bold bg-primarylight w-[70px] text-center text-white p-1 rounded-full">{campaign?.verified ? "S18A" : ""}</p>
+      {campaign?.verified && <p className="text-sm font-bold bg-primarylight w-[70px] text-center text-white p-1 rounded-full">{campaign?.verified ? "S18A" : ""}</p>}
       <p className="text-sm font-bold">{campaign?.organization?.name}</p>
 
 
-      {campaign?.organization?.supportingDoc && (
-        <>
-        <p className="text-xs font-bold bg-primarylight w-[70px] text-center text-white p-1 rounded-full">
-          verified
-        </p>
-        
-        </>
-      ) }
+      
 
       {/* Campaign Title */}
       <div className="flex flex-col gap-2 h-[100px] overflow-hidden">

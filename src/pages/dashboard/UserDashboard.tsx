@@ -12,7 +12,7 @@ import { useAppConfig } from '../../context/AppConfigContext';
 
 
 
-const MainDashboard = () => {
+const UserDashboard = () => {
     const { user } = useContext(AuthContext) || {};
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -31,7 +31,7 @@ const MainDashboard = () => {
 
     const card = [
         {
-            title: "Total Funds Raised through campaigns",
+            title: "Total Funds Raised",
             value: basicInfo?.fundsRaised || 0
         },
         {
@@ -52,14 +52,36 @@ const MainDashboard = () => {
         setLoading(true);
         try {
     
-            
-                const [basicInfoRes, donationsRes] = await Promise.all([
-                axios.get(`${BASE_URL}/analytics/campaigner/organization/basic-info/${user?.organization?._id}`, {
+            // if (user?.organization?.role== "owner") {
+            //     const [basicInfoRes, donationsRes] = await Promise.all([
+            //     axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
+            //         headers: {
+            //             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            //         },
+            //     }),
+            //     axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+            //         headers: {
+            //             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            //         },
+            //     }),
+            // ]);
+    
+            // setBasicInfo(basicInfoRes.data);
+            // console.log(basicInfoRes.data);
+    
+            // console.log(donationsRes.data);
+            // const donations = donationsRes.data;
+            // setLatestDonations(donations);
+
+            //     return;
+            // }
+            const [basicInfoRes, donationsRes] = await Promise.all([
+                axios.get(`${BASE_URL}/analytics/campaigner/basic-info/${user?.userId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
                 }),
-                axios.get(`${BASE_URL}/analytics/campaigner/organization/latest-donations/${user?.organization?._id}`, {
+                axios.get(`${BASE_URL}/analytics/campaigner/latest-donations/${user?.userId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     },
@@ -72,7 +94,7 @@ const MainDashboard = () => {
             console.log(donationsRes.data);
             const donations = donationsRes.data;
             setLatestDonations(donations);
-
+    
         } catch (error: any) {
             setError(error);
         } finally {
@@ -147,4 +169,4 @@ const MainDashboard = () => {
     );
 };
 
-export default MainDashboard;
+export default UserDashboard;

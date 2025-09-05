@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext, useMemo } from 'react';
-import { ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, ArrowUpIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import Loading from '../Loading';
-import { BASE_URL } from '../../config/url';
+import { BASE_URL, SOCKET_URL } from '../../config/url';
 import axios from 'axios';
 import { AuthContext } from '../../context/userContext';
+import { toast } from 'react-toastify';
 
 const DonationSent = () => {
   const [sentDonations, setSentDonations] = useState([]);
@@ -12,6 +13,8 @@ const DonationSent = () => {
   const [sentError, setSentError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const { user } = useContext(AuthContext) || {};
 
   // Fetch sent donations (for donors)
@@ -35,14 +38,24 @@ const DonationSent = () => {
     }
   }, [user]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(sentDonations.length / itemsPerPage);
+  // Filter donations by date range using dayjs
+  const filteredDonations = useMemo(() => {
+    return sentDonations.filter((item: any) => {
+      const donationDate = dayjs(item.date);
+      const afterFrom = fromDate ? donationDate.isSame(dayjs(fromDate), 'day') || donationDate.isAfter(dayjs(fromDate), 'day') : true;
+      const beforeTo = toDate ? donationDate.isSame(dayjs(toDate), 'day') || donationDate.isBefore(dayjs(toDate), 'day') : true;
+      return afterFrom && beforeTo;
+    });
+  }, [sentDonations, fromDate, toDate]);
+
+  // Pagination calculations (use filteredDonations)
+  const totalPages = Math.ceil(filteredDonations.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   
   const currentPageData = useMemo(() => {
-    return sentDonations.slice(startIndex, endIndex);
-  }, [sentDonations, startIndex, endIndex]);
+    return filteredDonations.slice(startIndex, endIndex);
+  }, [filteredDonations, startIndex, endIndex]);
 
   // Reset to first page when items per page changes
   useEffect(() => {
@@ -77,11 +90,72 @@ const DonationSent = () => {
     link.click();
   };
 
+  const handlePrint = async (donation) => {
+    const toastId = toast.loading("Generating S18A Certificate...");
+
+    try {
+      const res = await axios.post(`${BASE_URL}/s18/document`, donation);
+
+      toast.update(toastId, {
+        render: "Certificate generated successfully!",
+        type: "success",
+        isLoading: false,
+        autoClose: 3000,
+      });
+
+      // Get the outputPath and convert to browser-accessible URL
+      const outputPath = res.data.outputPath;
+      if (outputPath) {
+        const fileName =
+          outputPath.split("certificates\\").pop() ||
+          outputPath.split("certificates/").pop();
+        const fileUrl = `${SOCKET_URL}/certificates/${fileName}`;
+        window.open(fileUrl, "_blank");
+      }
+    } catch (error) {
+      toast.update(toastId, {
+        render: "Failed to generate S18A Certificate",
+        type: "error",
+        isLoading: false,
+        autoClose: 3000,
+      });
+      console.error("Error generating S18A Certificate: ", error);
+    }
+  };
+
   if (sentLoading) return <div className="flex justify-center items-center"><Loading /></div>;
   if (sentError) return <div>Error: {sentError.message}</div>;
 
   return (
     <div className="flex flex-col gap-4 bg-white border border-gray-200 rounded-lg p-4">
+      {/* Date Filter */}
+      <div className="flex flex-wrap gap-4 items-center mb-2">
+        <div>
+          <label className="text-sm text-gray-600 mr-2">From:</label>
+          <input
+            type="date"
+            value={fromDate}
+            onChange={e => setFromDate(e.target.value)}
+            className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label className="text-sm text-gray-600 mr-2">To:</label>
+          <input
+            type="date"
+            value={toDate}
+            onChange={e => setToDate(e.target.value)}
+            className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          onClick={() => { setFromDate(''); setToDate(''); }}
+          className="text-xs px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-gray-600"
+        >
+          Clear
+        </button>
+      </div>
+
       <div className="flex items-center sm:flex-row flex-col gap-2 justify-between">
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-bold">Sent Donations</h1>
@@ -139,6 +213,7 @@ const DonationSent = () => {
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Payment Method</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Action</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -178,6 +253,16 @@ const DonationSent = () => {
                         <span className="text-sm font-semibold text-green-600">
                           R{new Intl.NumberFormat().format(item.amount)}
                         </span>
+                      </td>
+                      <td className="py-4 px-4">
+                        {item?.s18aRecord?.length > 0 &&
+                          <button
+                          onClick={() => handlePrint(item.s18aRecord[0])}
+                          className="bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2"
+                        >
+                          <span>Print Certificate</span>
+                          <ArrowRightIcon className="w-4 h-4" />
+                        </button>}
                       </td>
                     </tr>
                   ))}

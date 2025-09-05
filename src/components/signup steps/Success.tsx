@@ -68,7 +68,7 @@ const Success = ({ data }) => {
         if (redirectToOrganization) {
           navigate("/user/dashboard/organization");
         } else {
-          navigate("/user/dashboard/profile");
+          navigate("/user/dashboard/stats");
         }
       }, 100);
     } catch (error) {

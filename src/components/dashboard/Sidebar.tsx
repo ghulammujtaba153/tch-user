@@ -33,15 +33,15 @@ interface MenuItem {
 
 const menuItems: MenuItem[] = [
   {
+    name: 'User Dashboard',
+    icon: HomeIcon,
+    path: '/user/dashboard/stats',
+  },
+  {
     name: 'My Profile',
     icon: UsersIcon,
     path: '/user/dashboard/profile',
   },
-  // {
-  //   name: 'Dashboard',
-  //   icon: HomeIcon,
-  //   path: '/user/dashboard/overview',
-  // },
   {
     name: 'My Donations',
     icon: CurrencyDollarIcon,
@@ -117,7 +117,7 @@ const menuItems: MenuItem[] = [
         path: "/user/dashboard/guides",
       },
       {
-        name: 'Support',
+        name: 'Submit Ticket',
         icon: UsersIcon,
         path: '/user/dashboard/support',
       }
@@ -137,32 +137,30 @@ const Sidebar: React.FC<{ isOpen: boolean; toggleSidebar: () => void }> = ({ isO
   const canShowMembers =
     !user?.organization?.role || user?.organization?.role === "owner";
 
+  const canShowOrgSetup =
+  user?.organization?.role === "owner";
+
   // ✅ Clone & filter menuItems dynamically
   const filteredMenuItems = menuItems.map(item => {
-    if (item.name === "Organization" && item.subItems) {
+    if (item.name === "Organisation" && item.subItems) {
       return {
         ...item,
         subItems: item.subItems
           .map(subItem => {
             // Filter sub-subItems inside "Organization Setup"
-            if (subItem.name === "Organization Setup" && subItem.subItems) {
+            if (subItem.name === "Organisation Setup" && subItem.subItems) {
               return {
                 ...subItem,
                 subItems: subItem.subItems.filter(subSubItem => {
-                  if (
-                    subSubItem.name === "S18A Document" ||
-                    subSubItem.name === "Bank Details"
-                  ) {
-                    return canShowMembers;
-                  }
-                  return true;
+                  // Only show org setup items for owner
+                  return canShowOrgSetup;
                 }),
               };
             }
 
             // Filter direct subItems like "Members"
             if (subItem.name === "Members") {
-              return canShowMembers ? subItem : null;
+              return canShowOrgSetup ? subItem : null;
             }
 
             return subItem;

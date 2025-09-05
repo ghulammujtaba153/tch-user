@@ -84,7 +84,7 @@ const OrganizationPage = () => {
 
           <div>
             <p><strong>Status:</strong> {status === "active" ? "Verified" : "Unverified"}</p>
-            <p><strong>Section 18A:</strong> {supportingDoc ? "Verified" : "Not Registered"}</p>
+            {/* <p><strong>Section 18A:</strong> {supportingDoc ? "Verified" : "Not Registered"}</p> */}
           </div>
 
           <p className="mt-2 text-gray-600">{description}</p>
