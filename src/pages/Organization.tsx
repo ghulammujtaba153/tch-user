@@ -64,7 +64,7 @@ const OrganizationPage = () => {
   if (loading) return <Loading />;
   if (!organization) return <p className="text-center text-red-500 mt-10">Organization not found.</p>;
 
-  const { name, description, logo, city, country, supportingDoc, status } = organization;
+  const { name, description, logo, city, country, address, status } = organization;
 
   return (
     <div className="pt-[100px] max-w-[1200px] mx-auto p-4 font-sans">
@@ -80,10 +80,10 @@ const OrganizationPage = () => {
 
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-800">{name}</h1>
-          <p><strong>Location:</strong> {city}, {country}</p>
+          <p><strong>Location:</strong> {address}</p>
 
           <div>
-            <p><strong>Status:</strong> {status === "active" ? "Verified" : "Unverified"}</p>
+            <p><strong>Status:</strong> {status === "active" ? "verified" : "unverified"}</p>
             {/* <p><strong>Section 18A:</strong> {supportingDoc ? "Verified" : "Not Registered"}</p> */}
           </div>
 
