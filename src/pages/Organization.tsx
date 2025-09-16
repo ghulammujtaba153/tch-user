@@ -1,16 +1,17 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { BASE_URL, SOCKET_URL } from '../config/url';
-import { toast } from 'react-toastify';
-import Loading from '../components/Loading';
-import CampaignTabs from '../components/organizationProfile/CampaignTabs';
-import ScrollToTop from '../utils/ScrollToTop';
-import { useAppConfig } from '../context/AppConfigContext';
-import DonationModal from '../components/organizationProfile/DonationModal';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { BASE_URL, SOCKET_URL } from "../config/url";
+import { toast } from "react-toastify";
+import Loading from "../components/Loading";
+import CampaignTabs from "../components/organizationProfile/CampaignTabs";
+import ScrollToTop from "../utils/ScrollToTop";
+import { useAppConfig } from "../context/AppConfigContext";
+import DonationModal from "../components/organizationProfile/DonationModal";
+import { AuthContext } from "../context/userContext";
 
 const getFullUrl = (filePath: string) =>
-  filePath?.startsWith('http') ? filePath : `${SOCKET_URL}/${filePath}`;
+  filePath?.startsWith("http") ? filePath : `${SOCKET_URL}/${filePath}`;
 
 const OrganizationPage = () => {
   const { id } = useParams();
@@ -23,6 +24,7 @@ const OrganizationPage = () => {
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { config } = useAppConfig();
+  const { user } = useContext(AuthContext)!;
 
   useEffect(() => {
     if (config?.name) {
@@ -38,7 +40,7 @@ const OrganizationPage = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error('Something went wrong while fetching donation button');
+      toast.error("Something went wrong while fetching donation button");
     }
   };
 
@@ -62,9 +64,13 @@ const OrganizationPage = () => {
   }, [id]);
 
   if (loading) return <Loading />;
-  if (!organization) return <p className="text-center text-red-500 mt-10">Organization not found.</p>;
+  if (!organization)
+    return (
+      <p className="text-center text-red-500 mt-10">Organization not found.</p>
+    );
 
-  const { name, description, logo, city, country, address, status } = organization;
+  const { name, description, logo, city, country, address, status } =
+    organization;
 
   return (
     <div className="pt-[100px] max-w-[1200px] mx-auto p-4 font-sans">
@@ -80,22 +86,35 @@ const OrganizationPage = () => {
 
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-800">{name}</h1>
-          <p><strong>Location:</strong> {address}</p>
+          <p>
+            <strong>Location:</strong> {address}
+          </p>
 
           <div>
-            <p><strong>Status:</strong> {status === "active" ? "verified" : "unverified"}</p>
+            <p>
+              <strong>Status:</strong>{" "}
+              {status === "active" ? "verified" : "unverified"}
+            </p>
             {/* <p><strong>Section 18A:</strong> {supportingDoc ? "Verified" : "Not Registered"}</p> */}
           </div>
 
-          <p className="mt-2 text-gray-600">{description}</p>
+          <p className="mt-2 text-gray-600 mb-4">{description}</p>
 
-          <button
-            className="mt-5 hover:scale-105 text-white bg-secondary py-2 px-4 rounded-lg transition duration-200"
-            style={{ color: btnConfig.textColor, backgroundColor: btnConfig.color }}
-            onClick={() => setIsModalOpen(true)}
-          >
-            {btnConfig.text}
-          </button>
+          {user ? (
+            <button
+              className="mt-5 hover:scale-105 text-white bg-secondary py-2 px-4 rounded-lg transition duration-200"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Donate Now
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="mt-5 hover:scale-105 text-white bg-secondary py-4 px-4 rounded-lg transition duration-200"
+            >
+              Log in to Donate
+            </Link>
+          )}
         </div>
       </div>
 

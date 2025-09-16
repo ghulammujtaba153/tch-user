@@ -8,6 +8,7 @@ import ReactGA from "react-ga4";
 import io from "socket.io-client";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
+import { Link } from "react-router-dom";
 
 // Extend Window interface for Ecentric payment gateway
 declare global {
@@ -99,9 +100,9 @@ const DonationForm: React.FC<Props> = ({
   const predefinedAmounts = ["150", "200", "300", "500"];
   const tipOptions = [
     { label: "No Tip", value: 0 },
-    { label: "5%", value: 5 },
-    { label: "10%", value: 10 },
-    { label: "15%", value: 15 },
+    { label: "3.5%", value: 3.5 },
+    { label: "7.5%", value: 7.5 },
+    { label: "11%", value: 11 },
   ];
 
   // Fetch payment settings on component mount
@@ -673,7 +674,10 @@ const DonationForm: React.FC<Props> = ({
 
       {/* Tip Section */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">Add a Tip (Optional)</label>
+        <label className="block text-sm font-medium text-gray-700">Fee Contribution (Optional)</label>
+        <p className="block text-sm font-medium text-gray-400 mb-3">You can help us to maximise your selected base donation by contributing towards our fees.</p>
+
+
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {tipOptions.map((tip) => (
             <button
@@ -690,7 +694,7 @@ const DonationForm: React.FC<Props> = ({
         </div>
         <input
           type="number"
-          placeholder="Custom tip amount (R)"
+          placeholder="Custom amount (R)"
           value={customTip}
           onChange={(e) => handleCustomTipChange(e.target.value)}
           className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
@@ -823,7 +827,7 @@ const DonationForm: React.FC<Props> = ({
       )}
 
       {/* Fee Breakdown */}
-      {amount && parseFloat(amount) > 0 && (
+      {/* {amount && parseFloat(amount) > 0 && (
         <div className="mb-6 bg-gray-50 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-gray-800 mb-3">
             {selectedPaymentType} Payment Breakdown
@@ -858,7 +862,7 @@ const DonationForm: React.FC<Props> = ({
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {/* Donor Details */}
       <div className="mb-6">
@@ -1011,7 +1015,9 @@ const DonationForm: React.FC<Props> = ({
       
 
       {/* Donate Button */}
-      <button
+      {user ? (
+        
+        <button
         onClick={handleDonate}
         disabled={loading || isPending || settingsLoading}
         className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
@@ -1025,6 +1031,14 @@ const DonationForm: React.FC<Props> = ({
           `DONATE R${calculateTotalChargeAmount().toFixed(2)} via ${selectedPaymentType}`
         )}
       </button>
+      ) : (
+        <Link
+          to="/login"
+          className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors flex items-center justify-center"
+        >
+          Log in to Donate
+        </Link>
+      )}
 
       {/* EFT Modal */}
       {showEFTModal && (
