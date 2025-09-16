@@ -251,7 +251,7 @@ const DonationSent = () => {
                       </td>
                       <td className="py-4 px-4">
                         <span className="text-sm font-semibold text-green-600">
-                          R{new Intl.NumberFormat().format(item.amount)}
+                          R{new Intl.NumberFormat().format(item.totalAmount)}
                         </span>
                       </td>
                       <td className="py-4 px-4">
