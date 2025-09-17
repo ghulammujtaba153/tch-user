@@ -133,8 +133,8 @@ const CampaignDetails = () => {
         <Notification
           isOpen={true} // show modal when user is not logged in
           onClose={() => {}} // pass your close handler
-          title="Access Denied"
-          message="Please login first to continue."
+          title="Login Required"
+          message="To proceed with your donation, please log in to your account or continue browsing."
           type="error"
           link="/signin" // optional: take user to login page
         />

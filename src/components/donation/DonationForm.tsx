@@ -62,7 +62,7 @@ const DonationForm: React.FC<Props> = ({
 }) => {
   const { user } = useContext(AuthContext)!;
   const [amount, setAmount] = useState<string>("150");
-  const [customAmount, setCustomAmount] = useState("");
+  const [customAmount, setCustomAmount] = useState("150"); // <-- set to "150" to match default
   const [selectedPaymentType, setSelectedPaymentType] = useState<PaymentMethod>("Card");
   const [loading, setLoading] = useState(false);
   const [showEFTModal, setShowEFTModal] = useState(false);
@@ -178,7 +178,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("💳 Calculating card platform fee with settings:", cardSettings.platformFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (cardSettings.platformFee.percent !== undefined) {
       const fee = (baseAmount * cardSettings.platformFee.percent) / 100;
       console.log(`Card platform fee (${cardSettings.platformFee.percent}%): ${fee}`);
@@ -188,7 +188,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`Card platform fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -199,7 +199,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("💳 Calculating card transaction fee with settings:", cardSettings.transactionFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (cardSettings.transactionFee.percent !== undefined) {
       const fee = (baseAmount * cardSettings.transactionFee.percent) / 100;
       console.log(`Card transaction fee (${cardSettings.transactionFee.percent}%): ${fee}`);
@@ -209,7 +209,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`Card transaction fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -220,7 +220,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("🏦 Calculating EFT platform fee with settings:", eftSettings.platformFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (eftSettings.platformFee.percent !== undefined) {
       const fee = (baseAmount * eftSettings.platformFee.percent) / 100;
       console.log(`EFT platform fee (${eftSettings.platformFee.percent}%): ${fee}`);
@@ -230,7 +230,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`EFT platform fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -241,7 +241,7 @@ const DonationForm: React.FC<Props> = ({
     console.log("🏦 Calculating EFT transaction fee with settings:", eftSettings.transactionFee);
 
     const baseAmount = parseFloat(amount) || 0;
-    
+
     if (eftSettings.transactionFee.percent !== undefined) {
       const fee = (baseAmount * eftSettings.transactionFee.percent) / 100;
       console.log(`EFT transaction fee (${eftSettings.transactionFee.percent}%): ${fee}`);
@@ -251,7 +251,7 @@ const DonationForm: React.FC<Props> = ({
       console.log(`EFT transaction fee (fixed): ${fee}`);
       return fee;
     }
-    
+
     return 0;
   };
 
@@ -294,19 +294,19 @@ const DonationForm: React.FC<Props> = ({
 
   const validateS18A = () => {
     const newErrors: { idNumber?: string; taxNumber?: string } = {};
-    
+
     if (wantS18A) {
       if (!idNumber.trim()) {
         newErrors.idNumber = 'ID Number is required for S18A certificate';
       } else if (!/^\d{13}$/.test(idNumber.replace(/\s/g, ''))) {
         newErrors.idNumber = 'Please enter a valid 13-digit ID number';
       }
-      
+
       if (!taxNumber.trim()) {
         newErrors.taxNumber = 'Tax Number is required for S18A certificate';
       }
     }
-    
+
     setS18aErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -316,12 +316,12 @@ const DonationForm: React.FC<Props> = ({
       toast.error("Please fill all required fields");
       return false;
     }
-    
+
     if (isVerified && !validateS18A()) {
       toast.error("Please complete S18A certificate fields correctly");
       return false;
     }
-    
+
     return true;
   };
 
@@ -560,7 +560,7 @@ const DonationForm: React.FC<Props> = ({
 
   const handleTipChange = (percentage: number) => {
     setTipPercentage(percentage);
-    setCustomTip(""); // Clear custom tip when selecting predefined
+    setCustomTip(""); // Clear custom tip when selecting a percentage
   };
 
   const handleCustomTipChange = (value: string) => {
@@ -594,9 +594,9 @@ const DonationForm: React.FC<Props> = ({
   // Get fee display text for UI - Card specific
   const getCardFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
     if (!cardSettings) return "Loading...";
-    
+
     const fee = feeType === 'platform' ? cardSettings.platformFee : cardSettings.transactionFee;
-    
+
     if (fee.percent !== undefined) {
       return `${fee.percent}%`;
     } else if (fee.total !== undefined) {
@@ -608,9 +608,9 @@ const DonationForm: React.FC<Props> = ({
   // Get fee display text for UI - EFT specific
   const getEFTFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
     if (!eftSettings) return "Loading...";
-    
+
     const fee = feeType === 'platform' ? eftSettings.platformFee : eftSettings.transactionFee;
-    
+
     if (fee.percent !== undefined) {
       return `${fee.percent}%`;
     } else if (fee.total !== undefined) {
@@ -626,17 +626,22 @@ const DonationForm: React.FC<Props> = ({
 
   // Autofill name/email if "For you" is selected for S18A
   useEffect(() => {
+
+    console.log("🔄 S18A 'For' option changed:", user);
+
     if (wantS18A && s18aFor === "self" && user) {
       setFormData((prev) => ({
         ...prev,
         donorName: user.name || "",
         donorEmail: user.email || "",
+        mobile: user.phoneNumber || "",
       }));
-    }else {
+    } else {
       setFormData((prev) => ({
         ...prev,
         donorName: "",
         donorEmail: "",
+        mobile:  "",
       }));
     }
 
@@ -656,7 +661,7 @@ const DonationForm: React.FC<Props> = ({
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Make a Donation</h2>
-      
+
 
 
       {/* Amount Selection */}
@@ -668,11 +673,11 @@ const DonationForm: React.FC<Props> = ({
               key={amt}
               onClick={() => {
                 setAmount(amt);
-                setCustomAmount("");
+                setCustomAmount(amt); // <-- update input field as well
               }}
               className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${amount === amt
-                  ? "bg-secondary text-white border-secondary shadow-lg"
-                  : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
+                ? "bg-secondary text-white border-secondary shadow-lg"
+                : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
                 }`}
             >
               R{amt}
@@ -701,11 +706,18 @@ const DonationForm: React.FC<Props> = ({
           {tipOptions.map((tip) => (
             <button
               key={tip.value}
-              onClick={() => handleTipChange(tip.value)}
-              className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${tipPercentage === tip.value && !customTip
+              onClick={() => {
+                handleTipChange(tip.value);
+                // Set customTip input to the calculated Rand value for display
+                const baseAmount = parseFloat(amount) || 0;
+                const tipValue = tip.value > 0 ? ((baseAmount * tip.value) / 100).toFixed(2) : "";
+                setCustomTip(tipValue);
+              }}
+              className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${
+                tipPercentage === tip.value && !customTip
                   ? "bg-secondary text-white border-secondary"
                   : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
-                }`}
+              }`}
             >
               {tip.label}
             </button>
@@ -717,7 +729,16 @@ const DonationForm: React.FC<Props> = ({
           value={customTip}
           onChange={(e) => handleCustomTipChange(e.target.value)}
           className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+          min={0}
         />
+        {/* Show info about which is active */}
+        <div className="text-xs text-gray-500 mt-2">
+          {tipPercentage > 0 && !customTip
+            ? `You are contributing ${tipPercentage}% (R${calculateTipAmount().toFixed(2)})`
+            : customTip
+              ? `You are contributing R${parseFloat(customTip || "0").toFixed(2)}`
+              : "No tip selected"}
+        </div>
       </div>
 
       {/* Payment Method */}
@@ -852,9 +873,8 @@ const DonationForm: React.FC<Props> = ({
                     value={idNumber}
                     onChange={handleIdNumberChange}
                     placeholder="000 000 0000 000"
-                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
-                      s18aErrors.idNumber ? 'border-red-300' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${s18aErrors.idNumber ? 'border-red-300' : 'border-gray-300'
+                      }`}
                   />
                   {s18aErrors.idNumber && (
                     <p className="text-red-600 text-xs mt-1">{s18aErrors.idNumber}</p>
@@ -871,9 +891,8 @@ const DonationForm: React.FC<Props> = ({
                     value={taxNumber}
                     onChange={handleTaxNumberChange}
                     placeholder="Enter your tax number"
-                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
-                      s18aErrors.taxNumber ? 'border-red-300' : 'border-gray-300'
-                    }`}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${s18aErrors.taxNumber ? 'border-red-300' : 'border-gray-300'
+                      }`}
                   />
                   {s18aErrors.taxNumber && (
                     <p className="text-red-600 text-xs mt-1">{s18aErrors.taxNumber}</p>
@@ -898,20 +917,24 @@ const DonationForm: React.FC<Props> = ({
             </div>
             {calculateTipAmount() > 0 && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Tip:</span>
+                <span className="text-gray-600">Fee Contribution:</span>
                 <span className="font-medium">R{calculateTipAmount().toFixed(2)}</span>
               </div>
             )}
 
-            
-              <div className="flex justify-between">
-                <span className="text-gray-600">Fee Contribution:</span>
-                <span className="font-medium">
-  R{(calculatePlatformFee() + calculateTransactionFee()).toFixed(2)}
-</span>
 
-              </div>
-            
+
+
+
+
+            {/*<div className="flex justify-between">
+              <span className="text-gray-600">Fee Contribution:</span>
+              <span className="font-medium">
+                R{(calculatePlatformFee() + calculateTransactionFee()).toFixed(2)}
+              </span>
+
+            </div>*/}
+
 
             {/* <div className="flex justify-between text-red-600">
               <span>Platform Fee ({selectedPaymentType}):</span>
@@ -936,173 +959,173 @@ const DonationForm: React.FC<Props> = ({
 
       {/* Donor Details */}
       <div className="mb-6">
-  <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-    {/* Full Name */}
-    <div>
-      <label htmlFor="donorName" className="block text-sm mb-2 font-medium text-gray-700">Full Name *</label>
-      <input
-        type="text"
-        id="donorName"
-        name="donorName"
-        value={formData.donorName}
-        onChange={handleInputChange}
-        placeholder="Enter your full name"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-        disabled={wantS18A && s18aFor === "self"}
-      />
-    </div>
+          {/* Full Name */}
+          <div>
+            <label htmlFor="donorName" className="block text-sm mb-2 font-medium text-gray-700">Full Name *</label>
+            <input
+              type="text"
+              id="donorName"
+              name="donorName"
+              value={formData.donorName}
+              onChange={handleInputChange}
+              placeholder="Enter your full name"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              disabled={wantS18A && s18aFor === "self"}
+            />
+          </div>
 
-    {/* Email Address */}
-    <div>
-      <label htmlFor="donorEmail" className="block text-sm mb-2 font-medium text-gray-700">Email Address *</label>
-      <input
-        type="email"
-        id="donorEmail"
-        name="donorEmail"
-        value={formData.donorEmail}
-        onChange={handleInputChange}
-        placeholder="Enter your email address"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-        disabled={wantS18A && s18aFor === "self"}
-      />
-    </div>
+          {/* Email Address */}
+          <div>
+            <label htmlFor="donorEmail" className="block text-sm mb-2 font-medium text-gray-700">Email Address *</label>
+            <input
+              type="email"
+              id="donorEmail"
+              name="donorEmail"
+              value={formData.donorEmail}
+              onChange={handleInputChange}
+              placeholder="Enter your email address"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              disabled={wantS18A && s18aFor === "self"}
+            />
+          </div>
 
-    {/* Phone Number */}
-    <div>
-      <label htmlFor="mobile" className="block text-sm mb-2 font-medium text-gray-700">Mobile Number *</label>
-      <PhoneInput
-        country={'za'}
-        value={formData.mobile || ""}
-        onChange={(phone) => setFormData({ ...formData, mobile: phone })}
-        enableSearch={true}
-        inputClass="!w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-        containerClass="!w-full"
-        buttonClass="!border-none"
-        dropdownClass="phone-input-dropdown"
-        searchClass="phone-input-search"
-        placeholder="Enter your phone number"
-      />
-    </div>
+          {/* Phone Number */}
+          <div>
+            <label htmlFor="mobile" className="block text-sm mb-2 font-medium text-gray-700">Mobile Number *</label>
+            <PhoneInput
+              country={'za'}
+              value={formData.mobile || ""}
+              onChange={(phone) => setFormData({ ...formData, mobile: phone })}
+              enableSearch={true}
+              inputClass="!w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              containerClass="!w-full"
+              buttonClass="!border-none"
+              dropdownClass="phone-input-dropdown"
+              searchClass="phone-input-search"
+              placeholder="Enter your phone number"
+            />
+          </div>
 
-    {/* Street Address */}
-    <div>
-      <label htmlFor="address" className="block text-sm mb-2 font-medium text-gray-700">Street Address *</label>
-      <input
-        type="text"
-        id="address"
-        name="address"
-        value={formData.address}
-        onChange={handleInputChange}
-        placeholder="Enter your street address"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-      />
-    </div>
+          {/* Street Address */}
+          <div>
+            <label htmlFor="address" className="block text-sm mb-2 font-medium text-gray-700">Street Address *</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              value={formData.address}
+              onChange={handleInputChange}
+              placeholder="Enter your street address"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            />
+          </div>
 
-    {/* City */}
-    <div>
-      <label htmlFor="city" className="block text-sm mb-2 font-medium text-gray-700">City *</label>
-      <input
-        type="text"
-        id="city"
-        name="city"
-        value={formData.city}
-        onChange={handleInputChange}
-        placeholder="Enter your city"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-      />
-    </div>
+          {/* City */}
+          <div>
+            <label htmlFor="city" className="block text-sm mb-2 font-medium text-gray-700">City *</label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              value={formData.city}
+              onChange={handleInputChange}
+              placeholder="Enter your city"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            />
+          </div>
 
-    {/* Province */}
-    <div>
-      <label htmlFor="province" className="block text-sm mb-2 font-medium text-gray-700">Province *</label>
-      <input
-        type="text"
-        id="province"
-        name="province"
-        value={formData.province}
-        onChange={handleInputChange}
-        placeholder="Enter your province"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-      />
-    </div>
+          {/* Province */}
+          <div>
+            <label htmlFor="province" className="block text-sm mb-2 font-medium text-gray-700">Province *</label>
+            <input
+              type="text"
+              id="province"
+              name="province"
+              value={formData.province}
+              onChange={handleInputChange}
+              placeholder="Enter your province"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            />
+          </div>
 
-    {/* Postal Code */}
-    <div>
-      <label htmlFor="postalCode" className="block text-sm mb-2 font-medium text-gray-700">Postal Code *</label>
-      <input
-        type="text"
-        id="postalCode"
-        name="postalCode"
-        value={formData.postalCode}
-        onChange={handleInputChange}
-        placeholder="Enter your postal code"
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-      />
-    </div>
+          {/* Postal Code */}
+          <div>
+            <label htmlFor="postalCode" className="block text-sm mb-2 font-medium text-gray-700">Postal Code *</label>
+            <input
+              type="text"
+              id="postalCode"
+              name="postalCode"
+              value={formData.postalCode}
+              onChange={handleInputChange}
+              placeholder="Enter your postal code"
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            />
+          </div>
 
-    {/* Comment */}
-    <div className="md:col-span-2">
-      <label htmlFor="comment" className="block text-sm mb-2 font-medium text-gray-700">Comment </label>
-      <input
-        type="text"
-        id="comment"
-        name="comment"
-        value={formData.comment}
-        onChange={handleInputChange}
-        placeholder="Add a comment..."
-        className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
-      />
-    </div>
-  </div>
+          {/* Comment */}
+          <div className="md:col-span-2">
+            <label htmlFor="comment" className="block text-sm mb-2 font-medium text-gray-700">Comment </label>
+            <input
+              type="text"
+              id="comment"
+              name="comment"
+              value={formData.comment}
+              onChange={handleInputChange}
+              placeholder="Add a comment..."
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+            />
+          </div>
+        </div>
 
-  {/* Checkboxes */}
-  <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
-    <input
-      type="checkbox"
-      name="anonymous"
-      checked={formData.anonymous}
-      onChange={handleInputChange}
-      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
-    />
-    <span className="text-sm text-gray-700">I would like to donate anonymously</span>
-  </label>
+        {/* Checkboxes */}
+        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
+          <input
+            type="checkbox"
+            name="anonymous"
+            checked={formData.anonymous}
+            onChange={handleInputChange}
+            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+          />
+          <span className="text-sm text-gray-700">I would like to donate anonymously</span>
+        </label>
 
-  <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
-    <input
-      type="checkbox"
-      name="terms"
-      checked={formData.terms}
-      onChange={handleInputChange}
-      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
-    />
-    <span className="text-sm text-gray-700">
-      I agree to the <a href="/terms" target="_blank" className="text-secondary hover:underline">Terms and Conditions</a>
-    </span>
-  </label>
-</div>
+        <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
+          <input
+            type="checkbox"
+            name="terms"
+            checked={formData.terms}
+            onChange={handleInputChange}
+            className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
+          />
+          <span className="text-sm text-gray-700">
+            I agree to the <a href="/terms" target="_blank" className="text-secondary hover:underline">Terms and Conditions</a>
+          </span>
+        </label>
+      </div>
 
 
-      
+
 
       {/* Donate Button */}
       {user ? (
-        
+
         <button
-        onClick={handleDonate}
-        disabled={loading || isPending || settingsLoading}
-        className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-      >
-        {loading || isPending ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            Processing {selectedPaymentType} Payment...
-          </>
-        ) : (
-          `DONATE R${calculateTotalChargeAmount().toFixed(2)} via ${selectedPaymentType}`
-        )}
-      </button>
+          onClick={handleDonate}
+          disabled={loading || isPending || settingsLoading}
+          className="w-full bg-secondary hover:bg-secondary/90 text-white font-semibold py-4 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {loading || isPending ? (
+            <>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              Processing {selectedPaymentType} Payment...
+            </>
+          ) : (
+            `DONATE R${calculateTotalChargeAmount().toFixed(2)} via ${selectedPaymentType}`
+          )}
+        </button>
       ) : (
         <Link
           to="/login"
