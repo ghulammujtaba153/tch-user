@@ -134,7 +134,7 @@ const CampaignDetails = () => {
           isOpen={true} // show modal when user is not logged in
           onClose={() => {}} // pass your close handler
           title="Login Required"
-          message="To proceed with your donation, please log in to your account or continue browsing."
+          message="To proceed with your donation, please log in to your account"
           type="error"
           link="/signin" // optional: take user to login page
         />
