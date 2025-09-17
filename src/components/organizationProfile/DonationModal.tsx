@@ -60,9 +60,9 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
   const predefinedAmounts = ["150", "200", "300", "500"];
   const tipOptions = [
     { label: "No Tip", value: 0 },
-    { label: "5%", value: 5 },
-    { label: "10%", value: 10 },
-    { label: "15%", value: 15 },
+    { label: "3.5%", value: 3.5 },
+    { label: "7.5%", value: 7.5 },
+    { label: "11%", value: 11 },
   ];
 
   // Fetch payment settings on component mount
@@ -524,7 +524,9 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
 
           {/* Tip Section */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-3">Add a Tip (Optional)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-3">Fee Contribution (Optional)</label>
+            <p className="block text-sm font-medium text-gray-400 mb-3">You can help us to maximise your selected base donation by contributing towards our fees.</p>
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
               {tipOptions.map((tip) => (
                 <button
@@ -590,23 +592,32 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                   <span className="font-medium">R{calculateTipAmount().toFixed(2)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-red-600">
+
+              <div className="flex justify-between">
+                <span className="text-gray-600">Fee Contribution:</span>
+                <span className="font-medium">
+  R{(calculatePlatformFee() + calculateTransactionFee()).toFixed(2)}
+</span>
+
+              </div>
+
+              {/* <div className="flex justify-between text-red-600">
                 <span>Platform Fee ({selectedPaymentType}):</span>
                 <span>-R{calculatePlatformFee().toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-red-600">
                 <span>Transaction Fee ({selectedPaymentType}):</span>
                 <span>-R{calculateTransactionFee().toFixed(2)}</span>
-              </div>
+              </div> */}
               <div className="border-t border-gray-300 pt-2 mt-2"></div>
               <div className="flex justify-between font-semibold">
                 <span>You Pay:</span>
                 <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
               </div>
-              <div className="flex justify-between font-semibold text-green-600">
+              {/* <div className="flex justify-between font-semibold text-green-600">
                 <span>Organisation Receives:</span>
                 <span>R{calculateNetDonationAmount().toFixed(2)}</span>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

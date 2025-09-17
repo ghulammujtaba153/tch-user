@@ -82,10 +82,11 @@ const DonationForm: React.FC<Props> = ({
   const [idNumber, setIdNumber] = useState("");
   const [taxNumber, setTaxNumber] = useState("");
   const [s18aErrors, setS18aErrors] = useState<{ idNumber?: string; taxNumber?: string }>({});
+  const [s18aFor, setS18aFor] = useState<"self" | "individual" | "business" | "">("self");
 
   const [formData, setFormData] = useState({
-    donorName: user?.name || "",
-    donorEmail: user?.email || "",
+    donorName: "",
+    donorEmail: "",
     referenceId: "",
     address: "",
     city: "",
@@ -623,6 +624,24 @@ const DonationForm: React.FC<Props> = ({
     return method === 'Card' ? getCardFeeDisplay(feeType) : getEFTFeeDisplay(feeType);
   };
 
+  // Autofill name/email if "For you" is selected for S18A
+  useEffect(() => {
+    if (wantS18A && s18aFor === "self" && user) {
+      setFormData((prev) => ({
+        ...prev,
+        donorName: user.name || "",
+        donorEmail: user.email || "",
+      }));
+    }else {
+      setFormData((prev) => ({
+        ...prev,
+        donorName: "",
+        donorEmail: "",
+      }));
+    }
+
+  }, [wantS18A, s18aFor, user]);
+
   if (settingsLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
@@ -781,7 +800,47 @@ const DonationForm: React.FC<Props> = ({
           {wantS18A && (
             <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
               <h4 className="font-medium text-gray-900 mb-3">S18A Certificate Details</h4>
-              
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Who is the S18A certificate for?
+                </label>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="s18aFor"
+                      value="self"
+                      checked={s18aFor === "self"}
+                      onChange={() => setS18aFor("self")}
+                      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                    />
+                    <span className="ml-2 text-gray-800">For you</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="s18aFor"
+                      value="individual"
+                      checked={s18aFor === "individual"}
+                      onChange={() => setS18aFor("individual")}
+                      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                    />
+                    <span className="ml-2 text-gray-800">For another Individual</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="s18aFor"
+                      value="business"
+                      checked={s18aFor === "business"}
+                      onChange={() => setS18aFor("business")}
+                      className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
+                    />
+                    <span className="ml-2 text-gray-800">For a Business</span>
+                  </label>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">
@@ -827,14 +886,14 @@ const DonationForm: React.FC<Props> = ({
       )}
 
       {/* Fee Breakdown */}
-      {/* {amount && parseFloat(amount) > 0 && (
+      {amount && parseFloat(amount) > 0 && (
         <div className="mb-6 bg-gray-50 rounded-lg p-4">
           <h3 className="text-sm font-semibold text-gray-800 mb-3">
             {selectedPaymentType} Payment Breakdown
           </h3>
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Donation Amount:</span>
+              <span className="text-gray-600">Base Donation:</span>
               <span className="font-medium">R{parseFloat(amount).toFixed(2)}</span>
             </div>
             {calculateTipAmount() > 0 && (
@@ -843,26 +902,37 @@ const DonationForm: React.FC<Props> = ({
                 <span className="font-medium">R{calculateTipAmount().toFixed(2)}</span>
               </div>
             )}
-            <div className="flex justify-between text-red-600">
+
+            
+              <div className="flex justify-between">
+                <span className="text-gray-600">Fee Contribution:</span>
+                <span className="font-medium">
+  R{(calculatePlatformFee() + calculateTransactionFee()).toFixed(2)}
+</span>
+
+              </div>
+            
+
+            {/* <div className="flex justify-between text-red-600">
               <span>Platform Fee ({selectedPaymentType}):</span>
               <span>-R{calculatePlatformFee().toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-red-600">
               <span>Transaction Fee ({selectedPaymentType}):</span>
               <span>-R{calculateTransactionFee().toFixed(2)}</span>
-            </div>
+            </div> */}
             <div className="border-t border-gray-300 pt-2 mt-2"></div>
             <div className="flex justify-between font-semibold">
-              <span>You Pay:</span>
+              <span>Total Donation You Pay:</span>
               <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
             </div>
-            <div className="flex justify-between font-semibold text-green-600">
+            {/* <div className="flex justify-between font-semibold text-green-600">
               <span>Campaign Receives:</span>
               <span>R{calculateNetDonationAmount().toFixed(2)}</span>
-            </div>
+            </div> */}
           </div>
         </div>
-      )} */}
+      )}
 
       {/* Donor Details */}
       <div className="mb-6">
@@ -880,6 +950,7 @@ const DonationForm: React.FC<Props> = ({
         onChange={handleInputChange}
         placeholder="Enter your full name"
         className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+        disabled={wantS18A && s18aFor === "self"}
       />
     </div>
 
@@ -894,6 +965,7 @@ const DonationForm: React.FC<Props> = ({
         onChange={handleInputChange}
         placeholder="Enter your email address"
         className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+        disabled={wantS18A && s18aFor === "self"}
       />
     </div>
 
