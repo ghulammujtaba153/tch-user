@@ -19,7 +19,7 @@ const About = () => {
     <div className='pt-20'>
       <ScrollToTop />
         <AboutUsSection/>
-        <ChooseUsSection/>
+        {/* <ChooseUsSection/> */}
         {/* <FAQsSection/> */}
       
     </div>
