@@ -121,12 +121,12 @@ const Footer: React.FC = () => {
                 Quick Links
               </h2>
 
-              <Link
+              {/*<Link
                 to="/about"
                 className="text-sm hover:text-secondary transition-colors duration-300"
               >
                 About us
-              </Link>
+              </Link>*/}
 
               <Link
                 to="/support"
