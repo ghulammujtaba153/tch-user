@@ -7,7 +7,7 @@ import EFTModal from "./EFTModal";
 import ReactGA from "react-ga4";
 import io from "socket.io-client";
 import PhoneInput from "react-phone-input-2";
-import 'react-phone-input-2/lib/style.css';
+import "react-phone-input-2/lib/style.css";
 import { Link } from "react-router-dom";
 
 // Extend Window interface for Ecentric payment gateway
@@ -38,9 +38,6 @@ interface PaymentSettings {
   updatedAt: string;
 }
 
-
-
-
 interface Props {
   campaignId: string;
   organizationId: string;
@@ -63,13 +60,16 @@ const DonationForm: React.FC<Props> = ({
   const { user } = useContext(AuthContext)!;
   const [amount, setAmount] = useState<string>("150");
   const [customAmount, setCustomAmount] = useState("150"); // <-- set to "150" to match default
-  const [selectedPaymentType, setSelectedPaymentType] = useState<PaymentMethod>("Card");
+  const [selectedPaymentType, setSelectedPaymentType] =
+    useState<PaymentMethod>("Card");
   const [loading, setLoading] = useState(false);
   const [showEFTModal, setShowEFTModal] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   // Payment settings state
-  const [cardSettings, setCardSettings] = useState<PaymentSettings | null>(null);
+  const [cardSettings, setCardSettings] = useState<PaymentSettings | null>(
+    null
+  );
   const [eftSettings, setEftSettings] = useState<PaymentSettings | null>(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
 
@@ -81,8 +81,13 @@ const DonationForm: React.FC<Props> = ({
   const [wantS18A, setWantS18A] = useState(false);
   const [idNumber, setIdNumber] = useState("");
   const [taxNumber, setTaxNumber] = useState("");
-  const [s18aErrors, setS18aErrors] = useState<{ idNumber?: string; taxNumber?: string }>({});
-  const [s18aFor, setS18aFor] = useState<"self" | "individual" | "business" | "">("self");
+  const [s18aErrors, setS18aErrors] = useState<{
+    idNumber?: string;
+    taxNumber?: string;
+  }>({});
+  const [s18aFor, setS18aFor] = useState<
+    "self" | "individual" | "business" | ""
+  >("self");
 
   const [formData, setFormData] = useState({
     donorName: "",
@@ -115,7 +120,7 @@ const DonationForm: React.FC<Props> = ({
 
         const [cardResponse, eftResponse] = await Promise.all([
           axios.get(`${BASE_URL}/payment-settings?type=card`),
-          axios.get(`${BASE_URL}/payment-settings?type=eft`)
+          axios.get(`${BASE_URL}/payment-settings?type=eft`),
         ]);
 
         console.log("💳 Card settings:", cardResponse.data);
@@ -133,7 +138,7 @@ const DonationForm: React.FC<Props> = ({
           platformFee: { total: 10 },
           transactionFee: { percent: 7.5 },
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
         const defaultEftSettings = {
           _id: "default",
@@ -141,7 +146,7 @@ const DonationForm: React.FC<Props> = ({
           platformFee: { total: 15 },
           transactionFee: { percent: 5 },
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
         setCardSettings(defaultCardSettings);
         setEftSettings(defaultEftSettings);
@@ -167,8 +172,12 @@ const DonationForm: React.FC<Props> = ({
 
   // Get current payment settings based on selected method
   const getCurrentPaymentSettings = (): PaymentSettings | null => {
-    const settings = selectedPaymentType === "Card" ? cardSettings : eftSettings;
-    console.log(`📊 Current payment settings for ${selectedPaymentType}:`, settings);
+    const settings =
+      selectedPaymentType === "Card" ? cardSettings : eftSettings;
+    console.log(
+      `📊 Current payment settings for ${selectedPaymentType}:`,
+      settings
+    );
     return settings;
   };
 
@@ -176,13 +185,18 @@ const DonationForm: React.FC<Props> = ({
   const calculateCardPlatformFee = (): number => {
     if (!cardSettings) return 0;
 
-    console.log("💳 Calculating card platform fee with settings:", cardSettings.platformFee);
+    console.log(
+      "💳 Calculating card platform fee with settings:",
+      cardSettings.platformFee
+    );
 
     const baseAmount = parseFloat(amount) || 0;
 
     if (cardSettings.platformFee.percent !== undefined) {
       const fee = (baseAmount * cardSettings.platformFee.percent) / 100;
-      console.log(`Card platform fee (${cardSettings.platformFee.percent}%): ${fee}`);
+      console.log(
+        `Card platform fee (${cardSettings.platformFee.percent}%): ${fee}`
+      );
       return fee;
     } else if (cardSettings.platformFee.total !== undefined) {
       const fee = cardSettings.platformFee.total;
@@ -197,13 +211,18 @@ const DonationForm: React.FC<Props> = ({
   const calculateCardTransactionFee = (): number => {
     if (!cardSettings) return 0;
 
-    console.log("💳 Calculating card transaction fee with settings:", cardSettings.transactionFee);
+    console.log(
+      "💳 Calculating card transaction fee with settings:",
+      cardSettings.transactionFee
+    );
 
     const baseAmount = parseFloat(amount) || 0;
 
     if (cardSettings.transactionFee.percent !== undefined) {
       const fee = (baseAmount * cardSettings.transactionFee.percent) / 100;
-      console.log(`Card transaction fee (${cardSettings.transactionFee.percent}%): ${fee}`);
+      console.log(
+        `Card transaction fee (${cardSettings.transactionFee.percent}%): ${fee}`
+      );
       return fee;
     } else if (cardSettings.transactionFee.total !== undefined) {
       const fee = cardSettings.transactionFee.total;
@@ -218,13 +237,18 @@ const DonationForm: React.FC<Props> = ({
   const calculateEFTPlatformFee = (): number => {
     if (!eftSettings) return 0;
 
-    console.log("🏦 Calculating EFT platform fee with settings:", eftSettings.platformFee);
+    console.log(
+      "🏦 Calculating EFT platform fee with settings:",
+      eftSettings.platformFee
+    );
 
     const baseAmount = parseFloat(amount) || 0;
 
     if (eftSettings.platformFee.percent !== undefined) {
       const fee = (baseAmount * eftSettings.platformFee.percent) / 100;
-      console.log(`EFT platform fee (${eftSettings.platformFee.percent}%): ${fee}`);
+      console.log(
+        `EFT platform fee (${eftSettings.platformFee.percent}%): ${fee}`
+      );
       return fee;
     } else if (eftSettings.platformFee.total !== undefined) {
       const fee = eftSettings.platformFee.total;
@@ -239,13 +263,18 @@ const DonationForm: React.FC<Props> = ({
   const calculateEFTTransactionFee = (): number => {
     if (!eftSettings) return 0;
 
-    console.log("🏦 Calculating EFT transaction fee with settings:", eftSettings.transactionFee);
+    console.log(
+      "🏦 Calculating EFT transaction fee with settings:",
+      eftSettings.transactionFee
+    );
 
     const baseAmount = parseFloat(amount) || 0;
 
     if (eftSettings.transactionFee.percent !== undefined) {
       const fee = (baseAmount * eftSettings.transactionFee.percent) / 100;
-      console.log(`EFT transaction fee (${eftSettings.transactionFee.percent}%): ${fee}`);
+      console.log(
+        `EFT transaction fee (${eftSettings.transactionFee.percent}%): ${fee}`
+      );
       return fee;
     } else if (eftSettings.transactionFee.total !== undefined) {
       const fee = eftSettings.transactionFee.total;
@@ -258,12 +287,16 @@ const DonationForm: React.FC<Props> = ({
 
   // Calculate platform fee based on selected payment method
   const calculatePlatformFee = (): number => {
-    return selectedPaymentType === "Card" ? calculateCardPlatformFee() : calculateEFTPlatformFee();
+    return selectedPaymentType === "Card"
+      ? calculateCardPlatformFee()
+      : calculateEFTPlatformFee();
   };
 
   // Calculate transaction fee based on selected payment method
   const calculateTransactionFee = (): number => {
-    return selectedPaymentType === "Card" ? calculateCardTransactionFee() : calculateEFTTransactionFee();
+    return selectedPaymentType === "Card"
+      ? calculateCardTransactionFee()
+      : calculateEFTTransactionFee();
   };
 
   // Calculate tip amount
@@ -298,13 +331,13 @@ const DonationForm: React.FC<Props> = ({
 
     if (wantS18A) {
       if (!idNumber.trim()) {
-        newErrors.idNumber = 'ID Number is required for S18A certificate';
-      } else if (!/^\d{13}$/.test(idNumber.replace(/\s/g, ''))) {
-        newErrors.idNumber = 'Please enter a valid 13-digit ID number';
+        newErrors.idNumber = "ID Number is required for S18A certificate";
+      } else if (!/^\d{13}$/.test(idNumber.replace(/\s/g, ""))) {
+        newErrors.idNumber = "Please enter a valid 13-digit ID number";
       }
 
       if (!taxNumber.trim()) {
-        newErrors.taxNumber = 'Tax Number is required for S18A certificate';
+        newErrors.taxNumber = "Tax Number is required for S18A certificate";
       }
     }
 
@@ -313,7 +346,13 @@ const DonationForm: React.FC<Props> = ({
   };
 
   const validateForm = () => {
-    if (!formData.donorName || !formData.donorEmail || !formData.address || !formData.city || !formData.postalCode) {
+    if (
+      !formData.donorName ||
+      !formData.donorEmail ||
+      !formData.address ||
+      !formData.city ||
+      !formData.postalCode
+    ) {
       toast.error("Please fill all required fields");
       return false;
     }
@@ -377,7 +416,7 @@ const DonationForm: React.FC<Props> = ({
         transactionFee,
         netDonationAmount,
         totalChargeAmount,
-        cardSettings: cardSettings
+        cardSettings: cardSettings,
       });
 
       // Track donation attempt
@@ -408,22 +447,35 @@ const DonationForm: React.FC<Props> = ({
         anonymous: formData.anonymous,
         paymentMethod: "card",
         ...(wantS18A && {
-          IDNumber: idNumber.replace(/\s/g, ''),
+          IDNumber: idNumber.replace(/\s/g, ""),
           taxNumber: taxNumber.trim(),
         }),
       };
 
       // Card payment flow
-      const randomRef = `CARDCAM${Date.now()}`;
+      const randomPrefix: string = [...Array(3)]
+        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
+        .join("");
+      const randomSuffix: string = [...Array(3)]
+        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
+        .join("");
+      const timestamp = Date.now();
+      const randomRef = `${randomPrefix}${timestamp}${randomSuffix}`;
       const totalCents = Math.round(totalChargeAmount * 100);
 
-      console.log("💳 Initiating card payment:", { reference: randomRef, amount: totalCents });
-
-      const { data: paymentData } = await axios.post(`${BASE_URL}/ecentric/initiate-payment`, {
-        amount: totalCents.toString(),
+      console.log("💳 Initiating card payment:", {
         reference: randomRef,
-        transactionType: "Payment",
+        amount: totalCents,
       });
+
+      const { data: paymentData } = await axios.post(
+        `${BASE_URL}/ecentric/initiate-payment`,
+        {
+          amount: totalCents.toString(),
+          reference: randomRef,
+          transactionType: "Payment",
+        }
+      );
 
       if (!window.hpp?.payment) {
         toast.error("Card payment system not ready");
@@ -438,11 +490,14 @@ const DonationForm: React.FC<Props> = ({
             const response = await axios.post(`${BASE_URL}/donations`, {
               ...donationData,
               status: "completed",
-              transactionId: successData.transactionId || randomRef
+              transactionId: successData.transactionId || randomRef,
             });
 
             // Send socket notification
-            sendSocketNotification({ ...donationData, anonymous: formData.anonymous });
+            sendSocketNotification({
+              ...donationData,
+              anonymous: formData.anonymous,
+            });
 
             // Track successful donation
             ReactGA.event({
@@ -452,7 +507,9 @@ const DonationForm: React.FC<Props> = ({
               value: Math.round(totalChargeAmount),
             });
 
-            toast.success("Card donation successful! Thank you for your contribution.");
+            toast.success(
+              "Card donation successful! Thank you for your contribution."
+            );
           } catch (error) {
             console.error("❌ Error recording card donation:", error);
             toast.error("Payment succeeded but failed to record donation");
@@ -501,7 +558,7 @@ const DonationForm: React.FC<Props> = ({
         netDonationAmount,
         totalChargeAmount,
         reference,
-        eftSettings: eftSettings
+        eftSettings: eftSettings,
       });
 
       const donationData = {
@@ -526,7 +583,7 @@ const DonationForm: React.FC<Props> = ({
         status: "pending",
         referenceId: reference,
         ...(wantS18A && {
-          IDNumber: idNumber.replace(/\s/g, ''),
+          IDNumber: idNumber.replace(/\s/g, ""),
           taxNumber: taxNumber.trim(),
         }),
       };
@@ -534,7 +591,10 @@ const DonationForm: React.FC<Props> = ({
       await axios.post(`${BASE_URL}/donations`, donationData);
 
       // Send socket notification
-      sendSocketNotification({ ...donationData, anonymous: formData.anonymous });
+      sendSocketNotification({
+        ...donationData,
+        anonymous: formData.anonymous,
+      });
 
       // Track EFT donation
       ReactGA.event({
@@ -544,7 +604,9 @@ const DonationForm: React.FC<Props> = ({
         value: Math.round(totalChargeAmount),
       });
 
-      toast.success("EFT donation recorded! Complete payment using the provided bank details.");
+      toast.success(
+        "EFT donation recorded! Complete payment using the provided bank details."
+      );
       setShowEFTModal(false);
     } catch (error) {
       console.error("❌ Error recording EFT donation:", error);
@@ -556,7 +618,10 @@ const DonationForm: React.FC<Props> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleTipChange = (percentage: number) => {
@@ -572,31 +637,34 @@ const DonationForm: React.FC<Props> = ({
   // S18A Certificate handlers
   const formatIdNumber = (value: string) => {
     // Remove all non-digits and limit to 13 characters
-    const digits = value.replace(/\D/g, '').slice(0, 13);
+    const digits = value.replace(/\D/g, "").slice(0, 13);
     // Format as XXX XXX XXXX XXX
-    return digits.replace(/(\d{6})(\d{4})(\d{3})/, '$1 $2 $3').trim();
+    return digits.replace(/(\d{6})(\d{4})(\d{3})/, "$1 $2 $3").trim();
   };
 
   const handleIdNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatIdNumber(e.target.value);
     setIdNumber(formatted);
     if (s18aErrors.idNumber) {
-      setS18aErrors(prev => ({ ...prev, idNumber: undefined }));
+      setS18aErrors((prev) => ({ ...prev, idNumber: undefined }));
     }
   };
 
   const handleTaxNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaxNumber(e.target.value);
     if (s18aErrors.taxNumber) {
-      setS18aErrors(prev => ({ ...prev, taxNumber: undefined }));
+      setS18aErrors((prev) => ({ ...prev, taxNumber: undefined }));
     }
   };
 
   // Get fee display text for UI - Card specific
-  const getCardFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
+  const getCardFeeDisplay = (feeType: "platform" | "transaction"): string => {
     if (!cardSettings) return "Loading...";
 
-    const fee = feeType === 'platform' ? cardSettings.platformFee : cardSettings.transactionFee;
+    const fee =
+      feeType === "platform"
+        ? cardSettings.platformFee
+        : cardSettings.transactionFee;
 
     if (fee.percent !== undefined) {
       return `${fee.percent}%`;
@@ -607,10 +675,13 @@ const DonationForm: React.FC<Props> = ({
   };
 
   // Get fee display text for UI - EFT specific
-  const getEFTFeeDisplay = (feeType: 'platform' | 'transaction'): string => {
+  const getEFTFeeDisplay = (feeType: "platform" | "transaction"): string => {
     if (!eftSettings) return "Loading...";
 
-    const fee = feeType === 'platform' ? eftSettings.platformFee : eftSettings.transactionFee;
+    const fee =
+      feeType === "platform"
+        ? eftSettings.platformFee
+        : eftSettings.transactionFee;
 
     if (fee.percent !== undefined) {
       return `${fee.percent}%`;
@@ -621,13 +692,17 @@ const DonationForm: React.FC<Props> = ({
   };
 
   // Get fee display based on payment method
-  const getFeeDisplay = (method: PaymentMethod, feeType: 'platform' | 'transaction'): string => {
-    return method === 'Card' ? getCardFeeDisplay(feeType) : getEFTFeeDisplay(feeType);
+  const getFeeDisplay = (
+    method: PaymentMethod,
+    feeType: "platform" | "transaction"
+  ): string => {
+    return method === "Card"
+      ? getCardFeeDisplay(feeType)
+      : getEFTFeeDisplay(feeType);
   };
 
   // Autofill name/email if "For you" is selected for S18A
   useEffect(() => {
-
     console.log("🔄 S18A 'For' option changed:", user);
 
     if (wantS18A && s18aFor === "self" && user) {
@@ -642,10 +717,9 @@ const DonationForm: React.FC<Props> = ({
         ...prev,
         donorName: "",
         donorEmail: "",
-        mobile:  "",
+        mobile: "",
       }));
     }
-
   }, [wantS18A, s18aFor, user]);
 
   if (settingsLoading) {
@@ -663,11 +737,11 @@ const DonationForm: React.FC<Props> = ({
     <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Make a Donation</h2>
 
-
-
       {/* Amount Selection */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">Select Amount</label>
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Select Amount
+        </label>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {predefinedAmounts.map((amt) => (
             <button
@@ -676,10 +750,11 @@ const DonationForm: React.FC<Props> = ({
                 setAmount(amt);
                 setCustomAmount(amt); // <-- update input field as well
               }}
-              className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${amount === amt
-                ? "bg-secondary text-white border-secondary shadow-lg"
-                : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
-                }`}
+              className={`px-4 py-3 rounded-full border-2 font-medium transition-all ${
+                amount === amt
+                  ? "bg-secondary text-white border-secondary shadow-lg"
+                  : "bg-white text-gray-700 border-gray-300 hover:border-secondary"
+              }`}
             >
               R{amt}
             </button>
@@ -699,9 +774,13 @@ const DonationForm: React.FC<Props> = ({
 
       {/* Tip Section */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700">Fee Contribution (Optional)</label>
-        <p className="block text-sm font-medium text-gray-400 mb-3">You can help us to maximise your selected base donation by contributing towards our fees.</p>
-
+        <label className="block text-sm font-medium text-gray-700">
+          Fee Contribution (Optional)
+        </label>
+        <p className="block text-sm font-medium text-gray-400 mb-3">
+          You can help us to maximise your selected base donation by
+          contributing towards our fees.
+        </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
           {tipOptions.map((tip) => (
@@ -711,7 +790,10 @@ const DonationForm: React.FC<Props> = ({
                 handleTipChange(tip.value);
                 // Set customTip input to the calculated Rand value for display
                 const baseAmount = parseFloat(amount) || 0;
-                const tipValue = tip.value > 0 ? ((baseAmount * tip.value) / 100).toFixed(2) : "";
+                const tipValue =
+                  tip.value > 0
+                    ? ((baseAmount * tip.value) / 100).toFixed(2)
+                    : "";
                 setCustomTip(tipValue);
               }}
               className={`px-3 py-2 rounded-full border font-medium text-sm transition-all ${
@@ -735,19 +817,26 @@ const DonationForm: React.FC<Props> = ({
         {/* Show info about which is active */}
         <div className="text-xs text-gray-500 mt-2">
           {tipPercentage > 0 && !customTip
-            ? `You are contributing ${tipPercentage}% (R${calculateTipAmount().toFixed(2)})`
+            ? `You are contributing ${tipPercentage}% (R${calculateTipAmount().toFixed(
+                2
+              )})`
             : customTip
-              ? `You are contributing R${parseFloat(customTip || "0").toFixed(2)}`
-              : "No tip selected"}
+            ? `You are contributing R${parseFloat(customTip || "0").toFixed(2)}`
+            : "No tip selected"}
         </div>
       </div>
 
       {/* Payment Method */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">Payment Method</label>
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Payment Method
+        </label>
         <div className="grid grid-cols-2 gap-4">
           {["Card", "EFT"].map((method) => (
-            <label key={method} className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+            <label
+              key={method}
+              className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+            >
               <input
                 type="radio"
                 value={method}
@@ -758,7 +847,9 @@ const DonationForm: React.FC<Props> = ({
               <div className="flex-1">
                 <span className="font-medium">{method} Payment</span>
                 <div className="text-xs text-gray-500 mt-1">
-                  Platform: {getFeeDisplay(method as PaymentMethod, 'platform')} | Transaction: {getFeeDisplay(method as PaymentMethod, 'transaction')}
+                  Platform: {getFeeDisplay(method as PaymentMethod, "platform")}{" "}
+                  | Transaction:{" "}
+                  {getFeeDisplay(method as PaymentMethod, "transaction")}
                 </div>
               </div>
             </label>
@@ -772,20 +863,33 @@ const DonationForm: React.FC<Props> = ({
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                <svg
+                  className="w-4 h-4 text-green-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
-              <span className="font-medium text-green-800">Verified Campaign</span>
+              <span className="font-medium text-green-800">
+                Verified Campaign
+              </span>
             </div>
             <p className="text-sm text-green-700">
               This campaign is verified and eligible for S18A tax certificates.
             </p>
           </div>
 
-          <label className="block text-sm font-medium text-gray-700 mb-3">S18A Tax Certificate</label>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            S18A Tax Certificate
+          </label>
           <p className="text-sm text-gray-600 mb-4">
-            Would you like to receive an S18A certificate for tax deduction purposes?
+            Would you like to receive an S18A certificate for tax deduction
+            purposes?
           </p>
 
           <div className="space-y-3 mb-4">
@@ -799,7 +903,9 @@ const DonationForm: React.FC<Props> = ({
               />
               <div className="ml-3">
                 <span className="font-medium text-gray-900">No, thank you</span>
-                <p className="text-sm text-gray-600">Continue without S18A certificate</p>
+                <p className="text-sm text-gray-600">
+                  Continue without S18A certificate
+                </p>
               </div>
             </label>
 
@@ -812,8 +918,12 @@ const DonationForm: React.FC<Props> = ({
                 className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
               />
               <div className="ml-3">
-                <span className="font-medium text-gray-900">Yes, I want S18A certificate</span>
-                <p className="text-sm text-gray-600">Required for tax deduction claims</p>
+                <span className="font-medium text-gray-900">
+                  Yes, I want S18A certificate
+                </span>
+                <p className="text-sm text-gray-600">
+                  Required for tax deduction claims
+                </p>
               </div>
             </label>
           </div>
@@ -821,7 +931,9 @@ const DonationForm: React.FC<Props> = ({
           {/* S18A Details Form */}
           {wantS18A && (
             <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-              <h4 className="font-medium text-gray-900 mb-3">S18A Certificate Details</h4>
+              <h4 className="font-medium text-gray-900 mb-3">
+                S18A Certificate Details
+              </h4>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Who is the S18A certificate for?
@@ -847,7 +959,9 @@ const DonationForm: React.FC<Props> = ({
                       onChange={() => setS18aFor("individual")}
                       className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300"
                     />
-                    <span className="ml-2 text-gray-800">For another Individual</span>
+                    <span className="ml-2 text-gray-800">
+                      For another Individual
+                    </span>
                   </label>
                   <label className="flex items-center cursor-pointer">
                     <input
@@ -865,7 +979,10 @@ const DonationForm: React.FC<Props> = ({
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="idNumber"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     South African ID Number *
                   </label>
                   <input
@@ -874,16 +991,22 @@ const DonationForm: React.FC<Props> = ({
                     value={idNumber}
                     onChange={handleIdNumberChange}
                     placeholder="000 000 0000 000"
-                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${s18aErrors.idNumber ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
+                      s18aErrors.idNumber ? "border-red-300" : "border-gray-300"
+                    }`}
                   />
                   {s18aErrors.idNumber && (
-                    <p className="text-red-600 text-xs mt-1">{s18aErrors.idNumber}</p>
+                    <p className="text-red-600 text-xs mt-1">
+                      {s18aErrors.idNumber}
+                    </p>
                   )}
                 </div>
 
                 <div>
-                  <label htmlFor="taxNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label
+                    htmlFor="taxNumber"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
                     Tax Number *
                   </label>
                   <input
@@ -892,11 +1015,16 @@ const DonationForm: React.FC<Props> = ({
                     value={taxNumber}
                     onChange={handleTaxNumberChange}
                     placeholder="Enter your tax number"
-                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${s18aErrors.taxNumber ? 'border-red-300' : 'border-gray-300'
-                      }`}
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
+                      s18aErrors.taxNumber
+                        ? "border-red-300"
+                        : "border-gray-300"
+                    }`}
                   />
                   {s18aErrors.taxNumber && (
-                    <p className="text-red-600 text-xs mt-1">{s18aErrors.taxNumber}</p>
+                    <p className="text-red-600 text-xs mt-1">
+                      {s18aErrors.taxNumber}
+                    </p>
                   )}
                 </div>
               </div>
@@ -914,19 +1042,18 @@ const DonationForm: React.FC<Props> = ({
           <div className="space-y-2 text-sm">
             <div className="flex justify-between">
               <span className="text-gray-600">Base Donation:</span>
-              <span className="font-medium">R{parseFloat(amount).toFixed(2)}</span>
+              <span className="font-medium">
+                R{parseFloat(amount).toFixed(2)}
+              </span>
             </div>
             {calculateTipAmount() > 0 && (
               <div className="flex justify-between">
                 <span className="text-gray-600">Fee Contribution:</span>
-                <span className="font-medium">R{calculateTipAmount().toFixed(2)}</span>
+                <span className="font-medium">
+                  R{calculateTipAmount().toFixed(2)}
+                </span>
               </div>
             )}
-
-
-
-
-
 
             {/*<div className="flex justify-between">
               <span className="text-gray-600">Fee Contribution:</span>
@@ -935,7 +1062,6 @@ const DonationForm: React.FC<Props> = ({
               </span>
 
             </div>*/}
-
 
             {/* <div className="flex justify-between text-red-600">
               <span>Platform Fee ({selectedPaymentType}):</span>
@@ -948,7 +1074,9 @@ const DonationForm: React.FC<Props> = ({
             <div className="border-t border-gray-300 pt-2 mt-2"></div>
             <div className="flex justify-between font-semibold">
               <span>Total Donation You Pay:</span>
-              <span className="text-secondary">R{calculateTotalChargeAmount().toFixed(2)}</span>
+              <span className="text-secondary">
+                R{calculateTotalChargeAmount().toFixed(2)}
+              </span>
             </div>
             {/* <div className="flex justify-between font-semibold text-green-600">
               <span>Campaign Receives:</span>
@@ -960,12 +1088,18 @@ const DonationForm: React.FC<Props> = ({
 
       {/* Donor Details */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Donor Information</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          Donor Information
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
           {/* Full Name */}
           <div>
-            <label htmlFor="donorName" className="block text-sm mb-2 font-medium text-gray-700">Full Name *</label>
+            <label
+              htmlFor="donorName"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Full Name *
+            </label>
             <input
               type="text"
               id="donorName"
@@ -980,7 +1114,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Email Address */}
           <div>
-            <label htmlFor="donorEmail" className="block text-sm mb-2 font-medium text-gray-700">Email Address *</label>
+            <label
+              htmlFor="donorEmail"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Email Address *
+            </label>
             <input
               type="email"
               id="donorEmail"
@@ -995,9 +1134,14 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Phone Number */}
           <div>
-            <label htmlFor="mobile" className="block text-sm mb-2 font-medium text-gray-700">Mobile Number *</label>
+            <label
+              htmlFor="mobile"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Mobile Number *
+            </label>
             <PhoneInput
-              country={'za'}
+              country={"za"}
               value={formData.mobile || ""}
               onChange={(phone) => setFormData({ ...formData, mobile: phone })}
               enableSearch={true}
@@ -1012,7 +1156,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Street Address */}
           <div>
-            <label htmlFor="address" className="block text-sm mb-2 font-medium text-gray-700">Street Address *</label>
+            <label
+              htmlFor="address"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Street Address *
+            </label>
             <input
               type="text"
               id="address"
@@ -1026,7 +1175,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* City */}
           <div>
-            <label htmlFor="city" className="block text-sm mb-2 font-medium text-gray-700">City *</label>
+            <label
+              htmlFor="city"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              City *
+            </label>
             <input
               type="text"
               id="city"
@@ -1040,7 +1194,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Province */}
           <div>
-            <label htmlFor="province" className="block text-sm mb-2 font-medium text-gray-700">Province *</label>
+            <label
+              htmlFor="province"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Province *
+            </label>
             <input
               type="text"
               id="province"
@@ -1054,7 +1213,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Postal Code */}
           <div>
-            <label htmlFor="postalCode" className="block text-sm mb-2 font-medium text-gray-700">Postal Code *</label>
+            <label
+              htmlFor="postalCode"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Postal Code *
+            </label>
             <input
               type="text"
               id="postalCode"
@@ -1068,7 +1232,12 @@ const DonationForm: React.FC<Props> = ({
 
           {/* Comment */}
           <div className="md:col-span-2">
-            <label htmlFor="comment" className="block text-sm mb-2 font-medium text-gray-700">Comment </label>
+            <label
+              htmlFor="comment"
+              className="block text-sm mb-2 font-medium text-gray-700"
+            >
+              Comment{" "}
+            </label>
             <input
               type="text"
               id="comment"
@@ -1090,7 +1259,9 @@ const DonationForm: React.FC<Props> = ({
             onChange={handleInputChange}
             className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
           />
-          <span className="text-sm text-gray-700">I would like to donate anonymously</span>
+          <span className="text-sm text-gray-700">
+            I would like to donate anonymously
+          </span>
         </label>
 
         <label className="flex items-center mt-4 p-3 bg-gray-50 rounded-lg">
@@ -1102,17 +1273,20 @@ const DonationForm: React.FC<Props> = ({
             className="h-4 w-4 text-secondary focus:ring-secondary border-gray-300 rounded mr-3"
           />
           <span className="text-sm text-gray-700">
-            I agree to the <a href="/terms" target="_blank" className="text-secondary hover:underline">Terms and Conditions</a>
+            I agree to the{" "}
+            <a
+              href="/terms"
+              target="_blank"
+              className="text-secondary hover:underline"
+            >
+              Terms and Conditions
+            </a>
           </span>
         </label>
       </div>
 
-
-
-
       {/* Donate Button */}
       {user ? (
-
         <button
           onClick={handleDonate}
           disabled={loading || isPending || settingsLoading}
@@ -1124,7 +1298,9 @@ const DonationForm: React.FC<Props> = ({
               Processing {selectedPaymentType} Payment...
             </>
           ) : (
-            `DONATE R${calculateTotalChargeAmount().toFixed(2)} via ${selectedPaymentType}`
+            `DONATE R${calculateTotalChargeAmount().toFixed(
+              2
+            )} via ${selectedPaymentType}`
           )}
         </button>
       ) : (

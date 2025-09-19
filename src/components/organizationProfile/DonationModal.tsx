@@ -314,7 +314,14 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
       };
 
       // Card payment flow
-      const randomRef = `CARDORG${Date.now()}`;
+      const randomPrefix: string = [...Array(3)]
+        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
+        .join("");
+      const randomSuffix: string = [...Array(3)]
+        .map(() => String.fromCharCode(65 + Math.floor(Math.random() * 26)))
+        .join("");
+      const timestamp = Date.now();
+      const randomRef = `${randomPrefix}${timestamp}${randomSuffix}`;
       const totalCents = Math.round(totalChargeAmount * 100);
 
       console.log("💳 Initiating card payment:", { reference: randomRef, amount: totalCents });
