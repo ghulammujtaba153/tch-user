@@ -148,6 +148,13 @@ const CampaignCard: React.FC<{
           />
         </div>
 
+        {!admin && !campaigner && ( 
+          <div className="flex items-center justify-center"> 
+          <Link to={linkTo} className="bg-secondary text-center hover:bg-secondary/80 transition-colors duration-200 text-white font-semibold px-4 py-2 rounded-full w-full" >
+           Donate Now 
+           </Link> 
+          </div> )}
+
         {/* If campaigner, show delete button inside card but prevent link click */}
         {campaigner && (
           <div
