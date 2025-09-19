@@ -573,9 +573,9 @@ const DonationModal: React.FC<Props> = ({ organizationId, onClose }) => {
                   />
                   <div className="flex-1">
                     <span className="font-medium">{method} Payment</span>
-                    <div className="text-xs text-gray-500 mt-1">
+                    {/* <div className="text-xs text-gray-500 mt-1">
                       Platform: {getFeeDisplay(method as PaymentMethod, 'platform')} | Transaction: {getFeeDisplay(method as PaymentMethod, 'transaction')}
-                    </div>
+                    </div> */}
                   </div>
               </label>
             ))}
