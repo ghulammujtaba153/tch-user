@@ -158,6 +158,7 @@ const DonationForm: React.FC<Props> = ({
     if (!scriptExists) {
       const script = document.createElement("script");
       script.src = "https://secure1.ecentricpaymentgateway.co.za/HPP/API/js";
+      // script.src = "https://sandbox.ecentric.co.za/HPP/API/js"
       script.async = true;
       script.onload = () => console.log("Ecentric Lightbox loaded");
       document.body.appendChild(script);
@@ -413,7 +414,7 @@ const DonationForm: React.FC<Props> = ({
       };
 
       // Card payment flow
-      const randomRef = `CARD_CAM_${Date.now()}`;
+      const randomRef = `CARDCAM${Date.now()}`;
       const totalCents = Math.round(totalChargeAmount * 100);
 
       console.log("💳 Initiating card payment:", { reference: randomRef, amount: totalCents });
