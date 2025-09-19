@@ -25,6 +25,7 @@ const EditProfile = () => {
     dateOfBirth: "",
     gender: "",
     idNumber: "",
+    taxNumber: "",
     passportNumber: "",
     nationality: "",
     profession: "",
@@ -78,6 +79,7 @@ const EditProfile = () => {
             dateOfBirth: u.dateOfBirth,
             gender: u.gender,
             idNumber: u.idNumber || "",
+            taxNumber: u.taxNumber || "",
             passportNumber: u.passportNumber || "",
             nationality: u.nationality,
             profession: u.profession || "",
@@ -324,7 +326,7 @@ const EditProfile = () => {
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="w-full md:w-1/2">
                   <label htmlFor="idNumber" className="text-sm text-gray-500">
-                    ID Number
+                    South African ID Number
                   </label>
                   <input
                     type="text"
@@ -336,6 +338,21 @@ const EditProfile = () => {
                   />
                 </div>
                 <div className="w-full md:w-1/2">
+                  <label htmlFor="taxNumber" className="text-sm text-gray-500">
+                    Tax Number
+                  </label>
+                  <input
+                    type="text"
+                    id="taxNumber"
+                    value={formData.taxNumber}
+                    onChange={handleChange}
+                    placeholder="Enter your tax number"
+                    className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
+                  />
+                </div>
+              </div>
+
+              <div className="w-full md:w-1/2">
                   <label htmlFor="passportNumber" className="text-sm text-gray-500">
                     Passport Number
                   </label>
@@ -348,7 +365,6 @@ const EditProfile = () => {
                     className="bg-transparent w-full p-2 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-secondary"
                   />
                 </div>
-              </div>
 
               {/* Nationality and Profession */}
               <div className="flex flex-col md:flex-row gap-4">

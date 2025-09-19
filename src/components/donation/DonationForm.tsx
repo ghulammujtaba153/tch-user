@@ -711,7 +711,11 @@ const DonationForm: React.FC<Props> = ({
         donorName: user.name || "",
         donorEmail: user.email || "",
         mobile: user.phoneNumber || "",
+        
       }));
+      setIdNumber(user.idNumber || "") // Autofill ID number if available,
+      setTaxNumber(user.taxNumber || "")
+
     } else {
       setFormData((prev) => ({
         ...prev,
@@ -719,6 +723,8 @@ const DonationForm: React.FC<Props> = ({
         donorEmail: "",
         mobile: "",
       }));
+      setIdNumber("") // Autofill ID number if available,
+      setTaxNumber("")
     }
   }, [wantS18A, s18aFor, user]);
 
