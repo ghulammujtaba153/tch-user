@@ -16,6 +16,14 @@ interface User {
   email: string;
   name: string;
   role: string;
+  phoneNumber: string | null;
+  addressLine1: string | null;
+  addressLine2: string | null;
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  postalCode: string | null;
+
   isGoogleUse: boolean;
   isMicrosoftUse: boolean;
   gender: string | null,
@@ -65,6 +73,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: userData.user.email,
             name: userData.user.name,
             role: userData.user.role,
+            phoneNumber: userData.user.phoneNumber || null,
+            addressLine1: userData.user.addressLine1 || null,
+            addressLine2: userData.user.addressLine2 || null,
+            city: userData.user.city || null,
+            state: userData.user.state || null,
+            country: userData.user.country || null,
+            postalCode: userData.user.postalCode || null,
+            
             idNumber: userData.user.idNumber || null,
             taxNumber: userData.user.taxNumber || null,
             passportNumber: userData.user.passportNumber || null,

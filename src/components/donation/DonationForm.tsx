@@ -103,6 +103,22 @@ const DonationForm: React.FC<Props> = ({
     terms: false,
   });
 
+
+  console.log("User context in DonationForm:", user);
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      donorName: user?.name || "",
+      donorEmail: user?.email || "",
+      address: user?.addressLine1 || "",
+      city: user?.city || "",
+      province: user?.state || "",
+      postalCode: user?.postalCode || "",
+      mobile: user?.phoneNumber || "",
+    }));
+  }, [user]);
+
   const predefinedAmounts = ["150", "200", "300", "500"];
   const tipOptions = [
     { label: "No Tip", value: 0 },
@@ -486,6 +502,7 @@ const DonationForm: React.FC<Props> = ({
         paymentData,
         async (successData: any) => {
           console.log("💳 Card Payment Success", successData);
+          toast.loading("Processing payment...");
           try {
             const response = await axios.post(`${BASE_URL}/donations`, {
               ...donationData,
@@ -507,10 +524,13 @@ const DonationForm: React.FC<Props> = ({
               value: Math.round(totalChargeAmount),
             });
 
+            toast.dismiss();
+
             toast.success(
               "Card donation successful! Thank you for your contribution."
             );
           } catch (error) {
+            toast.dismiss();
             console.error("❌ Error recording card donation:", error);
             toast.error("Payment succeeded but failed to record donation");
           }
@@ -706,23 +726,21 @@ const DonationForm: React.FC<Props> = ({
     console.log("🔄 S18A 'For' option changed:", user);
 
     if (wantS18A && s18aFor === "self" && user) {
-      setFormData((prev) => ({
-        ...prev,
-        donorName: user.name || "",
-        donorEmail: user.email || "",
-        mobile: user.phoneNumber || "",
-        
-      }));
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   donorName: user.name || "",
+      //   donorEmail: user.email || "",
+      //   mobile: user.phoneNumber || "",
+      // }));
       setIdNumber(user.idNumber || "") // Autofill ID number if available,
       setTaxNumber(user.taxNumber || "")
-
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        donorName: "",
-        donorEmail: "",
-        mobile: "",
-      }));
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   donorName: "",
+      //   donorEmail: "",
+      //   mobile: "",
+      // }));
       setIdNumber("") // Autofill ID number if available,
       setTaxNumber("")
     }
@@ -1147,11 +1165,12 @@ const DonationForm: React.FC<Props> = ({
               Mobile Number *
             </label>
             <PhoneInput
+              key={formData.mobile} // <-- Add this line
               country={"za"}
               value={formData.mobile || ""}
               onChange={(phone) => setFormData({ ...formData, mobile: phone })}
               enableSearch={true}
-              inputClass="!w-full mt-1 px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
+              inputClass="!w-full mt-1 px-3 py-4 bg-gray-50 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
               containerClass="!w-full"
               buttonClass="!border-none"
               dropdownClass="phone-input-dropdown"

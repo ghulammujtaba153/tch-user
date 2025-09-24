@@ -36,7 +36,8 @@ const DonorCard = ({ donor }: { donor: any }) => {
                         </div>
                     </div>
                     <p className='text-sm font-bold text-secondary'>
-                        {donor?.amount ? `R${donor.amount}` : "Amount not available"}
+                        {/* {donor?.amount ? `R${donor.amount}` : "Amount not available"} */}
+                        {donor?.totalAmount ? `R${donor.totalAmount}` : "Amount not available"}
                     </p>
                 </div>
                 <div className="w-full h-[1px] bg-gray-300 mt-2"></div>

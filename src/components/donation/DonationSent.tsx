@@ -260,7 +260,7 @@ const DonationSent = () => {
                           onClick={() => handlePrint(item.s18aRecord[0])}
                           className="bg-secondary text-white px-4 py-2 rounded-full hover:bg-[#B42318]/80 flex items-center gap-2"
                         >
-                          <span>Print Certificate</span>
+                          <span>Download Certificate</span>
                           <ArrowRightIcon className="w-4 h-4" />
                         </button>}
                       </td>
