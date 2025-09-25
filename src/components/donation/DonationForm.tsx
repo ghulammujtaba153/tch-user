@@ -8,7 +8,7 @@ import ReactGA from "react-ga4";
 import io from "socket.io-client";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigation } from "react-router-dom";
 
 // Extend Window interface for Ecentric payment gateway
 declare global {
@@ -65,6 +65,7 @@ const DonationForm: React.FC<Props> = ({
   const [loading, setLoading] = useState(false);
   const [showEFTModal, setShowEFTModal] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const navigate = useNavigation();
 
   // Payment settings state
   const [cardSettings, setCardSettings] = useState<PaymentSettings | null>(
@@ -525,12 +526,14 @@ const DonationForm: React.FC<Props> = ({
             });
 
             toast.dismiss();
+            navigate('/payment-successfull')
 
             toast.success(
               "Card donation successful! Thank you for your contribution."
             );
           } catch (error) {
             toast.dismiss();
+            navigate('/payment-failure')
             console.error("❌ Error recording card donation:", error);
             toast.error("Payment succeeded but failed to record donation");
           }

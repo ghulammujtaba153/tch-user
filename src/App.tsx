@@ -114,6 +114,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/terms" element={<TermsCondition />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path='/payment-successfull' element={<PaymentSuccess/>} />
+          <Route path='/payment-failure' element={<PaymentFailure/>} />
           
 
           <Route element={<AuthRoutes />}>
@@ -123,8 +125,8 @@ function App() {
             <Route path="/verification/:id" element={<Verification />} />
             <Route path="/email/verification" element={<EmailVerification />} />
             <Route path="/newpassword/:id" element={<NewPassword />} />
-            <Route path='payment-successfull' element={<PaymentSuccess/>} />
-            <Route path='payment-failure' element={<PaymentFailure/>} />
+            
+            
           </Route>
           
           <Route path="/home/campaigns" element={<Campaigns />} />
@@ -159,6 +161,7 @@ function App() {
             <Route path="stats" element={<UserDashboard/>} />
             <Route path='overview' element={<MainDashboard />} />
             <Route path="campaigns" element={<MyCampaigns />} />
+            
             
             <Route path="profile" element={<Profile />} />
             <Route path="organization" element={<Organization />} />
