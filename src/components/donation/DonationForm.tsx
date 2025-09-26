@@ -101,6 +101,7 @@ const DonationForm: React.FC<Props> = ({
     postalCode: "",
     mobile: "",
     comment: "",
+    isCompany: false,
     anonymous: false,
     terms: false,
   });
@@ -583,6 +584,7 @@ const DonationForm: React.FC<Props> = ({
         totalChargeAmount,
         reference,
         eftSettings: eftSettings,
+        isCompany: formData.isCompany,
       });
 
       const donationData = {
@@ -610,6 +612,7 @@ const DonationForm: React.FC<Props> = ({
           IDNumber: idNumber.replace(/\s/g, ""),
           taxNumber: taxNumber.trim(),
         }),
+        isCompany: formData.isCompany,
       };
 
       await axios.post(`${BASE_URL}/donations`, donationData);
@@ -676,6 +679,13 @@ const DonationForm: React.FC<Props> = ({
 
   const handleTaxNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaxNumber(e.target.value);
+    if(s18aFor === "business"){
+      formData.isCompany = true;
+    }else {
+      formData.isCompany = false;
+    }
+      
+
     if (s18aErrors.taxNumber) {
       setS18aErrors((prev) => ({ ...prev, taxNumber: undefined }));
     }
@@ -1011,14 +1021,21 @@ const DonationForm: React.FC<Props> = ({
                     htmlFor="idNumber"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    South African ID Number *
+                    {/* {s18aFor === "business"
+                      ? "Business Registration Number *"
+                      : "South African ID Number *"} */}
+                      South African ID Number *
                   </label>
                   <input
                     type="text"
                     id="idNumber"
                     value={idNumber}
                     onChange={handleIdNumberChange}
-                    placeholder="000 000 0000 000"
+                    placeholder={
+                      s18aFor === "business"
+                        ? "Enter business registration number"
+                        : "000 000 0000 000"
+                    }
                     className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
                       s18aErrors.idNumber ? "border-red-300" : "border-gray-300"
                     }`}
@@ -1035,14 +1052,20 @@ const DonationForm: React.FC<Props> = ({
                     htmlFor="taxNumber"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Tax Number *
+                    {s18aFor === "business"
+                      ? "Business Tax Number *"
+                      : "Tax Number *"}
                   </label>
                   <input
                     type="text"
                     id="taxNumber"
                     value={taxNumber}
                     onChange={handleTaxNumberChange}
-                    placeholder="Enter your tax number"
+                    placeholder={
+                      s18aFor === "business"
+                        ? "Enter business tax number"
+                        : "Enter your tax number"
+                    }
                     className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent ${
                       s18aErrors.taxNumber
                         ? "border-red-300"
