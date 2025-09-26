@@ -1021,10 +1021,10 @@ const DonationForm: React.FC<Props> = ({
                     htmlFor="idNumber"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    {/* {s18aFor === "business"
-                      ? "Business Registration Number *"
-                      : "South African ID Number *"} */}
-                      South African ID Number *
+                    {s18aFor === "business"
+                      ? "Registration Number *"
+                      : "South African ID Number *"}
+                      {/* South African ID Number * */}
                   </label>
                   <input
                     type="text"
