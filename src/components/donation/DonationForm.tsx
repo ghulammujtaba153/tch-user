@@ -59,6 +59,7 @@ const DonationForm: React.FC<Props> = ({
   isVerified = false,
 }) => {
   const { user } = useContext(AuthContext)!;
+  
   const [amount, setAmount] = useState<string>("150");
   const [customAmount, setCustomAmount] = useState("150"); // <-- set to "150" to match default
   const [selectedPaymentType, setSelectedPaymentType] =

@@ -80,7 +80,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             state: userData.user.state || null,
             country: userData.user.country || null,
             postalCode: userData.user.postalCode || null,
-            
             idNumber: userData.user.idNumber || null,
             taxNumber: userData.user.taxNumber || null,
             passportNumber: userData.user.passportNumber || null,

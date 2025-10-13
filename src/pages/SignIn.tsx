@@ -63,7 +63,23 @@ const SignIn = () => {
                   name: res.data.user.name,
                   role: res.data.user.role,
                   profilePicture: res.data.user.profilePicture,
-                  organization: res.data.user.organization
+                  organization: res.data.user.organization,
+                  phoneNumber: res.data.user.phoneNumber || null,
+                  addressLine1: res.data.user.addressLine1 || null,
+                  addressLine2: res.data.user.addressLine2 || null,
+                  city: res.data.user.city || null,
+                  state: res.data.user.state || null,
+                  country: res.data.user.country || null,
+                  postalCode: res.data.user.postalCode || null,
+                  idNumber: res.data.user.idNumber || null,
+                  taxNumber: res.data.user.taxNumber || null,
+                  passportNumber: res.data.user.passportNumber || null,
+                  isGoogleUse: res.data.user.isGoogleUse,
+                  isMicrosoftUse: res.data.user.isMicrosoftUse,
+                  gender: res.data.user.gender,
+                  dateOfBirth: res.data.user.dateOfBirth,
+                  nationality: res.data.user.nationality,
+                  
                 }
                 login(user, res.data.token);
                 setUser(user);
