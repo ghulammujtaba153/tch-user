@@ -35,10 +35,15 @@ const DonorCard = ({ donor }: { donor: any }) => {
                             </div>
                         </div>
                     </div>
-                    <p className='text-sm font-bold text-secondary'>
-                        {/* {donor?.amount ? `R${donor.amount}` : "Amount not available"} */}
-                        {donor?.totalAmount ? `R${donor.totalAmount}` : "Amount not available"}
-                    </p>
+                    <p className="text-sm font-bold text-secondary">
+  {donor?.totalAmount
+    ? `R${new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(donor.totalAmount)}`
+    : "Amount not available"}
+</p>
+
                 </div>
                 <div className="w-full h-[1px] bg-gray-300 mt-2"></div>
             </div>

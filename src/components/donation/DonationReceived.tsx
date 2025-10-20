@@ -251,8 +251,12 @@ const DonationReceived = () => {
 
               {/* Amount */}
               <p className="text-sm font-semibold">
-                R{new Intl.NumberFormat().format(item.amount)}
-              </p>
+  R{new Intl.NumberFormat('en-US', { 
+    minimumFractionDigits: 2, 
+    maximumFractionDigits: 2 
+  }).format(item.amount)}
+</p>
+
 
               <p className="text-sm font-semibold">
                 {item?.s18aRecord?.length > 0 &&

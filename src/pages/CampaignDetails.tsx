@@ -513,7 +513,7 @@ const CampaignDetails = () => {
       </div>
 
       {/* comments section */}
-      {/* <Comments campaignId={id} /> */}
+      <Comments campaignId={id} />
     </div>
   );
 };
