@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState, useTransition } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import DonationForm from "../components/donation/DonationForm";
+
 import DonorCard from "../components/donation/DonorCard";
 import { BASE_URL, SOCKET_URL } from "../config/url";
 import axios from "axios";
@@ -40,6 +41,9 @@ const CampaignDetails = () => {
   const [campaigner, setCampaigner] = useState(false);
   const { config } = useAppConfig();
   const { user } = useContext(AuthContext)!;
+
+  // local state to control login notification when user clicks Donate
+  const [showLoginNotif, setShowLoginNotif] = useState(false);
 
   useEffect(() => {
     if (config?.name) {
@@ -94,11 +98,15 @@ const CampaignDetails = () => {
   };
 
   const handleDonateClick = () => {
-    // Always scroll to donation form - S18A option will be shown in the form if campaign is verified
-    const donationForm = document.getElementById("donation-form");
-    if (donationForm) {
-      donationForm.scrollIntoView({ behavior: "smooth" });
+    // If user not logged in show notification modal to prompt login
+    if (!user) {
+      setShowLoginNotif(true);
+      return;
     }
+
+    // logged in -> scroll to donation form
+    const donationForm = document.getElementById("donation-form");
+    if (donationForm) donationForm.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -129,16 +137,15 @@ const CampaignDetails = () => {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4 flex flex-col gap-5 justify-between pt-[100px] overflow-x-hidden font-sans">
-      {!user && (
-        <Notification
-          isOpen={true} // show modal when user is not logged in
-          onClose={() => {}} // pass your close handler
-          title="Login Required"
-          message="To proceed with your donation, please log in to your account"
-          type="error"
-          link="/signin" // optional: take user to login page
-        />
-      )}
+      {/* Notification shown only when user clicks Donate and is not logged in */}
+      <Notification
+        isOpen={showLoginNotif}
+        onClose={() => setShowLoginNotif(false)}
+        title="Login Required"
+        message="To proceed with your donation, please log in to your account"
+        type="error"
+        link="/signin"
+      />
 
       <ScrollToTop />
       {/* upper section */}
@@ -441,7 +448,8 @@ const CampaignDetails = () => {
             </>
           )}
 
-          {!admin && !campaigner && (
+          {/* show donation form only for logged-in non-admin non-campaigner users */}
+          {!admin && !campaigner && user && (
             <div id="donation-form">
               <DonationForm
                 campaignId={id as string}

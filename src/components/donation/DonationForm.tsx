@@ -339,11 +339,17 @@ const DonationForm: React.FC<Props> = ({
   };
 
   // Calculate net donation amount (what campaign receives)
+  // const calculateNetDonationAmount = (): number => {
+  //   const baseAmount = parseFloat(amount) || 0;
+  //   const platformFee = calculatePlatformFee();
+  //   const transactionFee = calculateTransactionFee();
+  //   return Math.max(0, baseAmount - platformFee - transactionFee);
+  // };
   const calculateNetDonationAmount = (): number => {
-    const baseAmount = parseFloat(amount) || 0;
+    const totalChargeAmount = calculateTotalChargeAmount();
     const platformFee = calculatePlatformFee();
     const transactionFee = calculateTransactionFee();
-    return Math.max(0, baseAmount - platformFee - transactionFee);
+    return Math.max(0, totalChargeAmount - platformFee - transactionFee);
   };
 
   const validateS18A = () => {

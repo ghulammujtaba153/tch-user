@@ -258,7 +258,7 @@ const Support = () => {
               value={formData.organizationName}
               onChange={handleChange}
               className={`border ${errors.subject ? 'border-red-500' : 'border-gray-300'} rounded-[10px] py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500`}
-              required
+              
             />
             {errors.organizationName && <p className="text-red-500 text-sm">{errors.organizationName}</p>}
           </div>

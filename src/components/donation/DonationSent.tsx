@@ -100,17 +100,54 @@ const DonationSent = () => {
         render: "Certificate generated successfully!",
         type: "success",
         isLoading: false,
-        autoClose: 3000,
+        autoClose: 2000,
       });
 
       // Get the outputPath and convert to browser-accessible URL
       const outputPath = res.data.outputPath;
-      if (outputPath) {
-        const fileName =
-          outputPath.split("certificates\\").pop() ||
-          outputPath.split("certificates/").pop();
-        const fileUrl = `${SOCKET_URL}/certificates/${fileName}`;
-        window.open(fileUrl, "_blank");
+      if (!outputPath) {
+        toast.error("No certificate path returned from server");
+        return;
+      }
+
+      const fileName =
+        outputPath.split("certificates\\").pop() ||
+        outputPath.split("certificates/").pop() ||
+        `certificate-${Date.now()}.pdf`;
+
+      const fileUrl = `${SOCKET_URL}/certificates/${fileName}`;
+
+      // Try to download the file as a blob so Chrome will prompt download instead of opening
+      try {
+        const token = localStorage.getItem('token') || undefined;
+        const fileRes = await axios.get(fileUrl, {
+          responseType: 'blob',
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
+
+        // determine filename from response headers if provided
+        const disposition = fileRes.headers['content-disposition'];
+        let inferredName = fileName;
+        if (disposition) {
+          const match = /filename\*?=(?:UTF-8'')?["']?([^;"']+)["']?/i.exec(disposition);
+          if (match && match[1]) {
+            inferredName = decodeURIComponent(match[1]);
+          }
+        }
+
+        const blob = new Blob([fileRes.data], { type: fileRes.data.type || 'application/pdf' });
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.download = inferredName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+      } catch (downloadErr) {
+        // Fallback: open in new tab if blob download fails (CORS or server issues)
+        console.warn("Blob download failed, falling back to open in new tab:", downloadErr);
+        window.open(fileUrl, "_blank", "noopener,noreferrer");
       }
     } catch (error) {
       toast.update(toastId, {
@@ -221,7 +258,7 @@ const DonationSent = () => {
                     <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-150">
                       <td className="py-4 px-4">
                         <span className="text-sm font-medium text-gray-900 bg-gray-100 px-2 py-1 rounded-md">
-                          {item.referenceId}
+                          {item.transactionId || item.referenceId}
                         </span>
                       </td>
                       <td className="py-4 px-4">
