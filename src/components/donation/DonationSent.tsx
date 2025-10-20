@@ -18,6 +18,7 @@ const DonationSent = () => {
   const { user } = useContext(AuthContext) || {};
 
   // Fetch sent donations (for donors)
+  
   useEffect(() => {
     if (user?.userId) {
       const fetchSentDonations = async () => {
@@ -110,12 +111,14 @@ const DonationSent = () => {
         return;
       }
 
-      const fileName =
-        outputPath.split("certificates\\").pop() ||
-        outputPath.split("certificates/").pop() ||
-        `certificate-${Date.now()}.pdf`;
-
-      const fileUrl = `${SOCKET_URL}/certificates/${fileName}`;
+      // extract basename robustly (works for windows/linux absolute paths and urls)
+      const fileName = (outputPath || "")
+        .split(/[\\/]/)
+        .pop() || `certificate-${Date.now()}.pdf`;
+      
+      // ensure no duplicate slashes and encode filename
+      const base = SOCKET_URL.replace(/\/+$/, "");
+      const fileUrl = `${base}/certificates/${encodeURIComponent(fileName)}`;
 
       // Try to download the file as a blob so Chrome will prompt download instead of opening
       try {
